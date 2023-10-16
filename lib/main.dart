@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/auth/login/login_page.dart';
+import 'package:mewtwo/utils.dart';
 
 void main() => runApp(const MyApp());
 
@@ -19,9 +22,11 @@ class MyApp extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
+        textTheme: GoogleFonts.robotoTextTheme()
+        
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
     );
   }
 }
