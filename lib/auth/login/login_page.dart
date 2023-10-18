@@ -1,51 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/auth/login/login_page_store.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/utils.dart';
 
 class LoginPage extends ConsumerWidget {
   LoginPage({Key? key}) : super(key: key);
-  final TextEditingController usernameController = TextEditingController();
+  final store = LoginPageStore();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      
-      body: Container(
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.disabled,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 92,
+    return Observer(
+      builder: (context) {
+        return Scaffold(
+          body: Container(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 92,
+                    ),
+                    header(),
+                    const SizedBox(
+                      height: 52,
+                    ),
+                    usernameInput(),
+                    const SizedBox(height: 20),
+                    passwordInput(),
+                    forgetPassword(),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    signInButton(),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    startHere(),
+                    const Spacer(),
+                    privacyPolicy(),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                  ],
                 ),
-                header(),
-                const SizedBox(
-                  height: 52,
-                ),
-                usernameInput(),
-                const SizedBox(height: 20),
-                passwordInput(),
-                forgetPassword(),
-                const SizedBox(
-                  height: 32,
-                ),
-                signInButton(),
-                const SizedBox(
-                  height: 32,
-                ),
-                startHere(),
-                const Spacer(),
-                privacyPolicy(),
-                const SizedBox(
-                  height: 48,
-                ),
-              ],
-            ),
-          )),
+              )),
+        );
+      }
     );
   }
 
@@ -74,7 +79,7 @@ class LoginPage extends ConsumerWidget {
             style: TextStyle(color: Color(0xFF7D7878)),
           ),
           TextFormField(
-            controller: usernameController,
+            controller: store.usernameController,
             maxLines: 1,
             style: const TextStyle(fontSize: 20),
             decoration: const InputDecoration(border: InputBorder.none, isDense: true),
@@ -86,21 +91,31 @@ class LoginPage extends ConsumerWidget {
 
   Widget passwordInput() {
     return Container(
-      padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 20),
+      padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8, start: 20, end: 8),
       decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(20)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          const Text(
-            "Password",
-            style: TextStyle(color: Color(0xFF7D7878)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Password",
+                  style: TextStyle(color: Color(0xFF7D7878)),
+                ),
+                TextFormField(
+                  obscureText: store.isPasswordHidden,
+                  controller: store.passwordController,
+                  maxLines: 1,
+                  style: const TextStyle(fontSize: 20),
+                  decoration: const InputDecoration(border: InputBorder.none, isDense: true),
+                )
+              ],
+            ),
           ),
-          TextFormField(
-            controller: usernameController,
-            maxLines: 1,
-            style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(border: InputBorder.none, isDense: true),
-          )
+          IconButton(onPressed: () {
+            store.isPasswordHidden = !store.isPasswordHidden;
+          }, icon: Icon(store.isPasswordHidden ? Icons.visibility : Icons.visibility_off, color: const Color(0xFF7D7878),))
         ],
       ),
     );
