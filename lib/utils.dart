@@ -46,8 +46,17 @@ class Log {
     return _singleton!;
   }
   
-  final Logger _logger = Logger();
+  final Logger _logger = Logger(
+    printer: PrettyPrinter(
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+    )
+  );
   void d(String msg) {
     _logger.d(msg);
+  }
+
+  void e(String msg, {required StackTrace stackTrace}) {
+    _logger.e(msg, stackTrace: stackTrace);
   }
 }
