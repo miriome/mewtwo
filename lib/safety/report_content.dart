@@ -83,9 +83,15 @@ class ReportContent extends StatelessWidget {
               autovalidateMode: AutovalidateMode.always,
               child: TextFormField(
                 validator: (text) {
-                  if (text != null && text.isEmpty) {
-                    return "Please enter a reason";
+                  if (text != null) {
+                    if (text.isEmpty) {
+                      return "Please enter a reason";
+                    }
+                    if (text.length < 20) {
+                      return "Reason has to be at least 20 characters";
+                    }
                   }
+
                   return null;
                 },
                 maxLength: 500,
