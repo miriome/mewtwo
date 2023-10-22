@@ -35,6 +35,14 @@ class MainPlatform {
       Log.instance.d(e.toString());
     }
   }
+
+  static Future<void> showIOSAlert(String message) async {
+    try {
+      await platform.invokeMethod('showAlert', {"message": message});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
 }
 
 class Log {

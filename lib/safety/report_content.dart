@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/report_content_store.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
+import 'package:dartx/dartx.dart';
 
 class ReportContent extends StatelessWidget {
   final String typeId;
@@ -20,7 +23,9 @@ class ReportContent extends StatelessWidget {
                 bool reported = await store.submitReport(type: type, id: typeId);
                 if (reported) {
                   if (context.mounted) {
-                    Navigator.of(context).pop(reported);
+                    SystemNavigator.pop(animated: true);
+                    MainPlatform.showIOSAlert(
+                        "${type.name.capitalize()} has been reported. Our staff will take measures based on your valuable feedback.");
                   }
                 }
               }
@@ -60,6 +65,9 @@ class ReportContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: BackButton(onPressed: () {
+            SystemNavigator.pop(animated: true);
+          }),
           backgroundColor: Colors.white,
           elevation: 0,
         ),
@@ -67,10 +75,9 @@ class ReportContent extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             Text(
-                "Please give a simple reason of why you are reporting this ${type.name}. Please provide at least 20 characters", style: GoogleFonts.barlow(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500
-                ),),
+              "Please give a simple reason of why you are reporting this ${type.name}. Please provide at least 20 characters",
+              style: GoogleFonts.barlow(fontSize: 15, fontWeight: FontWeight.w500),
+            ),
             const SizedBox(height: 16),
             Form(
               autovalidateMode: AutovalidateMode.always,
