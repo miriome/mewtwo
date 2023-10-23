@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 
+
+
+
 class MaterialColorGenerator {
   static MaterialColor from(Color color) {
     return MaterialColor(color.value, <int, Color>{
@@ -32,6 +35,14 @@ class MainPlatform {
       Log.instance.d(e.toString());
     }
   }
+
+  static Future<void> showIOSAlert(String message) async {
+    try {
+      await platform.invokeMethod('showAlert', {"message": message});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
 }
 
 class Log {
@@ -43,8 +54,17 @@ class Log {
     return _singleton!;
   }
   
-  final Logger _logger = Logger();
+  final Logger _logger = Logger(
+    printer: PrettyPrinter(
+      colors: true, // Colorful log messages
+      printEmojis: true, // Print an emoji for each log message
+    )
+  );
   void d(String msg) {
     _logger.d(msg);
+  }
+
+  void e(String msg, {required StackTrace stackTrace}) {
+    _logger.e(msg, stackTrace: stackTrace);
   }
 }
