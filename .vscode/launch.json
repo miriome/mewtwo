@@ -20,6 +20,11 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        }
+        },
+        {
+            "name": "Flutter: Attach",
+            "request": "attach",
+            "type": "dart",
+          }
     ]
 }

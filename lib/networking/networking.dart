@@ -1,19 +1,37 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const tokenKey = "flutterk_access_token";
 
 class Networking {
   final dio = Dio();
   static Networking? _singleton;
-  static Networking get instance {
-    _singleton ??= Networking._();
+  static Future<Networking> get instance async {
+    if (_singleton != null) {
+      return _singleton!;
+    }
+    final sp = await SharedPreferences.getInstance();
+    String token = "";
+      if (sp.containsKey("k_access_token")) {
+        token = sp.getString("k_access_token") ?? "";  
+      }
+      
+      final options = BaseOptions(
+      baseUrl: kDebugMode ? "http://localhost:8080/api/" :  "https://www.miromie.com/api/",
+      headers: {
+        'Authorization': "Bearer $token",
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    );
+    _singleton = Networking._(options);
     return _singleton!;
   }
 
-  Networking._() {
-    final options = BaseOptions(
-      baseUrl: kDebugMode ? "http://localhost:8080/" :  "https://www.miromie.com/api/"
-    );
+
+  Networking._(BaseOptions options) {
     dio.options = options;
+    
   }
 
   Future<Response> post({required String path, Map<String, String>? body}) async {
