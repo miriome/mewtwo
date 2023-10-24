@@ -18,11 +18,11 @@ class Networking {
       }
       
       final options = BaseOptions(
-      baseUrl: kDebugMode ? "http://localhost:8080/api/" :  "https://www.miromie.com/api/",
+      baseUrl: "https://miromie.com/api/",
       headers: {
         'Authorization': "Bearer $token",
         'Content-Type': 'application/x-www-form-urlencoded'
-      }
+      },
     );
     _singleton = Networking._(options);
     return _singleton!;
