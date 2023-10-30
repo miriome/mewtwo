@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart' as DIO;
 import 'package:flutter/foundation.dart';
-import 'package:mewtwo/networking/hello_world.pbgrpc.dart';
+import 'package:mewtwo/networking/auth.pbgrpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:grpc/grpc.dart';
 
@@ -9,15 +9,20 @@ const tokenKey = "flutterk_access_token";
 class Networking {
   final _channel = ClientChannel(
     'localhost',
-    port: 50051,
+    port: 8081,
     options: ChannelOptions(
-      credentials: kDebugMode ? ChannelCredentials.secure() : ChannelCredentials.secure(),
+      credentials: kDebugMode ? ChannelCredentials.secure(
+        onBadCertificate: (cert, lol) {
+          return true;
+        }
+      ) : ChannelCredentials.secure(),
       codecRegistry:
           CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
     ),
   );
   final dio = DIO.Dio();
   static Networking? _singleton;
+  late final AuthServiceClient _authServiceClient;
   static Future<Networking> get instance async {
     if (_singleton != null) {
       return _singleton!;
@@ -42,12 +47,24 @@ class Networking {
 
   Networking._(DIO.BaseOptions options) {
     dio.options = options;
-    final client = HelloWorldServiceClient(_channel);
+    _authServiceClient = AuthServiceClient(_channel);
+    
     
   }
 
   Future<DIO.Response> post({required String path, Map<String, String>? body}) async {
     return await dio.post(path, data: body);
   }
+
+  Future<LoginResponse> login() async {
+    final req = LoginRequest(
+      username: "asd",
+      password: "Miromie1!"
+    );
+    
+    return await _authServiceClient.login(req);
+    
+  }
+  
 }
 

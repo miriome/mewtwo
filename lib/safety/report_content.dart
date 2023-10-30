@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/report_content_store.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,16 +19,17 @@ class ReportContent extends StatelessWidget {
   Widget submitReportButton() {
     return Observer(builder: (context) {
       return ElevatedButton(
-        onPressed: store.isSubmitButtonEnabled
+        onPressed: true
             ? () async {
-                bool reported = await store.submitReport(type: type, id: typeId);
-                if (reported) {
-                  if (context.mounted) {
-                    SystemNavigator.pop(animated: true);
-                    MainPlatform.showIOSAlert(
-                        "${type.name.capitalize()} has been reported. Our staff will take measures based on your valuable feedback.");
-                  }
-                }
+              final res = await (await Networking.instance).login();
+                // bool reported = await store.submitReport(type: type, id: typeId);
+                // if (reported) {
+                //   if (context.mounted) {
+                //     SystemNavigator.pop(animated: true);
+                //     MainPlatform.showIOSAlert(
+                //         "${type.name.capitalize()} has been reported. Our staff will take measures based on your valuable feedback.");
+                //   }
+                // }
               }
             : null,
         style: ButtonStyle(

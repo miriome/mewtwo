@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: networking/hello_world.proto
+//  source: networking/auth.proto
 //
 // @dart = 2.12
 
