@@ -68,3 +68,22 @@ class Log {
     _logger.e(msg, stackTrace: stackTrace);
   }
 }
+
+class Utility {
+  static bool parseBool(dynamic val) {
+    if (val is int) {
+      return val == 1;
+    }
+    if (val is bool) {
+      return val;
+    }
+    return false;
+
+  }
+
+  static int parseInt(dynamic val, [int defaultVal = 0]) {
+    return int.tryParse(val) ?? defaultVal;
+
+  }
+  
+}

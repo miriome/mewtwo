@@ -6,6 +6,6 @@ part 'routes_data.dart';
 
 class AuthRoutes {
   static const List<TypedGoRoute> typedRoutes = [TypedGoRoute<LoginRoute>(
-        path: 'reportContent',
+        path: 'login',
       )];
 }
