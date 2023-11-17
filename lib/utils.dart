@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:mewtwo/home/model/user_model.dart';
 
 
 
@@ -22,7 +25,7 @@ class MaterialColorGenerator {
   }
 }
 
-enum Screens { forgetPassword }
+enum Screens { forgetPassword, goToOtherUserProfile }
 
 // TODO: remove this when not needed or refactor into something better.
 class MainPlatform {
@@ -39,6 +42,15 @@ class MainPlatform {
   static Future<void> showIOSAlert(String message) async {
     try {
       await platform.invokeMethod('showAlert', {"message": message});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
+
+  static Future<void> goToOtherUserProfile(UserModel user) async {
+    final userJson = jsonEncode(user.toJson()) ;
+    try {
+      await platform.invokeMethod('goToScreen', {"screen": Screens.goToOtherUserProfile.name, "userModelJson": userJson});
     } on PlatformException catch (e) {
       Log.instance.d(e.toString());
     }
@@ -80,10 +92,25 @@ class Utility {
     return false;
 
   }
+  static String int2Str(dynamic val) {
+    if (val is int) {
+      return val.toString();
+    }
+    return "";
+  }
+
+  static int bool2int(dynamic val) {
+    if (val is int) {
+      return val;
+    }
+    if (val is bool) {
+      return val ? 1 : 0;
+    }
+    return 0;
+  }
 
   static int parseInt(dynamic val, [int defaultVal = 0]) {
     return int.tryParse(val) ?? defaultVal;
-
   }
   
 }

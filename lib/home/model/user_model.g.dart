@@ -25,9 +25,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
-      'id': instance.id,
-      'followers': instance.followers,
-      'myFollow': instance.myFollow,
+      'id': Utility.int2Str(instance.id),
+      'followers': Utility.int2Str(instance.followers),
+      'myFollow': Utility.bool2int(instance.myFollow),
       'styles': instance.styles,
       'username': instance.username,
       'name': instance.name,

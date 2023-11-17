@@ -7,13 +7,15 @@ part 'user_model.g.dart';
 class UserModel {
   @JsonKey(
     fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
   )
   final int id;
   @JsonKey(
     fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
   )
   final int followers;
-  @JsonKey(fromJson: Utility.parseBool)
+  @JsonKey(fromJson: Utility.parseBool, toJson: Utility.bool2int)
   final bool myFollow;
   final String styles, username, name, photo_url;
   final String? email, password, pronouns, weight, height, bust, waist, hips;
