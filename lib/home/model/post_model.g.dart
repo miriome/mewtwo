@@ -37,3 +37,49 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'hashtag': instance.hashtag,
       'posted_by': instance.posted_by?.toJson(),
     };
+
+// **************************************************************************
+// StoreGenerator
+// **************************************************************************
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
+
+mixin _$PostModel on _PostModel, Store {
+  late final _$likesAtom = Atom(name: '_PostModel.likes', context: context);
+
+  @override
+  int get likes {
+    _$likesAtom.reportRead();
+    return super.likes;
+  }
+
+  @override
+  set likes(int value) {
+    _$likesAtom.reportWrite(value, super.likes, () {
+      super.likes = value;
+    });
+  }
+
+  late final _$my_likeAtom = Atom(name: '_PostModel.my_like', context: context);
+
+  @override
+  bool get my_like {
+    _$my_likeAtom.reportRead();
+    return super.my_like;
+  }
+
+  @override
+  set my_like(bool value) {
+    _$my_likeAtom.reportWrite(value, super.my_like, () {
+      super.my_like = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+likes: ${likes},
+my_like: ${my_like}
+    ''';
+  }
+}

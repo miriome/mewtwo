@@ -1,11 +1,37 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/utils.dart';
-
+import 'package:mobx/mobx.dart';
+import 'package:mobx/mobx.dart';
 part 'post_model.g.dart';
 
+
 @JsonSerializable(explicitToJson: true)
-class PostModel {
+class PostModel extends _PostModel with _$PostModel {
+  PostModel({
+    required super.image,
+    required super.caption,
+    required super.hypertext,
+    required super.hyperlink,
+    required super.created_at,
+    required super.id,
+    required super.chat_enabled,
+    required super.added_by,
+    required super.likes,
+    required super.my_like,
+    super.hashtag,
+    super.posted_by
+  });
+  /// Connect the generated [_$PersonFromJson] function to the `fromJson`
+  /// factory.
+  factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
+
+  /// Connect the generated [_$PostModelToJson] function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$PostModelToJson(this);
+}
+
+
+abstract class _PostModel with Store {
   final String image;
   final String caption;
   final String hypertext;
@@ -24,19 +50,22 @@ class PostModel {
     fromJson: Utility.parseInt,
   )
   final int added_by;
+
+  @observable
   @JsonKey(
     fromJson: Utility.parseInt,
   )
-  final int likes;
+  int likes;
   //try. if not stick to int
   @JsonKey(
     fromJson: Utility.parseBool,
   )
-  final bool my_like;
+  @observable
+  bool my_like;
   final String? hashtag;
   final UserModel? posted_by;
 
-  PostModel({
+  _PostModel({
     required this.image,
     required this.caption,
     required this.hypertext,
@@ -51,10 +80,4 @@ class PostModel {
     this.posted_by
   });
 
-  /// Connect the generated [_$PersonFromJson] function to the `fromJson`
-  /// factory.
-  factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
-
-  /// Connect the generated [_$PostModelToJson] function to the `toJson` method.
-  Map<String, dynamic> toJson() => _$PostModelToJson(this);
 }

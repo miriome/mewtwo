@@ -155,5 +155,150 @@ class _GetPostsApiProviderElement
   @override
   int get pageIndex => (origin as GetPostsApiProvider).pageIndex;
 }
+
+String _$likePostApiHash() => r'c5fb6f786edd31620bf3ed330cf4e0fe25623409';
+
+/// See also [likePostApi].
+@ProviderFor(likePostApi)
+const likePostApiProvider = LikePostApiFamily();
+
+/// See also [likePostApi].
+class LikePostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [likePostApi].
+  const LikePostApiFamily();
+
+  /// See also [likePostApi].
+  LikePostApiProvider call({
+    required int postId,
+    required bool setLikeTo,
+  }) {
+    return LikePostApiProvider(
+      postId: postId,
+      setLikeTo: setLikeTo,
+    );
+  }
+
+  @override
+  LikePostApiProvider getProviderOverride(
+    covariant LikePostApiProvider provider,
+  ) {
+    return call(
+      postId: provider.postId,
+      setLikeTo: provider.setLikeTo,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'likePostApiProvider';
+}
+
+/// See also [likePostApi].
+class LikePostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [likePostApi].
+  LikePostApiProvider({
+    required int postId,
+    required bool setLikeTo,
+  }) : this._internal(
+          (ref) => likePostApi(
+            ref as LikePostApiRef,
+            postId: postId,
+            setLikeTo: setLikeTo,
+          ),
+          from: likePostApiProvider,
+          name: r'likePostApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$likePostApiHash,
+          dependencies: LikePostApiFamily._dependencies,
+          allTransitiveDependencies:
+              LikePostApiFamily._allTransitiveDependencies,
+          postId: postId,
+          setLikeTo: setLikeTo,
+        );
+
+  LikePostApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.postId,
+    required this.setLikeTo,
+  }) : super.internal();
+
+  final int postId;
+  final bool setLikeTo;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(LikePostApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: LikePostApiProvider._internal(
+        (ref) => create(ref as LikePostApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        postId: postId,
+        setLikeTo: setLikeTo,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _LikePostApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LikePostApiProvider &&
+        other.postId == postId &&
+        other.setLikeTo == setLikeTo;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, postId.hashCode);
+    hash = _SystemHash.combine(hash, setLikeTo.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin LikePostApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `postId` of this provider.
+  int get postId;
+
+  /// The parameter `setLikeTo` of this provider.
+  bool get setLikeTo;
+}
+
+class _LikePostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with LikePostApiRef {
+  _LikePostApiProviderElement(super.provider);
+
+  @override
+  int get postId => (origin as LikePostApiProvider).postId;
+  @override
+  bool get setLikeTo => (origin as LikePostApiProvider).setLikeTo;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

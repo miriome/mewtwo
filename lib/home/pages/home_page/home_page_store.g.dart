@@ -69,6 +69,15 @@ mixin _$HomePageStore on _HomePageStore, Store {
     return _$loadPostsAsyncAction.run(() => super.loadPosts());
   }
 
+  late final _$togglePostLikeAsyncAction =
+      AsyncAction('_HomePageStore.togglePostLike', context: context);
+
+  @override
+  Future<void> togglePostLike({required int postId}) {
+    return _$togglePostLikeAsyncAction
+        .run(() => super.togglePostLike(postId: postId));
+  }
+
   @override
   String toString() {
     return '''

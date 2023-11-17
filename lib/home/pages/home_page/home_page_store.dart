@@ -8,11 +8,10 @@ part 'home_page_store.g.dart';
 class HomePageStore extends _HomePageStore with _$HomePageStore {}
 
 abstract class _HomePageStore with Store {
-
   _HomePageStore() {
     loadPosts();
   }
-  
+
   @observable
   int currentPage = 0;
 
@@ -25,11 +24,25 @@ abstract class _HomePageStore with Store {
   @action
   Future<void> loadPosts() async {
     final getPostsProvider = GetPostsApiProvider(pageIndex: currentPage);
-    
-    final listener = Mew.pc.listen(getPostsProvider, (previous, next) { 
+
+    final listener = Mew.pc.listen(getPostsProvider, (previous, next) {
       _isLoading = next.isLoading;
     });
     _posts = ObservableList.of(await Mew.pc.read(getPostsProvider.future));
-    listener.close();  
+    listener.close();
+  }
+
+  @action
+  Future<void> togglePostLike({required int postId}) async {
+    final currentPost = _posts.firstWhere((element) => element.id == postId);
+    final toggle = !currentPost.my_like;
+    
+    final likePostProvider = LikePostApiProvider(postId: postId, setLikeTo: !currentPost.my_like);
+    final postIndex = _posts.indexWhere((element) => element.id == postId);
+    _posts[postIndex].my_like = toggle;
+    _posts[postIndex].likes += toggle ? 1 : -1;
+
+    await Mew.pc.read(likePostProvider.future);
+
   }
 }

@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
               crossAxisSpacing: 8,
               itemCount: store.posts.length,
               itemBuilder: (context, index) {
-                return PostTile(post: store.posts[index]);
+                return PostTile(post: store.posts[index], onLikeToggle: (postId) => store.togglePostLike(postId: postId),);
               },
             ),
           ),
