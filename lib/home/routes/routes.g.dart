@@ -7,23 +7,27 @@ part of 'routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $homeScreenRoute,
+      $mainRoute,
       $unauthorizedRoute,
     ];
 
-RouteBase get $homeScreenRoute => GoRouteData.$route(
+RouteBase get $mainRoute => GoRouteData.$route(
       path: '/',
-      factory: $HomeScreenRouteExtension._fromState,
+      factory: $MainRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
           path: 'reportContent',
           factory: $ReportContentRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'HomePage',
+          factory: $HomePageRouteExtension._fromState,
+        ),
       ],
     );
 
-extension $HomeScreenRouteExtension on HomeScreenRoute {
-  static HomeScreenRoute _fromState(GoRouterState state) => HomeScreenRoute();
+extension $MainRouteExtension on MainRoute {
+  static MainRoute _fromState(GoRouterState state) => MainRoute();
 
   String get location => GoRouteData.$location(
         '/',
@@ -71,6 +75,23 @@ const _$ReportTypeEnumMap = {
   ReportType.user: 'user',
 };
 
+extension $HomePageRouteExtension on HomePageRoute {
+  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
+
+  String get location => GoRouteData.$location(
+        '/HomePage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
       entries.singleWhere((element) => element.value == value).key;
@@ -81,7 +102,7 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
       factory: $UnauthorizedRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'reportContent',
+          path: 'login',
           factory: $LoginRouteExtension._fromState,
         ),
       ],
@@ -109,7 +130,7 @@ extension $LoginRouteExtension on LoginRoute {
   static LoginRoute _fromState(GoRouterState state) => LoginRoute();
 
   String get location => GoRouteData.$location(
-        '/unauth/reportContent',
+        '/unauth/login',
       );
 
   void go(BuildContext context) => context.go(location);

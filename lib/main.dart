@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
+          scaffoldBackgroundColor: const Color(0xFFFEFEFE),
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.robotoTextTheme()),
       builder: EasyLoading.init(),
       routerConfig: GoRouter(
-          routes: $appRoutes, initialLocation: ReportContentRoute(reportType: ReportType.post, typeId: "1").location),
+          routes: $appRoutes, initialLocation: HomePageRoute().location),
     );
   }
 }
