@@ -25,6 +25,24 @@ mixin _$HomePageStore on _HomePageStore, Store {
     });
   }
 
+  late final _$_numberOfFollowersAtom =
+      Atom(name: '_HomePageStore._numberOfFollowers', context: context);
+
+  int get numberOfFollowers {
+    _$_numberOfFollowersAtom.reportRead();
+    return super._numberOfFollowers;
+  }
+
+  @override
+  int get _numberOfFollowers => numberOfFollowers;
+
+  @override
+  set _numberOfFollowers(int value) {
+    _$_numberOfFollowersAtom.reportWrite(value, super._numberOfFollowers, () {
+      super._numberOfFollowers = value;
+    });
+  }
+
   late final _$_isLoadingAtom =
       Atom(name: '_HomePageStore._isLoading', context: context);
 

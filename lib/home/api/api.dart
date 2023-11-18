@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mewtwo/home/model/get_posts_api_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/utils.dart';
@@ -9,27 +10,28 @@ part 'api.g.dart';
 
 
 @riverpod
-Future<List<PostModel>> getPostsApi(
+Future<GetPostsApiModel?> getPostsApi(
   GetPostsApiRef ref, {
   required int pageIndex,
 }) async {
   final body = {'page_index': pageIndex.toString(), 'count': 50.toString()};
   try {
     final res = await (await Networking.instance).post(path: "post/getPost", body: body);
-    Map response = res.data;
+    Map<String, dynamic> response = res.data;
     if (response['status'] == false) {
       Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
-      return [];
+      return null;
     }
-    final data = response['data'] as List<dynamic>;
-    return data.map((e) => PostModel.fromJson(e)).toList();
+    
+    return GetPostsApiModel.fromJson(response);
+    
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
     Log.instance.e(e.toString(), stackTrace: s);
   } catch (e, s) {
     Log.instance.e(e.toString(), stackTrace: s);
   }
-  return [];
+  return null;
 }
 
 @riverpod

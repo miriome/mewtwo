@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/home_page/widgets/post_tile.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mewtwo/utils.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -106,7 +107,8 @@ class _HomePageState extends State<HomePage> {
       leadingWidth: 150,
       actions: [
         GestureDetector(
-          child: Icon(
+          onTap: () => MainPlatform.goToScreen(Screens.likedPosts),
+          child: const Icon(
             Icons.favorite,
             color: Color(0xFFFA897B),
             size: 28,
@@ -114,7 +116,8 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(width: 16),
         GestureDetector(
-          child: Icon(
+          onTap: () => MainPlatform.goToScreen(Screens.chats),
+          child: const Icon(
             Icons.chat_bubble,
             color: Color(0xFFFFDD94),
             size: 28,

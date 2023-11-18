@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: const Color(0xFFFEFEFE),
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the

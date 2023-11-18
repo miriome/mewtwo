@@ -16,6 +16,9 @@ abstract class _HomePageStore with Store {
   int currentPage = 0;
 
   @readonly
+  int _numberOfFollowers = -1;
+
+  @readonly
   bool _isLoading = false;
 
   @readonly
@@ -28,7 +31,11 @@ abstract class _HomePageStore with Store {
     final listener = Mew.pc.listen(getPostsProvider, (previous, next) {
       _isLoading = next.isLoading;
     });
-    _posts = ObservableList.of(await Mew.pc.read(getPostsProvider.future));
+    final res = await Mew.pc.read(getPostsProvider.future);
+    if (res != null) {
+      _posts = ObservableList.of(res.data);
+      _numberOfFollowers = res.followers;
+    }
     listener.close();
   }
 

@@ -6,7 +6,7 @@ part of 'api.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getPostsApiHash() => r'71fd39063ed826895382bec3401224d5151c7ac1';
+String _$getPostsApiHash() => r'65e02ed319fba39bea91fbda12990ce1bab6f1fe';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const getPostsApiProvider = GetPostsApiFamily();
 
 /// See also [getPostsApi].
-class GetPostsApiFamily extends Family<AsyncValue<List<PostModel>>> {
+class GetPostsApiFamily extends Family<AsyncValue<GetPostsApiModel?>> {
   /// See also [getPostsApi].
   const GetPostsApiFamily();
 
@@ -72,7 +72,7 @@ class GetPostsApiFamily extends Family<AsyncValue<List<PostModel>>> {
 }
 
 /// See also [getPostsApi].
-class GetPostsApiProvider extends AutoDisposeFutureProvider<List<PostModel>> {
+class GetPostsApiProvider extends AutoDisposeFutureProvider<GetPostsApiModel?> {
   /// See also [getPostsApi].
   GetPostsApiProvider({
     required int pageIndex,
@@ -107,7 +107,7 @@ class GetPostsApiProvider extends AutoDisposeFutureProvider<List<PostModel>> {
 
   @override
   Override overrideWith(
-    FutureOr<List<PostModel>> Function(GetPostsApiRef provider) create,
+    FutureOr<GetPostsApiModel?> Function(GetPostsApiRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,7 +124,7 @@ class GetPostsApiProvider extends AutoDisposeFutureProvider<List<PostModel>> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<PostModel>> createElement() {
+  AutoDisposeFutureProviderElement<GetPostsApiModel?> createElement() {
     return _GetPostsApiProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class GetPostsApiProvider extends AutoDisposeFutureProvider<List<PostModel>> {
   }
 }
 
-mixin GetPostsApiRef on AutoDisposeFutureProviderRef<List<PostModel>> {
+mixin GetPostsApiRef on AutoDisposeFutureProviderRef<GetPostsApiModel?> {
   /// The parameter `pageIndex` of this provider.
   int get pageIndex;
 }
 
 class _GetPostsApiProviderElement
-    extends AutoDisposeFutureProviderElement<List<PostModel>>
+    extends AutoDisposeFutureProviderElement<GetPostsApiModel?>
     with GetPostsApiRef {
   _GetPostsApiProviderElement(super.provider);
 

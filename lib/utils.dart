@@ -25,7 +25,7 @@ class MaterialColorGenerator {
   }
 }
 
-enum Screens { forgetPassword, goToOtherUserProfile }
+enum Screens { forgetPassword, goToOtherUserProfile, likedPosts, chats, postDetails }
 
 // TODO: remove this when not needed or refactor into something better.
 class MainPlatform {
@@ -51,6 +51,13 @@ class MainPlatform {
     final userJson = jsonEncode(user.toJson()) ;
     try {
       await platform.invokeMethod('goToScreen', {"screen": Screens.goToOtherUserProfile.name, "userModelJson": userJson});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
+  static Future<void> goToPostDetails(int postId) async {
+    try {
+      await platform.invokeMethod('goToScreen', {"screen": Screens.postDetails.name, "postId": postId});
     } on PlatformException catch (e) {
       Log.instance.d(e.toString());
     }

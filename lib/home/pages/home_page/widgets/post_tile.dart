@@ -14,7 +14,9 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
-      return Center(
+      return GestureDetector(
+        onDoubleTap: () => onLikeToggle(post.id),
+        onTap: () => MainPlatform.goToPostDetails(post.id),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
@@ -64,20 +66,28 @@ class PostTile extends StatelessWidget {
                       ),
                       
                       const Spacer(),
-                      GestureDetector(
-                        onTap: () => onLikeToggle(post.id),
-                        child: Icon(
-                          post.my_like ? Icons.favorite : Icons.favorite_border,
-                          color: const Color(0xFFFA897B),
+                      SizedBox(
+                        width: 42 ,
+                        child: Row(
+                          children: [
+                          GestureDetector(
+                          onTap: () => onLikeToggle(post.id),
+                          child: Icon(
+                            post.my_like ? Icons.favorite : Icons.favorite_border,
+                            size: 12,
+                            color: const Color(0xFFFA897B),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        NumberFormat.decimalPattern().format(post.likes),
-                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          NumberFormat.decimalPattern().format(post.likes),
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700,),
+                        )
+                        ],),
                       )
+                      
                     ],
                   ),
                 ),
