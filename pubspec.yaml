@@ -49,6 +49,7 @@ dependencies:
   json_annotation: ^4.8.1
   cached_network_image: ^3.3.0
   intl: ^0.18.1
+  sliver_tools: ^0.2.12
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -4,6 +4,14 @@ class HomePageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return HomePage();
+    return const HomePage();
+  }
+}
+
+class SearchPageRoute extends GoRouteData {
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SearchPage();
   }
 }
