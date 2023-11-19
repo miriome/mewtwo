@@ -445,5 +445,134 @@ class _SearchApiProviderElement
   @override
   String get keyword => (origin as SearchApiProvider).keyword;
 }
+
+String _$getUserInfoApiHash() => r'54d45174ae24c3c64565417f251bedb003e488d0';
+
+/// See also [getUserInfoApi].
+@ProviderFor(getUserInfoApi)
+const getUserInfoApiProvider = GetUserInfoApiFamily();
+
+/// See also [getUserInfoApi].
+class GetUserInfoApiFamily extends Family<AsyncValue<UserModel?>> {
+  /// See also [getUserInfoApi].
+  const GetUserInfoApiFamily();
+
+  /// See also [getUserInfoApi].
+  GetUserInfoApiProvider call({
+    required int userId,
+  }) {
+    return GetUserInfoApiProvider(
+      userId: userId,
+    );
+  }
+
+  @override
+  GetUserInfoApiProvider getProviderOverride(
+    covariant GetUserInfoApiProvider provider,
+  ) {
+    return call(
+      userId: provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getUserInfoApiProvider';
+}
+
+/// See also [getUserInfoApi].
+class GetUserInfoApiProvider extends AutoDisposeFutureProvider<UserModel?> {
+  /// See also [getUserInfoApi].
+  GetUserInfoApiProvider({
+    required int userId,
+  }) : this._internal(
+          (ref) => getUserInfoApi(
+            ref as GetUserInfoApiRef,
+            userId: userId,
+          ),
+          from: getUserInfoApiProvider,
+          name: r'getUserInfoApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getUserInfoApiHash,
+          dependencies: GetUserInfoApiFamily._dependencies,
+          allTransitiveDependencies:
+              GetUserInfoApiFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  GetUserInfoApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final int userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<UserModel?> Function(GetUserInfoApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetUserInfoApiProvider._internal(
+        (ref) => create(ref as GetUserInfoApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<UserModel?> createElement() {
+    return _GetUserInfoApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetUserInfoApiProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetUserInfoApiRef on AutoDisposeFutureProviderRef<UserModel?> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+}
+
+class _GetUserInfoApiProviderElement
+    extends AutoDisposeFutureProviderElement<UserModel?>
+    with GetUserInfoApiRef {
+  _GetUserInfoApiProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as GetUserInfoApiProvider).userId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

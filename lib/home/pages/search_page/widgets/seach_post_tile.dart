@@ -21,10 +21,9 @@ class SearchPostTile extends StatelessWidget {
           borderRadius:
               BorderRadius.circular(6),
           child: AspectRatio(
-                  aspectRatio: 184 / 232,
+                  aspectRatio: 184 / 242,
                   child: CachedNetworkImage(
                     imageUrl: post.image,
-                    width: 184,
                     fit: BoxFit.fill,
                     alignment: Alignment.topCenter,
                   ))

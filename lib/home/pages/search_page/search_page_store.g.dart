@@ -9,6 +9,14 @@ part of 'search_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SearchPageStore on _SearchPageStore, Store {
+  Computed<List<String>>? _$selfStylesComputed;
+
+  @override
+  List<String> get selfStyles =>
+      (_$selfStylesComputed ??= Computed<List<String>>(() => super.selfStyles,
+              name: '_SearchPageStore.selfStyles'))
+          .value;
+
   late final _$searchTermAtom =
       Atom(name: '_SearchPageStore.searchTerm', context: context);
 
@@ -61,6 +69,24 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
+  late final _$_selfUserModelAtom =
+      Atom(name: '_SearchPageStore._selfUserModel', context: context);
+
+  UserModel? get selfUserModel {
+    _$_selfUserModelAtom.reportRead();
+    return super._selfUserModel;
+  }
+
+  @override
+  UserModel? get _selfUserModel => selfUserModel;
+
+  @override
+  set _selfUserModel(UserModel? value) {
+    _$_selfUserModelAtom.reportWrite(value, super._selfUserModel, () {
+      super._selfUserModel = value;
+    });
+  }
+
   late final _$_postResultsAtom =
       Atom(name: '_SearchPageStore._postResults', context: context);
 
@@ -97,6 +123,14 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
+  late final _$_loadSelfUserDataAsyncAction =
+      AsyncAction('_SearchPageStore._loadSelfUserData', context: context);
+
+  @override
+  Future<void> _loadSelfUserData() {
+    return _$_loadSelfUserDataAsyncAction.run(() => super._loadSelfUserData());
+  }
+
   late final _$searchAsyncAction =
       AsyncAction('_SearchPageStore.search', context: context);
 
@@ -108,7 +142,8 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
   @override
   String toString() {
     return '''
-searchTerm: ${searchTerm}
+searchTerm: ${searchTerm},
+selfStyles: ${selfStyles}
     ''';
   }
 }
