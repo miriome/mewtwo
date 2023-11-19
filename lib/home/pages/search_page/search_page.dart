@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
@@ -22,7 +24,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    
+    MainPlatform.addMethodCallhandler((call) async {
+      if (call.method == "modifyInitialSearchTerm" && call.arguments is String) {
+        store.searchTerm = call.arguments;
+      }
+      
+    });
     store.initReactions();
     super.initState();
   }

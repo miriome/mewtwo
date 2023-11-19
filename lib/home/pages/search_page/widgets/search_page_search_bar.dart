@@ -16,20 +16,15 @@ class SearchPageSearchBar extends StatefulWidget {
 
 class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
   final searchController = SearchController();
-  final searchFocusNode = FocusNode();
 
   @override
   void initState() {
-    searchController.addListener(() {
-      widget.store.searchTerm = searchController.text;
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     searchController.dispose();
-    searchFocusNode.dispose();
 
     super.dispose();
   }
@@ -39,6 +34,7 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
     return ReactionBuilder(
       builder: (context) {
           return autorun((_) {
+            searchController.text = widget.store.searchTerm;
             if (widget.store.userResults.isNotEmpty && !searchController.isOpen) {
               searchController.openView();
             }
@@ -57,11 +53,12 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
               isFullScreen: false,
               builder: (context, controller) => TapRegion(
                     onTapOutside: (event) {
-                      searchFocusNode.unfocus();
+                      widget.store.searchBarFocusNode.unfocus();
                     },
                     child: SearchBar(
-                      focusNode: searchFocusNode,
+                      focusNode: widget.store.searchBarFocusNode,
                       controller: controller,
+                      onChanged: (value) => widget.store.searchTerm = value,
                       hintText: "Search for styles, clothes, or usernames...",
                       hintStyle: MaterialStateTextStyle.resolveWith(
                         (states) {

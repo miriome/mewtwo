@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/post_model.dart';
@@ -34,6 +36,12 @@ abstract class _SearchPageStore with Store {
   @readonly
   ObservableList<UserModel> _userResults = ObservableList.of([]);
 
+  @readonly
+  FocusNode _searchBarFocusNode = FocusNode();
+
+  CancelableOperation? _currentSearchOp;
+
+
   @computed
   List<String> get selfStyles {
     final styles = _selfUserModel?.styles.split(",") ?? [];
@@ -47,8 +55,9 @@ abstract class _SearchPageStore with Store {
 
   void initReactions() {
     d.add(reaction((_) => searchTerm, (_) {
-      if (selfStyles.contains(searchTerm)) {
+      if (!_searchBarFocusNode.hasFocus) {
         search();
+        return;
       }
       _searchTimer?.cancel();
       _searchTimer = Timer(const Duration(seconds: 1, milliseconds: 2), () {
@@ -58,6 +67,7 @@ abstract class _SearchPageStore with Store {
   }
 
   void dispose() {
+    _searchBarFocusNode.dispose();
     for (var disposer in d) {
       disposer();
     }
@@ -83,16 +93,21 @@ abstract class _SearchPageStore with Store {
 
   @action
   Future<void> search() async {
+    _currentSearchOp?.cancel();
     final searchApiProvider = SearchApiProvider(pageIndex: _currentPage, keyword: searchTerm);
 
     final listener = Mew.pc.listen(searchApiProvider, (previous, next) {
       _isLoading = next.isLoading;
     });
-    final res = await Mew.pc.read(searchApiProvider.future);
-    if (res != null) {
+    final cancelableFut = CancelableOperation.fromFuture(Mew.pc.read(searchApiProvider.future));
+    
+    _currentSearchOp = cancelableFut.then((res) {
+      if (res != null) {
       _postResults = ObservableList.of(res.postData ?? []);
       _userResults = ObservableList.of(res.userData ?? []);
     }
+    });
+    
     listener.close();
   }
 }

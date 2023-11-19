@@ -5,9 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 
-
-
-
 class MaterialColorGenerator {
   static MaterialColor from(Color color) {
     return MaterialColor(color.value, <int, Color>{
@@ -29,7 +26,23 @@ enum Screens { forgetPassword, goToOtherUserProfile, likedPosts, chats, postDeta
 
 // TODO: remove this when not needed or refactor into something better.
 class MainPlatform {
-  static const platform = MethodChannel('MainChannel');
+  static final platform = const MethodChannel('MainChannel')
+    ..setMethodCallHandler((call) async {
+      for (var element in _handlers) {
+        await element.call(call);
+      }
+    });
+
+  static final List<Future<void> Function(MethodCall)> _handlers = [];
+
+  static void addMethodCallhandler(Future<dynamic> Function(MethodCall) handler) {
+    _handlers.add(handler);
+    platform.setMethodCallHandler((call) async {
+      for (var element in _handlers) {
+        await element.call(call);
+      }
+    });
+  }
 
   static Future<void> goToScreen(Screens screen) async {
     try {
@@ -48,13 +61,15 @@ class MainPlatform {
   }
 
   static Future<void> goToOtherUserProfile(UserModel user) async {
-    final userJson = jsonEncode(user.toJson()) ;
+    final userJson = jsonEncode(user.toJson());
     try {
-      await platform.invokeMethod('goToScreen', {"screen": Screens.goToOtherUserProfile.name, "userModelJson": userJson});
+      await platform
+          .invokeMethod('goToScreen', {"screen": Screens.goToOtherUserProfile.name, "userModelJson": userJson});
     } on PlatformException catch (e) {
       Log.instance.d(e.toString());
     }
   }
+
   static Future<void> goToPostDetails(int postId) async {
     try {
       await platform.invokeMethod('goToScreen', {"screen": Screens.postDetails.name, "postId": postId});
@@ -65,20 +80,19 @@ class MainPlatform {
 }
 
 class Log {
-   static Log? _singleton;
+  static Log? _singleton;
   Log._();
 
   static Log get instance {
     _singleton ??= Log._();
     return _singleton!;
   }
-  
+
   final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      colors: true, // Colorful log messages
-      printEmojis: true, // Print an emoji for each log message
-    )
-  );
+      printer: PrettyPrinter(
+    colors: true, // Colorful log messages
+    printEmojis: true, // Print an emoji for each log message
+  ));
   void d(String msg) {
     _logger.d(msg);
   }
@@ -97,8 +111,8 @@ class Utility {
       return val;
     }
     return false;
-
   }
+
   static String int2Str(dynamic val) {
     if (val is int) {
       return val.toString();
@@ -119,5 +133,4 @@ class Utility {
   static int parseInt(dynamic val, [int defaultVal = 0]) {
     return int.tryParse(val) ?? defaultVal;
   }
-  
 }

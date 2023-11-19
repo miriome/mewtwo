@@ -123,6 +123,24 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
+  late final _$_searchBarFocusNodeAtom =
+      Atom(name: '_SearchPageStore._searchBarFocusNode', context: context);
+
+  FocusNode get searchBarFocusNode {
+    _$_searchBarFocusNodeAtom.reportRead();
+    return super._searchBarFocusNode;
+  }
+
+  @override
+  FocusNode get _searchBarFocusNode => searchBarFocusNode;
+
+  @override
+  set _searchBarFocusNode(FocusNode value) {
+    _$_searchBarFocusNodeAtom.reportWrite(value, super._searchBarFocusNode, () {
+      super._searchBarFocusNode = value;
+    });
+  }
+
   late final _$_loadSelfUserDataAsyncAction =
       AsyncAction('_SearchPageStore._loadSelfUserData', context: context);
 
