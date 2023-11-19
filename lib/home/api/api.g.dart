@@ -6,7 +6,7 @@ part of 'api.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getPostsApiHash() => r'65e02ed319fba39bea91fbda12990ce1bab6f1fe';
+String _$getPostsApiHash() => r'8ad4dbc37db37fdd2b9147530c4f19e61d63ad14';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -299,6 +299,280 @@ class _LikePostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
   int get postId => (origin as LikePostApiProvider).postId;
   @override
   bool get setLikeTo => (origin as LikePostApiProvider).setLikeTo;
+}
+
+String _$searchApiHash() => r'4234648ea28f3c3dec713f1f68b629c49ebc0236';
+
+/// See also [searchApi].
+@ProviderFor(searchApi)
+const searchApiProvider = SearchApiFamily();
+
+/// See also [searchApi].
+class SearchApiFamily extends Family<AsyncValue<SearchApiModel?>> {
+  /// See also [searchApi].
+  const SearchApiFamily();
+
+  /// See also [searchApi].
+  SearchApiProvider call({
+    required int pageIndex,
+    required String keyword,
+  }) {
+    return SearchApiProvider(
+      pageIndex: pageIndex,
+      keyword: keyword,
+    );
+  }
+
+  @override
+  SearchApiProvider getProviderOverride(
+    covariant SearchApiProvider provider,
+  ) {
+    return call(
+      pageIndex: provider.pageIndex,
+      keyword: provider.keyword,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'searchApiProvider';
+}
+
+/// See also [searchApi].
+class SearchApiProvider extends AutoDisposeFutureProvider<SearchApiModel?> {
+  /// See also [searchApi].
+  SearchApiProvider({
+    required int pageIndex,
+    required String keyword,
+  }) : this._internal(
+          (ref) => searchApi(
+            ref as SearchApiRef,
+            pageIndex: pageIndex,
+            keyword: keyword,
+          ),
+          from: searchApiProvider,
+          name: r'searchApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$searchApiHash,
+          dependencies: SearchApiFamily._dependencies,
+          allTransitiveDependencies: SearchApiFamily._allTransitiveDependencies,
+          pageIndex: pageIndex,
+          keyword: keyword,
+        );
+
+  SearchApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pageIndex,
+    required this.keyword,
+  }) : super.internal();
+
+  final int pageIndex;
+  final String keyword;
+
+  @override
+  Override overrideWith(
+    FutureOr<SearchApiModel?> Function(SearchApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SearchApiProvider._internal(
+        (ref) => create(ref as SearchApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pageIndex: pageIndex,
+        keyword: keyword,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<SearchApiModel?> createElement() {
+    return _SearchApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SearchApiProvider &&
+        other.pageIndex == pageIndex &&
+        other.keyword == keyword;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pageIndex.hashCode);
+    hash = _SystemHash.combine(hash, keyword.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SearchApiRef on AutoDisposeFutureProviderRef<SearchApiModel?> {
+  /// The parameter `pageIndex` of this provider.
+  int get pageIndex;
+
+  /// The parameter `keyword` of this provider.
+  String get keyword;
+}
+
+class _SearchApiProviderElement
+    extends AutoDisposeFutureProviderElement<SearchApiModel?>
+    with SearchApiRef {
+  _SearchApiProviderElement(super.provider);
+
+  @override
+  int get pageIndex => (origin as SearchApiProvider).pageIndex;
+  @override
+  String get keyword => (origin as SearchApiProvider).keyword;
+}
+
+String _$getUserInfoApiHash() => r'54d45174ae24c3c64565417f251bedb003e488d0';
+
+/// See also [getUserInfoApi].
+@ProviderFor(getUserInfoApi)
+const getUserInfoApiProvider = GetUserInfoApiFamily();
+
+/// See also [getUserInfoApi].
+class GetUserInfoApiFamily extends Family<AsyncValue<UserModel?>> {
+  /// See also [getUserInfoApi].
+  const GetUserInfoApiFamily();
+
+  /// See also [getUserInfoApi].
+  GetUserInfoApiProvider call({
+    required int userId,
+  }) {
+    return GetUserInfoApiProvider(
+      userId: userId,
+    );
+  }
+
+  @override
+  GetUserInfoApiProvider getProviderOverride(
+    covariant GetUserInfoApiProvider provider,
+  ) {
+    return call(
+      userId: provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getUserInfoApiProvider';
+}
+
+/// See also [getUserInfoApi].
+class GetUserInfoApiProvider extends AutoDisposeFutureProvider<UserModel?> {
+  /// See also [getUserInfoApi].
+  GetUserInfoApiProvider({
+    required int userId,
+  }) : this._internal(
+          (ref) => getUserInfoApi(
+            ref as GetUserInfoApiRef,
+            userId: userId,
+          ),
+          from: getUserInfoApiProvider,
+          name: r'getUserInfoApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getUserInfoApiHash,
+          dependencies: GetUserInfoApiFamily._dependencies,
+          allTransitiveDependencies:
+              GetUserInfoApiFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  GetUserInfoApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final int userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<UserModel?> Function(GetUserInfoApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetUserInfoApiProvider._internal(
+        (ref) => create(ref as GetUserInfoApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<UserModel?> createElement() {
+    return _GetUserInfoApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetUserInfoApiProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetUserInfoApiRef on AutoDisposeFutureProviderRef<UserModel?> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+}
+
+class _GetUserInfoApiProviderElement
+    extends AutoDisposeFutureProviderElement<UserModel?>
+    with GetUserInfoApiRef {
+  _GetUserInfoApiProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as GetUserInfoApiProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

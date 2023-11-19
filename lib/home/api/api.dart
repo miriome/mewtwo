@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/home/model/get_posts_api_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
+import 'package:mewtwo/home/model/search_api_model.dart';
+import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +16,7 @@ Future<GetPostsApiModel?> getPostsApi(
   GetPostsApiRef ref, {
   required int pageIndex,
 }) async {
-  final body = {'page_index': pageIndex.toString(), 'count': 50.toString()};
+  final body = {'page_index': pageIndex.toString(), 'count': 100.toString()};
   try {
     final res = await (await Networking.instance).post(path: "post/getPost", body: body);
     Map<String, dynamic> response = res.data;
@@ -54,4 +56,52 @@ final body = {'post_id': postId.toString(), 'is_like': setLikeTo ? 1 : 0};
     Log.instance.e(e.toString(), stackTrace: s);
   }
   return false;
+}
+
+@riverpod
+Future<SearchApiModel?> searchApi(
+  SearchApiRef ref, {
+  required int pageIndex,
+  required String keyword
+}) async {
+  final body = {'page_index': pageIndex.toString(), 'count': 100.toString(), 'keyword': keyword};
+  try {
+    final res = await (await Networking.instance).post(path: "post/search", body: body);
+    Map<String, dynamic> response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return null;
+    }
+    
+    return SearchApiModel.fromJson(response['data']);
+    
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return null;
+}
+
+@riverpod
+Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {
+  required int userId
+}) async {
+
+  try {
+    final res = await (await Networking.instance).get(path: "users/profile/$userId");
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return null;
+    }
+    return UserModel.fromJson(response['data']);
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return null;
 }
