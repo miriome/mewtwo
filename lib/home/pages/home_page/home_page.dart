@@ -23,50 +23,6 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: Loading more list
-    // final loadingMorePage = PagedLayoutBuilder(
-    //     pagingController: store.controller,
-    //     builderDelegate: PagedChildBuilderDelegate(
-    //       itemBuilder: (context, item, index) {
-    //         return PostTile(
-    //           post: store.posts[index],
-    //           onLikeToggle: (postId) => store.togglePostLike(postId: postId),
-    //         );
-    //       },
-    //     ),
-    //     loadingListingBuilder: (context, itemWidgetBuilder, itemCount, newPageProgressIndicatorBuilder) {
-    //       return Column(
-    //         children: [
-    //           AlignedGridView.count(
-    //             crossAxisCount: 2,
-    //             mainAxisSpacing: 8,
-    //             crossAxisSpacing: 8,
-    //             itemCount: store.posts.length,
-    //             itemBuilder: itemWidgetBuilder,
-    //           ),
-    //           newPageProgressIndicatorBuilder(context)
-    //         ],
-    //       );
-    //     },
-    //     errorListingBuilder: (context, itemWidgetBuilder, itemCount, newPageErrorIndicatorBuilder) {
-    //       return AlignedGridView.count(
-    //         crossAxisCount: 2,
-    //         mainAxisSpacing: 8,
-    //         crossAxisSpacing: 8,
-    //         itemCount: store.posts.length,
-    //         itemBuilder: itemWidgetBuilder,
-    //       );
-    //     },
-    //     completedListingBuilder: (context, itemWidgetBuilder, itemCount, noMoreItemsIndicatorBuilder) {
-    //       return AlignedGridView.count(
-    //         crossAxisCount: 2,
-    //         mainAxisSpacing: 8,
-    //         crossAxisSpacing: 8,
-    //         itemCount: store.posts.length,
-    //         itemBuilder: itemWidgetBuilder,
-    //       );
-    //     },
-    //     layoutProtocol: PagedLayoutProtocol.box);
     return SafeArea(
       child: Observer(
         builder: (context) {
@@ -97,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSizeWidget get appBar {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9F9F9),
       elevation: 0,
       leading: Container(
         alignment: Alignment.centerLeft,

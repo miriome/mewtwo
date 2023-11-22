@@ -21,14 +21,12 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final store = SearchPageStore();
 
-
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "modifyInitialSearchTerm" && call.arguments is String) {
         store.searchTerm = call.arguments;
       }
-      
     });
     store.initReactions();
     super.initState();
@@ -50,13 +48,15 @@ class _SearchPageState extends State<SearchPage> {
             child: CustomScrollView(
               slivers: [
                 SliverPinnedHeader(
-                    child: Padding(
+                    child: Container(
+                        color: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: SearchPageSearchBar(
                           store: store,
                         ))),
-                SliverToBoxAdapter(
-                    child: Padding(
+                SliverPinnedHeader(
+                    child: Container(
+                  color: Colors.white,
                   padding: EdgeInsets.symmetric(
                       vertical: 16,
                       horizontal: store.searchTerm == "All"
@@ -68,9 +68,18 @@ class _SearchPageState extends State<SearchPage> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         final currentStyle = store.selfStyles[index];
-                        final isCurrentStyleSelected = store.searchTerm == currentStyle;
+                        bool isCurrentStyleSelected = false;
+                        if (currentStyle == "All") {
+                          isCurrentStyleSelected = store.searchTerm == "";
+                        } else {
+                          isCurrentStyleSelected = store.searchTerm == currentStyle;
+                        }
                         return GestureDetector(
                           onTap: () {
+                            if (currentStyle == "All") {
+                              store.searchTerm = "";
+                              return;
+                            }
                             store.searchTerm = currentStyle;
                           },
                           child: Text(
@@ -93,6 +102,55 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 )),
+                SliverList.builder(itemBuilder: (context, index) {
+                  final user = store.userResults[index];
+                  return GestureDetector(
+                    onTap: () => MainPlatform.goToOtherUserProfile(user),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: const Color(0xFF6EC6CA),
+                            foregroundImage: user.photo_url == "https://miromie.com/uploads/"
+                                ? null
+                                : CachedNetworkImageProvider(
+                                    user.photo_url,
+                                  ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user.name,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                user.username,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(
+                                    0xFF6EC6CA,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }, itemCount: store.userResults.length,),
                 SliverAlignedGrid.count(
                   itemBuilder: (context, index) {
                     return SearchPostTile(post: store.postResults[index]);

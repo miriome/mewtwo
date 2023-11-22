@@ -15,8 +15,6 @@ class SearchPageSearchBar extends StatefulWidget {
 }
 
 class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
-  final searchController = SearchController();
-
   @override
   void initState() {
     super.initState();
@@ -24,101 +22,40 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
 
   @override
   void dispose() {
-    searchController.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ReactionBuilder(
-      builder: (context) {
-          return autorun((_) {
-            searchController.text = widget.store.searchTerm;
-            if (widget.store.userResults.isNotEmpty && !searchController.isOpen) {
-              searchController.openView();
-            }
-            if (widget.store.userResults.isEmpty && searchController.isOpen) {
-              searchController.closeView(widget.store.searchTerm);
-            }
-          });
+    return TapRegion(
+      onTapOutside: (event) {
+        widget.store.searchBarFocusNode.unfocus();
+      },
+      child: TextField(
+        onChanged: (value) {
+          widget.store.searchTerm = value;
         },
-      child: Observer(
-        builder: (context) {
-          return SearchAnchor(
-              viewConstraints: BoxConstraints(
-                  maxHeight: 120 + (widget.store.userResults.length > 5 ? 5 : widget.store.userResults.length) * 56),
-              searchController: searchController,
-              viewLeading: Container(),
-              isFullScreen: false,
-              builder: (context, controller) => TapRegion(
-                    onTapOutside: (event) {
-                      widget.store.searchBarFocusNode.unfocus();
-                    },
-                    child: SearchBar(
-                      focusNode: widget.store.searchBarFocusNode,
-                      controller: controller,
-                      onChanged: (value) => widget.store.searchTerm = value,
-                      hintText: "Search for styles, clothes, or usernames...",
-                      hintStyle: MaterialStateTextStyle.resolveWith(
-                        (states) {
-                          return const TextStyle(color: Color(0xFF7D7878));
-                        },
-                      ),
-                    ),
-                  ),
-              suggestionsBuilder: (context, controller) {
-                return widget.store.userResults.map((user) {
-                  return GestureDetector(
-                    onTap: () => MainPlatform.goToOtherUserProfile(user),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircleAvatar(
-                            radius: 24,
-                            backgroundColor: const Color(0xFF6EC6CA),
-                            foregroundImage: user.photo_url == "https://miromie.com/uploads/"
-                                ? null
-                                : CachedNetworkImageProvider(
-                                    user.photo_url,
-                                  ),
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                user.name,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                user.username,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(
-                                    0xFF6EC6CA,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                });
-              });
-        }
+        focusNode: widget.store.searchBarFocusNode,
+        maxLines: 1,
+        decoration: InputDecoration(
+            hintText: "Search for styles, clothes, or usernames...",
+            hintStyle: const TextStyle(color: Color(0xFF7D7878)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
+    // return SearchBar(
+    //   focusNode: widget.store.searchBarFocusNode,
+    //   // backgroundColor: MaterialStatePropertyAll(Colors.white),
+    //   surfaceTintColor: MaterialStatePropertyAll(Colors.white),
+    //   onChanged: (value) {
+    //     widget.store.searchTerm = value;
+    //   },
+    //   hintText: "Search for styles, clothes, or usernames...",
+    //   hintStyle: MaterialStateTextStyle.resolveWith(
+    //     (states) {
+    //       return const TextStyle(color: Color(0xFF7D7878));
+    //     },
+    //   ),
+    // );
   }
 }

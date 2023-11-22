@@ -35,6 +35,12 @@ class PostTile extends StatelessWidget {
                         aspectRatio: 184 / 242,
                         child: CachedNetworkImage(
                           imageUrl: post.image,
+                          placeholder: (context, url) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF6EC6CA),),
+                            );
+                          },
                           fit: BoxFit.fill,
                           alignment: Alignment.topCenter,
                         ))
@@ -92,30 +98,27 @@ class PostTile extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          SizedBox(
-            width: 42,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => onLikeToggle(post.id),
-                  child: Icon(
-                    post.my_like ? Icons.favorite : Icons.favorite_border,
-                    size: 12,
-                    color: const Color(0xFFFA897B),
-                  ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => onLikeToggle(post.id),
+                child: Icon(
+                  post.my_like ? Icons.favorite : Icons.favorite_border,
+                  size: 12,
+                  color: const Color(0xFFFA897B),
                 ),
-                const SizedBox(
-                  width: 4,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                NumberFormat.decimalPattern().format(post.likes),
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
                 ),
-                Text(
-                  NumberFormat.decimalPattern().format(post.likes),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           )
         ],
       ),
