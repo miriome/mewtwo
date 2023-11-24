@@ -6,11 +6,11 @@ import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
 
-class PostTile extends StatelessWidget {
+class HomePostTile extends StatelessWidget {
   final PostModel post;
   final void Function(int) onLikeToggle;
   final void Function(int) onUserTap;
-  const PostTile({Key? key, required this.post, required this.onLikeToggle, required this.onUserTap}) : super(key: key);
+  const HomePostTile({Key? key, required this.post, required this.onLikeToggle, required this.onUserTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class PostTile extends StatelessWidget {
                                 color: Color(0xFF6EC6CA),),
                             );
                           },
-                          fit: BoxFit.fill,
+                          fit: BoxFit.fitHeight,
                           alignment: Alignment.topCenter,
                         ))
                   ],

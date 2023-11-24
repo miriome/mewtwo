@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mewtwo/auth/routes/routes.dart';
 import 'package:mewtwo/home/pages/home_page/home_page.dart';
+import 'package:mewtwo/home/pages/profile_page/profile_page.dart';
 import 'package:mewtwo/home/pages/search_page/search_page.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
@@ -44,5 +45,7 @@ class HomeRoutes {
         path: 'HomePage',
       ), TypedGoRoute<SearchPageRoute>(
         path: 'SearchPage',
+      ), TypedGoRoute<ProfilePageRoute>(
+        path: 'ProfilePage',
       )];
 }

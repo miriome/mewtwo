@@ -27,6 +27,10 @@ RouteBase get $mainRoute => GoRouteData.$route(
           path: 'SearchPage',
           factory: $SearchPageRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'ProfilePage',
+          factory: $ProfilePageRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -101,6 +105,23 @@ extension $SearchPageRouteExtension on SearchPageRoute {
 
   String get location => GoRouteData.$location(
         '/SearchPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ProfilePageRouteExtension on ProfilePageRoute {
+  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
+
+  String get location => GoRouteData.$location(
+        '/ProfilePage',
       );
 
   void go(BuildContext context) => context.go(location);

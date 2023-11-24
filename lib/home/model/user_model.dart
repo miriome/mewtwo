@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
 
 part 'user_model.g.dart';
@@ -19,6 +20,7 @@ class UserModel {
   final bool myFollow;
   final String styles, username, name, photo_url;
   final String? email, password, pronouns, weight, height, bust, waist, hips;
+  final List<PostModel>? posts;
 
   UserModel(
       {required this.id,
@@ -33,6 +35,7 @@ class UserModel {
       required this.bust,
       required this.waist,
       required this.hips,
+      this.posts,
       this.email,
       this.password,
       this.pronouns});

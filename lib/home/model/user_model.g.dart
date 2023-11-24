@@ -19,6 +19,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       bust: json['bust'] as String?,
       waist: json['waist'] as String?,
       hips: json['hips'] as String?,
+      posts: (json['posts'] as List<dynamic>?)
+          ?.map((e) => PostModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       email: json['email'] as String?,
       password: json['password'] as String?,
       pronouns: json['pronouns'] as String?,
@@ -40,4 +43,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'bust': instance.bust,
       'waist': instance.waist,
       'hips': instance.hips,
+      'posts': instance.posts?.map((e) => e.toJson()).toList(),
     };

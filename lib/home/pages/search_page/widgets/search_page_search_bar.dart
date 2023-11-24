@@ -28,22 +28,17 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
-      onTapOutside: (event) {
-        widget.store.searchBarFocusNode.unfocus();
+    return TextField(
+      onChanged: (value) {
+        widget.store.searchTerm = value;
       },
-      child: TextField(
-        onChanged: (value) {
-          widget.store.searchTerm = value;
-        },
-        controller: widget.store.textEditingController,
-        focusNode: widget.store.searchBarFocusNode,
-        maxLines: 1,
-        decoration: InputDecoration(
-            hintText: "Search for styles, clothes, or usernames...",
-            hintStyle: const TextStyle(color: Color(0xFF7D7878)),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-      ),
+      controller: widget.store.textEditingController,
+      focusNode: widget.store.searchBarFocusNode,
+      maxLines: 1,
+      decoration: InputDecoration(
+          hintText: "Search for styles, clothes, or usernames...",
+          hintStyle: const TextStyle(color: Color(0xFF7D7878)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
     );
   }
 }

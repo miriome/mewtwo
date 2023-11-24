@@ -70,6 +70,16 @@ class MainPlatform {
     }
   }
 
+  static Future<void> showOwnProfileActions(UserModel user) async {
+    final userJson = jsonEncode(user.toJson());
+    try {
+      await platform
+          .invokeMethod('showOwnProfileActions', {"userModelJson": userJson});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
+
   static Future<void> goToPostDetails(int postId) async {
     try {
       await platform.invokeMethod('goToScreen', {"screen": Screens.postDetails.name, "postId": postId});
