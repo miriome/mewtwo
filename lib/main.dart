@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xFFFEFEFE),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Color(0xFF6EC6CA)
+          ),
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
           // counter didn't reset back to zero; the application is not restarted.
           primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
           textTheme: GoogleFonts.robotoTextTheme()),
-      builder: EasyLoading.init(),
+      builder: EasyLoading.init(), // TODO: Remove this
       routerConfig: GoRouter(
           routes: $appRoutes, initialLocation: HomePageRoute().location),
     );

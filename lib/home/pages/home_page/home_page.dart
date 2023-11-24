@@ -3,8 +3,7 @@ import 'package:mewtwo/base/widgets/miromie_title.dart';
 import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mewtwo/home/pages/home_page/widgets/post_tile.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:mewtwo/home/pages/home_page/widgets/home_post_tile.dart';
 import 'package:mewtwo/utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisSpacing: 8,
                 itemCount: store.posts.length,
                 itemBuilder: (context, index) {
-                  return PostTile(
+                  return HomePostTile(
                     onUserTap: (userId) {},
                     post: store.posts[index],
                     onLikeToggle: (postId) => store.togglePostLike(postId: postId),

@@ -24,6 +24,13 @@ class SearchPostTile extends StatelessWidget {
                   aspectRatio: 184 / 242,
                   child: CachedNetworkImage(
                     imageUrl: post.image,
+                    placeholder: (context, url) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF6EC6CA),
+                          ),
+                        );
+                      },
                     fit: BoxFit.fill,
                     alignment: Alignment.topCenter,
                   ))
