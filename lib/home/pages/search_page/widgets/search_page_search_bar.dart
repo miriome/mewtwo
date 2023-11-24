@@ -22,6 +22,7 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
 
   @override
   void dispose() {
+    widget.store.dispose();
     super.dispose();
   }
 
@@ -35,6 +36,7 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
         onChanged: (value) {
           widget.store.searchTerm = value;
         },
+        controller: widget.store.textEditingController,
         focusNode: widget.store.searchBarFocusNode,
         maxLines: 1,
         decoration: InputDecoration(
@@ -43,19 +45,5 @@ class _SearchPageSearchBarState extends State<SearchPageSearchBar> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
-    // return SearchBar(
-    //   focusNode: widget.store.searchBarFocusNode,
-    //   // backgroundColor: MaterialStatePropertyAll(Colors.white),
-    //   surfaceTintColor: MaterialStatePropertyAll(Colors.white),
-    //   onChanged: (value) {
-    //     widget.store.searchTerm = value;
-    //   },
-    //   hintText: "Search for styles, clothes, or usernames...",
-    //   hintStyle: MaterialStateTextStyle.resolveWith(
-    //     (states) {
-    //       return const TextStyle(color: Color(0xFF7D7878));
-    //     },
-    //   ),
-    // );
   }
 }

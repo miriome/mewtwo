@@ -39,6 +39,9 @@ abstract class _SearchPageStore with Store {
   @readonly
   FocusNode _searchBarFocusNode = FocusNode();
 
+  @readonly
+  TextEditingController _textEditingController = TextEditingController();
+
   CancelableOperation? _currentSearchOp;
 
 
@@ -55,6 +58,7 @@ abstract class _SearchPageStore with Store {
 
   void initReactions() {
     d.add(reaction((_) => searchTerm, (_) {
+      _textEditingController.text = searchTerm;
       if (!_searchBarFocusNode.hasFocus) {
         search();
         return;
@@ -68,6 +72,7 @@ abstract class _SearchPageStore with Store {
 
   void dispose() {
     _searchBarFocusNode.dispose();
+    _textEditingController.dispose();
     for (var disposer in d) {
       disposer();
     }

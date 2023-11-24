@@ -141,6 +141,25 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
+  late final _$_textEditingControllerAtom =
+      Atom(name: '_SearchPageStore._textEditingController', context: context);
+
+  TextEditingController get textEditingController {
+    _$_textEditingControllerAtom.reportRead();
+    return super._textEditingController;
+  }
+
+  @override
+  TextEditingController get _textEditingController => textEditingController;
+
+  @override
+  set _textEditingController(TextEditingController value) {
+    _$_textEditingControllerAtom
+        .reportWrite(value, super._textEditingController, () {
+      super._textEditingController = value;
+    });
+  }
+
   late final _$_loadSelfUserDataAsyncAction =
       AsyncAction('_SearchPageStore._loadSelfUserData', context: context);
 

@@ -27,8 +27,10 @@ class _HomePageState extends State<HomePage> {
       child: Observer(
         builder: (context) {
           return Scaffold(
+          backgroundColor: Colors.white,
             appBar: appBar,
             body: Container(
+              color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: 
               AlignedGridView.count(
@@ -53,8 +55,8 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSizeWidget get appBar {
     return AppBar(
-      backgroundColor: const Color(0xFFF9F9F9),
       elevation: 0,
+      surfaceTintColor: Colors.white,
       leading: Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsetsDirectional.only(start: 16),
