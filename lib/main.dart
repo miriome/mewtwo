@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
+        useMaterial3: true,
           scaffoldBackgroundColor: const Color(0xFFFEFEFE),
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xFF6EC6CA)

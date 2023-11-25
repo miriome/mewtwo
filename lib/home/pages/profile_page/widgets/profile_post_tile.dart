@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
 
@@ -25,23 +26,28 @@ class ProfilePostTile extends StatelessWidget {
           child: ClipRRect(
             borderRadius:
                 const BorderRadiusDirectional.only(bottomEnd: Radius.circular(4), bottomStart: Radius.circular(4)),
-            child: Column(
+            child: Stack(
               children: [
-                AspectRatio(
-                    aspectRatio: 184 / 242,
-                    child: CachedNetworkImage(
-                      imageUrl: post.image,
-                      placeholder: (context, url) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xFF6EC6CA),
-                          ),
-                        );
-                      },
-                      fit: BoxFit.fitHeight,
-                      alignment: Alignment.topCenter,
-                    )),
-                cardFooter,
+                Column(
+                  children: [
+                    AspectRatio(
+                        aspectRatio: 184 / 242,
+                        child: CachedNetworkImage(
+                          imageUrl: post.image,
+                          placeholder: (context, url) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF6EC6CA),
+                              ),
+                            );
+                          },
+                          fit: BoxFit.fitHeight,
+                          alignment: Alignment.topCenter,
+                        )),
+                    if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon()),
+                    cardFooter,
+                  ],
+                ),
               ],
             ),
           ),
@@ -67,7 +73,6 @@ class ProfilePostTile extends StatelessWidget {
             ),
             Text(
               NumberFormat.decimalPattern().format(post.likes),
-              
               style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
