@@ -34,56 +34,53 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Observer(builder: (context) {
-          return Scaffold(
-            appBar: appBar,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 16),
-                  measurements,
-                  const SizedBox(height: 16),
-                  relationStatistics,
-                  const SizedBox(height: 16),
-                  store.posts.length > 0 ?
-                  Expanded(
-                      child: RefreshIndicator(
-                    onRefresh: () async {
-                      store.load();
+      child: Observer(builder: (context) {
+        return Scaffold(
+          appBar: appBar,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16),
+                measurements,
+                const SizedBox(height: 16),
+                relationStatistics,
+                const SizedBox(height: 16),
+                store.posts.isNotEmpty ?
+                Expanded(
+                    child: RefreshIndicator(
+                  onRefresh: () async {
+                    store.load();
+                  },
+                  child: AlignedGridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    itemBuilder: (context, index) {
+                      return ProfilePostTile(post: store.posts[index]);
                     },
-                    child: AlignedGridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      itemBuilder: (context, index) {
-                        return ProfilePostTile(post: store.posts[index]);
-                      },
-                      itemCount: store.posts.length,
-                    ),
-                  )) : Column(
-                    children: [TextButton(
-                      onPressed: () {
-                        MainPlatform.goToScreen(Screens.newPost);
-                      },
-                      child: const Text.rich(TextSpan(
-                        style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-                        children: [
-                          TextSpan(text: "You don’t have any posts yet.\n"),
-                          TextSpan(text: "Create your first post now! :)", style: TextStyle(decoration: TextDecoration.underline))
-                        ]
-                      )),
-                    )],
-                  )
-                ],
-              ),
+                    itemCount: store.posts.length,
+                  ),
+                )) : Column(
+                  children: [TextButton(
+                    onPressed: () {
+                      MainPlatform.goToScreen(Screens.newPost);
+                    },
+                    child: const Text.rich(TextSpan(
+                      style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+                      children: [
+                        TextSpan(text: "You don’t have any posts yet.\n"),
+                        TextSpan(text: "Create your first post now! :)", style: TextStyle(decoration: TextDecoration.underline))
+                      ]
+                    )),
+                  )],
+                )
+              ],
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -109,11 +106,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Text(
                       store.user?.name ?? "",
-                      style: GoogleFonts.roboto(color: const Color(0xFF7D7878)),
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
                     ),
                     Text(
                       store.user?.username ?? "",
-                      style: GoogleFonts.roboto(color: const Color(0xFF6EC6CA)),
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
                     )
                   ],
                 )

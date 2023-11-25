@@ -26,7 +26,7 @@ class ProfilePostTile extends StatelessWidget {
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.25), offset: const Offset(0, 4), blurRadius: 4)]),
           child: ClipRRect(
             borderRadius:
-                const BorderRadiusDirectional.only(bottomEnd: Radius.circular(4), bottomStart: Radius.circular(4)),
+                BorderRadiusDirectional.circular(4),
             child: Stack(
               children: [
                 Column(
