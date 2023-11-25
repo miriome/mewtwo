@@ -13,34 +13,39 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (context) {
-      return Scaffold(
-        appBar: appBar,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 16),
-              measurements,
-              const SizedBox(height: 16),
-              relationStatistics,
-              const SizedBox(height: 16),
-              Expanded(
-                  child: AlignedGridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                itemBuilder: (context, index) {
-                  return ProfilePostTile(post: store.posts[index]);
-                },
-                itemCount: store.posts.length,
-              ))
-            ],
-          ),
-        ),
-      );
-    });
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Observer(builder: (context) {
+          return Scaffold(
+            appBar: appBar,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 16),
+                  measurements,
+                  const SizedBox(height: 16),
+                  relationStatistics,
+                  const SizedBox(height: 16),
+                  Expanded(
+                      child: AlignedGridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    itemBuilder: (context, index) {
+                      return ProfilePostTile(post: store.posts[index]);
+                    },
+                    itemCount: store.posts.length,
+                  ))
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
   }
 
   PreferredSizeWidget get appBar {
@@ -94,6 +99,7 @@ class ProfilePage extends StatelessWidget {
         ),
       ],
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.white,
     );
   }
 

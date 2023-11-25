@@ -34,6 +34,8 @@ class HomePostTile extends StatelessWidget {
                     AspectRatio(
                         aspectRatio: 184 / 242,
                         child: CachedNetworkImage(
+                          memCacheHeight: 242*2,
+                          memCacheWidth: 184*2,
                           imageUrl: post.image,
                           placeholder: (context, url) {
                             return const Center(
