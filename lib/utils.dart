@@ -22,7 +22,7 @@ class MaterialColorGenerator {
   }
 }
 
-enum Screens { forgetPassword, goToOtherUserProfile, likedPosts, chats, postDetails }
+enum Screens { forgetPassword, goToOtherUserProfile, likedPosts, chats, postDetails, newPost }
 
 // TODO: remove this when not needed or refactor into something better.
 class MainPlatform {

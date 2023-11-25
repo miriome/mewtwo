@@ -49,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 16),
                   relationStatistics,
                   const SizedBox(height: 16),
+                  store.posts.length > 0 ?
                   Expanded(
                       child: RefreshIndicator(
                     onRefresh: () async {
@@ -63,7 +64,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       itemCount: store.posts.length,
                     ),
-                  ))
+                  )) : Column(
+                    children: [TextButton(
+                      onPressed: () {
+                        MainPlatform.goToScreen(Screens.newPost);
+                      },
+                      child: const Text.rich(TextSpan(
+                        style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+                        children: [
+                          TextSpan(text: "You don’t have any posts yet.\n"),
+                          TextSpan(text: "Create your first post now! :)", style: TextStyle(decoration: TextDecoration.underline))
+                        ]
+                      )),
+                    )],
+                  )
                 ],
               ),
             ),
