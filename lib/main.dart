@@ -9,6 +9,7 @@ import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 void main() => runApp(ProviderScope(
       parent: Mew.pc,
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xFF6EC6CA)
           ),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)), backgroundColor: Colors.white),
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the

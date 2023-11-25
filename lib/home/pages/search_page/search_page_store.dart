@@ -16,7 +16,7 @@ class SearchPageStore extends _SearchPageStore with _$SearchPageStore {}
 abstract class _SearchPageStore with Store {
   _SearchPageStore() {
     search();
-    _loadSelfUserData();
+    loadSelfUserData();
   }
   @observable
   String searchTerm = "";
@@ -80,7 +80,7 @@ abstract class _SearchPageStore with Store {
 
 
   @action
-  Future<void> _loadSelfUserData() async {
+  Future<void> loadSelfUserData() async {
     final sp = await SharedPreferences.getInstance();
     int? selfUserId;
     if (sp.containsKey("k_id")) {

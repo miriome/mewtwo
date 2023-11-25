@@ -160,12 +160,12 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  late final _$_loadSelfUserDataAsyncAction =
-      AsyncAction('_SearchPageStore._loadSelfUserData', context: context);
+  late final _$loadSelfUserDataAsyncAction =
+      AsyncAction('_SearchPageStore.loadSelfUserData', context: context);
 
   @override
-  Future<void> _loadSelfUserData() {
-    return _$_loadSelfUserDataAsyncAction.run(() => super._loadSelfUserData());
+  Future<void> loadSelfUserData() {
+    return _$loadSelfUserDataAsyncAction.run(() => super.loadSelfUserData());
   }
 
   late final _$searchAsyncAction =

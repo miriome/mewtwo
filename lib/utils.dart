@@ -39,8 +39,9 @@ class MainPlatform {
     _handlers.add(handler);
     platform.setMethodCallHandler((call) async {
       for (var element in _handlers) {
-        await element.call(call);
+        element.call(call);
       }
+      return;
     });
   }
 

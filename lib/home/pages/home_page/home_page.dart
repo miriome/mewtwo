@@ -4,6 +4,7 @@ import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/home_page/widgets/home_post_tile.dart';
+import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,7 +18,13 @@ class _HomePageState extends State<HomePage> {
   final store = HomePageStore();
   @override
   void initState() {
-    
+    MainPlatform.addMethodCallhandler((call) async {
+      if (call.method == "viewWillAppear" && call.arguments is String) {
+        if (call.arguments == HomePageRoute().location) {
+          store.loadPosts();
+        }
+        
+      }});
     super.initState();
   }
   @override
@@ -32,18 +39,21 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: 
-              AlignedGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                itemCount: store.posts.length,
-                itemBuilder: (context, index) {
-                  return HomePostTile(
-                    onUserTap: (userId) {},
-                    post: store.posts[index],
-                    onLikeToggle: (postId) => store.togglePostLike(postId: postId),
-                  );
-                },
+              RefreshIndicator(
+                onRefresh: () => store.loadPosts(),
+                child: AlignedGridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  itemCount: store.posts.length,
+                  itemBuilder: (context, index) {
+                    return HomePostTile(
+                      onUserTap: (userId) {},
+                      post: store.posts[index],
+                      onLikeToggle: (postId) => store.togglePostLike(postId: postId),
+                    );
+                  },
+                ),
               ),
             ),
           );

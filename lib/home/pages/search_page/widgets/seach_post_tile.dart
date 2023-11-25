@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
@@ -22,22 +23,7 @@ class SearchPostTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: Stack(
               children: [
-                AspectRatio(
-                    aspectRatio: 184 / 242,
-                    child: CachedNetworkImage(
-                      memCacheHeight: 242*2,
-                      memCacheWidth: 184*2,
-                      imageUrl: post.image,
-                      placeholder: (context, url) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xFF6EC6CA),
-                          ),
-                        );
-                      },
-                      fit: BoxFit.fill,
-                      alignment: Alignment.topCenter,
-                    )),
+                PostImage(imageUrl: post.image),
                 if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon()),
               ],
             )),

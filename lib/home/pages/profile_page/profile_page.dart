@@ -5,11 +5,31 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
+import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
-class ProfilePage extends StatelessWidget {
-  final store = ProfilePageStore()..load();
+class ProfilePage extends StatefulWidget {
+
   ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+     MainPlatform.addMethodCallhandler((call) async {
+      if (call.method == "viewWillAppear" && call.arguments is String) {
+        if (call.arguments == ProfilePageRoute().location) {
+          store.load();
+        }
+        
+      }
+    });
+    super.initState();
+  }
+  final store = ProfilePageStore()..load();
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +50,19 @@ class ProfilePage extends StatelessWidget {
                   relationStatistics,
                   const SizedBox(height: 16),
                   Expanded(
-                      child: AlignedGridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    itemBuilder: (context, index) {
-                      return ProfilePostTile(post: store.posts[index]);
+                      child: RefreshIndicator(
+                    onRefresh: () async {
+                      store.load();
                     },
-                    itemCount: store.posts.length,
+                    child: AlignedGridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      itemBuilder: (context, index) {
+                        return ProfilePostTile(post: store.posts[index]);
+                      },
+                      itemCount: store.posts.length,
+                    ),
                   ))
                 ],
               ),
@@ -89,7 +114,6 @@ class ProfilePage extends StatelessWidget {
                 if (store.user != null) {
                   MainPlatform.showOwnProfileActions(store.user!);
                 }
-                
               },
               iconSize: 30,
               icon: const Icon(
