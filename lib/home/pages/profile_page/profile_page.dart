@@ -9,7 +9,6 @@ import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class ProfilePage extends StatefulWidget {
-
   ProfilePage({Key? key}) : super(key: key);
 
   @override
@@ -19,16 +18,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
-     MainPlatform.addMethodCallhandler((call) async {
+    MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "viewWillAppear" && call.arguments is String) {
         if (call.arguments == ProfilePageRoute().location) {
           store.load();
         }
-        
       }
     });
     super.initState();
   }
+
   final store = ProfilePageStore()..load();
 
   @override
@@ -44,38 +43,41 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 const SizedBox(height: 16),
                 measurements,
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 relationStatistics,
                 const SizedBox(height: 16),
-                store.posts.isNotEmpty ?
-                Expanded(
-                    child: RefreshIndicator(
-                  onRefresh: () async {
-                    store.load();
-                  },
-                  child: AlignedGridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    itemBuilder: (context, index) {
-                      return ProfilePostTile(post: store.posts[index]);
-                    },
-                    itemCount: store.posts.length,
-                  ),
-                )) : Column(
-                  children: [TextButton(
-                    onPressed: () {
-                      MainPlatform.goToScreen(Screens.newPost);
-                    },
-                    child: const Text.rich(TextSpan(
-                      style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-                      children: [
-                        TextSpan(text: "You don’t have any posts yet.\n"),
-                        TextSpan(text: "Create your first post now! :)", style: TextStyle(decoration: TextDecoration.underline))
-                      ]
-                    )),
-                  )],
-                )
+                store.posts.isNotEmpty
+                    ? Expanded(
+                        child: RefreshIndicator(
+                        onRefresh: () async {
+                          store.load();
+                        },
+                        child: AlignedGridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          itemBuilder: (context, index) {
+                            return ProfilePostTile(post: store.posts[index]);
+                          },
+                          itemCount: store.posts.length,
+                        ),
+                      ))
+                    : Column(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              MainPlatform.goToScreen(Screens.newPost);
+                            },
+                            child: const Text.rich(
+                                TextSpan(style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)), children: [
+                              TextSpan(text: "You don’t have any posts yet.\n"),
+                              TextSpan(
+                                  text: "Create your first post now! :)",
+                                  style: TextStyle(decoration: TextDecoration.underline))
+                            ])),
+                          )
+                        ],
+                      )
               ],
             ),
           ),
@@ -103,14 +105,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 16,
                 ),
                 Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      store.user?.name ?? "",
-                      style: GoogleFonts.roboto(fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
+                      "asd",
+                      style:
+                          GoogleFonts.roboto(
+                            height: 1,
+                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
                     ),
                     Text(
                       store.user?.username ?? "",
-                      style: GoogleFonts.roboto(fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
+                      style:
+                          GoogleFonts.roboto(
+                            height: 1,
+                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
                     )
                   ],
                 )
@@ -128,8 +139,8 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               iconSize: 30,
               icon: const Icon(
-                Icons.more_vert,
-                color: Color(0xFF7D7878),
+                Icons.menu,
+                color: Color(0xFF8474A1),
               )),
         ),
       ],
