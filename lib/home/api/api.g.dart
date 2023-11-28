@@ -574,5 +574,24 @@ class _GetUserInfoApiProviderElement
   @override
   int get userId => (origin as GetUserInfoApiProvider).userId;
 }
+
+String _$getNotificationsApiHash() =>
+    r'e2e401ea27b0732d76ee184eb309c83fb3831868';
+
+/// See also [getNotificationsApi].
+@ProviderFor(getNotificationsApi)
+final getNotificationsApiProvider =
+    AutoDisposeFutureProvider<List<NotificationModel>>.internal(
+  getNotificationsApi,
+  name: r'getNotificationsApiProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getNotificationsApiHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetNotificationsApiRef
+    = AutoDisposeFutureProviderRef<List<NotificationModel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

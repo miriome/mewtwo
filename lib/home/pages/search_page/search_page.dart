@@ -1,4 +1,4 @@
-import 'dart:async';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -8,12 +8,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/search_page_search_bar.dart';
 import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
-import 'package:mobx/mobx.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();

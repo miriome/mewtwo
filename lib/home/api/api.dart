@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/home/model/get_posts_api_model.dart';
+import 'package:mewtwo/home/model/notification_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/search_api_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
@@ -9,7 +11,6 @@ import 'package:mewtwo/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'api.g.dart';
-
 
 @riverpod
 Future<GetPostsApiModel?> getPostsApi(
@@ -24,9 +25,8 @@ Future<GetPostsApiModel?> getPostsApi(
       Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
       return null;
     }
-    
+
     return GetPostsApiModel.fromJson(response);
-    
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
     Log.instance.e(e.toString(), stackTrace: s);
@@ -37,10 +37,8 @@ Future<GetPostsApiModel?> getPostsApi(
 }
 
 @riverpod
-Future<bool> likePostApi(LikePostApiRef ref, {
-  required int postId, required bool setLikeTo
-}) async {
-final body = {'post_id': postId.toString(), 'is_like': setLikeTo ? 1 : 0};
+Future<bool> likePostApi(LikePostApiRef ref, {required int postId, required bool setLikeTo}) async {
+  final body = {'post_id': postId.toString(), 'is_like': setLikeTo ? 1 : 0};
   try {
     final res = await (await Networking.instance).post(path: "post/setLike", body: body);
     Map response = res.data;
@@ -59,11 +57,7 @@ final body = {'post_id': postId.toString(), 'is_like': setLikeTo ? 1 : 0};
 }
 
 @riverpod
-Future<SearchApiModel?> searchApi(
-  SearchApiRef ref, {
-  required int pageIndex,
-  required String keyword
-}) async {
+Future<SearchApiModel?> searchApi(SearchApiRef ref, {required int pageIndex, required String keyword}) async {
   final body = {'page_index': pageIndex.toString(), 'count': 100.toString(), 'keyword': keyword};
   try {
     final res = await (await Networking.instance).post(path: "post/search", body: body);
@@ -72,9 +66,8 @@ Future<SearchApiModel?> searchApi(
       Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
       return null;
     }
-    
+
     return SearchApiModel.fromJson(response['data']);
-    
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
     Log.instance.e(e.toString(), stackTrace: s);
@@ -85,10 +78,7 @@ Future<SearchApiModel?> searchApi(
 }
 
 @riverpod
-Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {
-  required int userId
-}) async {
-
+Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {required int userId}) async {
   try {
     final res = await (await Networking.instance).get(path: "users/profile/$userId");
     Map response = res.data;
@@ -104,4 +94,26 @@ Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {
     Log.instance.e(e.toString(), stackTrace: s);
   }
   return null;
+}
+
+@riverpod
+Future<List<NotificationModel>> getNotificationsApi(GetNotificationsApiRef ref) async {
+  try {
+    final res = await (await Networking.instance).get(path: "users/notifications");
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return [];
+    }
+    if (response['data'] is List) {
+      return (response['data'] as List).map((e) => NotificationModel.fromJson(e)).toList();
+    }
+    return [];
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return [];
 }

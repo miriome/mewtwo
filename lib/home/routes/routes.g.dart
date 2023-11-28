@@ -9,6 +9,7 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
       $mainRoute,
       $unauthorizedRoute,
+      $mainTabShellRoute,
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
@@ -18,18 +19,6 @@ RouteBase get $mainRoute => GoRouteData.$route(
         GoRouteData.$route(
           path: 'reportContent',
           factory: $ReportContentRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'HomePage',
-          factory: $HomePageRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'SearchPage',
-          factory: $SearchPageRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'ProfilePage',
-          factory: $ProfilePageRouteExtension._fromState,
         ),
       ],
     );
@@ -83,57 +72,6 @@ const _$ReportTypeEnumMap = {
   ReportType.user: 'user',
 };
 
-extension $HomePageRouteExtension on HomePageRoute {
-  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
-
-  String get location => GoRouteData.$location(
-        '/HomePage',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $SearchPageRouteExtension on SearchPageRoute {
-  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
-
-  String get location => GoRouteData.$location(
-        '/SearchPage',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $ProfilePageRouteExtension on ProfilePageRoute {
-  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
-
-  String get location => GoRouteData.$location(
-        '/ProfilePage',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
       entries.singleWhere((element) => element.value == value).key;
@@ -173,6 +111,80 @@ extension $LoginRouteExtension on LoginRoute {
 
   String get location => GoRouteData.$location(
         '/unauth/login',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $mainTabShellRoute => ShellRouteData.$route(
+      factory: $MainTabShellRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'HomePage',
+          factory: $HomePageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'SearchPage',
+          factory: $SearchPageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'ProfilePage',
+          factory: $ProfilePageRouteExtension._fromState,
+        ),
+      ],
+    );
+
+extension $MainTabShellRouteExtension on MainTabShellRoute {
+  static MainTabShellRoute _fromState(GoRouterState state) =>
+      const MainTabShellRoute();
+}
+
+extension $HomePageRouteExtension on HomePageRoute {
+  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
+
+  String get location => GoRouteData.$location(
+        'HomePage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SearchPageRouteExtension on SearchPageRoute {
+  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
+
+  String get location => GoRouteData.$location(
+        'SearchPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ProfilePageRouteExtension on ProfilePageRoute {
+  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
+
+  String get location => GoRouteData.$location(
+        'ProfilePage',
       );
 
   void go(BuildContext context) => context.go(location);

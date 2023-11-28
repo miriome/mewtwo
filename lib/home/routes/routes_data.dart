@@ -12,7 +12,7 @@ class SearchPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SearchPage();
+    return const SearchPage();
   }
 }
 
@@ -21,5 +21,13 @@ class ProfilePageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return ProfilePage();
+  }
+}
+
+class NotificationPageRoute extends GoRouteData {
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return NotificationPage();
   }
 }
