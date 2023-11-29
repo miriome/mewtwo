@@ -13,7 +13,7 @@ List<RouteBase> get $appRoutes => [
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
-      path: '/',
+      path: '/base',
       factory: $MainRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
@@ -27,7 +27,7 @@ extension $MainRouteExtension on MainRoute {
   static MainRoute _fromState(GoRouterState state) => MainRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/base',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -49,7 +49,7 @@ extension $ReportContentRouteExtension on ReportContentRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/reportContent',
+        '/base/reportContent',
         queryParams: {
           'report-type': _$ReportTypeEnumMap[reportType],
           'type-id': typeId,
@@ -123,20 +123,48 @@ extension $LoginRouteExtension on LoginRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $mainTabShellRoute => ShellRouteData.$route(
+RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
       factory: $MainTabShellRouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'HomePage',
-          factory: $HomePageRouteExtension._fromState,
+      branches: [
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/HomePage',
+              factory: $HomePageRouteExtension._fromState,
+            ),
+          ],
         ),
-        GoRouteData.$route(
-          path: 'SearchPage',
-          factory: $SearchPageRouteExtension._fromState,
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/SearchPage',
+              factory: $SearchPageRouteExtension._fromState,
+            ),
+          ],
         ),
-        GoRouteData.$route(
-          path: 'ProfilePage',
-          factory: $ProfilePageRouteExtension._fromState,
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/NewPost',
+              factory: $NewPostRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/NotificationPage',
+              factory: $NotificationPageRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/ProfilePage',
+              factory: $ProfilePageRouteExtension._fromState,
+            ),
+          ],
         ),
       ],
     );
@@ -150,7 +178,7 @@ extension $HomePageRouteExtension on HomePageRoute {
   static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
 
   String get location => GoRouteData.$location(
-        'HomePage',
+        '/HomePage',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -167,7 +195,42 @@ extension $SearchPageRouteExtension on SearchPageRoute {
   static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
 
   String get location => GoRouteData.$location(
-        'SearchPage',
+        '/SearchPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $NewPostRouteExtension on NewPostRoute {
+  static NewPostRoute _fromState(GoRouterState state) => NewPostRoute();
+
+  String get location => GoRouteData.$location(
+        '/NewPost',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $NotificationPageRouteExtension on NotificationPageRoute {
+  static NotificationPageRoute _fromState(GoRouterState state) =>
+      NotificationPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/NotificationPage',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -184,7 +247,7 @@ extension $ProfilePageRouteExtension on ProfilePageRoute {
   static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
 
   String get location => GoRouteData.$location(
-        'ProfilePage',
+        '/ProfilePage',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mewtwo/auth/routes/routes.dart';
+import 'package:mewtwo/home/main_tab_bar.dart';
 import 'package:mewtwo/home/pages/home_page/home_page.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page.dart';
@@ -15,7 +16,7 @@ part 'routes.g.dart';
 
 
 @TypedGoRoute<MainRoute>(
-    path: '/',
+    path: '/base',
     routes: [
       ...SafetyRoutes.typedRoutes,
     ]
@@ -42,41 +43,59 @@ class UnauthorizedRoute extends GoRouteData {
 
 // Root routes end ------------------------------------
 
-class TabRoutes {
-  static const List<TypedGoRoute> typedRoutes = [TypedGoRoute<HomePageRoute>(
-        path: 'HomePage',
-      ), TypedGoRoute<SearchPageRoute>(
-        path: 'SearchPage',
-      ), TypedGoRoute<ProfilePageRoute>(
-        path: 'ProfilePage',
-      )];
-}
 
-class MainTab extends StatelessWidget {
-  final Widget child;
-  MainTab({required this.child});
+// Main tab routes start ------------------------------------
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-@TypedShellRoute<MainTabShellRoute>(
-  
-  routes: [
-    ...TabRoutes.typedRoutes
+@TypedStatefulShellRoute<MainTabShellRoute>(
+  branches: [
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<HomePageRoute>(
+        path: '/HomePage',
+      )
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<SearchPageRoute>(
+        path: '/SearchPage',
+      )
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<NewPostRoute>(
+        path: '/NewPost',
+      )
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<NotificationPageRoute>(
+        path: '/NotificationPage',
+      )
+      ],
+    ),
+    TypedStatefulShellBranch(
+      routes: [
+        TypedGoRoute<ProfilePageRoute>(
+        path: '/ProfilePage',
+      )
+      ],
+    ),
+    
   ]
 )
-class MainTabShellRoute extends ShellRouteData {
-  const MainTabShellRoute();
-
+class MainTabShellRoute extends StatefulShellRouteData {
+    const MainTabShellRoute();
   @override
   Widget builder(
     BuildContext context,
     GoRouterState state,
-    Widget navigator,
+    StatefulNavigationShell navigationShell,
   ) {
-    return MainTab(child: navigator);
+    return MainTabBar(child: navigationShell);
+    
   }
 }
+// Main tab routes end ------------------------------------
