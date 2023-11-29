@@ -192,10 +192,16 @@ extension $HomePageRouteExtension on HomePageRoute {
 }
 
 extension $SearchPageRouteExtension on SearchPageRoute {
-  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
+  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute(
+        initialSearchTerm: state.uri.queryParameters['initial-search-term'],
+      );
 
   String get location => GoRouteData.$location(
         '/SearchPage',
+        queryParams: {
+          if (initialSearchTerm != null)
+            'initial-search-term': initialSearchTerm,
+        },
       );
 
   void go(BuildContext context) => context.go(location);

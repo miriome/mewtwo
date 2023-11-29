@@ -17,10 +17,13 @@ class NewPostRoute extends GoRouteData {
 }
 
 class SearchPageRoute extends GoRouteData {
+  final String? initialSearchTerm;
+
+  SearchPageRoute({this.initialSearchTerm});
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const SearchPage();
+    return SearchPage(initialSearchTerm: initialSearchTerm ?? '',);
   }
 }
 

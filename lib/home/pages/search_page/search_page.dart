@@ -12,7 +12,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final String initialSearchTerm;
+  const SearchPage({Key? key, required this.initialSearchTerm}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -25,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "viewWillAppear" && call.arguments is String) {
-        if (call.arguments == SearchPageRoute().location) {
+        if (call.arguments == SearchPageRoute(initialSearchTerm: "").location) {
           store.loadSelfUserData();
         }
         
@@ -35,6 +36,7 @@ class _SearchPageState extends State<SearchPage> {
       }
     });
     store.initReactions();
+    store.searchTerm = widget.initialSearchTerm;
     super.initState();
   }
 

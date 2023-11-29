@@ -1,29 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/main.dart';
+import 'package:mewtwo/utils.dart';
 
 
-class MainTabBar extends StatelessWidget {
+class MainTabBar extends StatefulWidget {
   
   final StatefulNavigationShell child;
   const MainTabBar({Key? key, required this.child}) : super(key: key);
 
   @override
+  State<MainTabBar> createState() => _MainTabBarState();
+}
+
+class _MainTabBarState extends State<MainTabBar> {
+  @override
+  void initState() {
+    MainPlatform.addMethodCallhandler((call) async {
+      switch(call.method) {
+        case "goToMyProfile":
+          widget.child.goBranch(4);
+          break;
+        case 'goToSearch':
+        if (call.arguments is String) {
+          SearchPageRoute(initialSearchTerm: call.arguments).go(context);
+        } else {
+          SearchPageRoute().go(context);
+        }
+          break;
+      }
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-          currentIndex: child.currentIndex,
+          currentIndex: widget.child.currentIndex,
           selectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
           unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
           onTap: (index) {
-            child.goBranch(
+            if (index == 2) {
+              MainPlatform.goToScreen(Screens.newPost);
+              return;
+            } 
+            widget.child.goBranch(
               index,
-              // A common pattern when using bottom navigation bars is to support
-              // navigating to the initial location when tapping the item that is
-              // already active. This example demonstrates how to support this behavior,
-              // using the initialLocation parameter of goBranch.
-              initialLocation: index == child.currentIndex,
             );
             
           },
