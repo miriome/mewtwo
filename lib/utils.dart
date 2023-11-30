@@ -114,6 +114,12 @@ class Log {
 }
 
 class Utility {
+  static String parseStr(dynamic val) {
+    if (val is String) {
+      return val;
+    }
+    return "";
+  }
   static bool parseBool(dynamic val) {
     if (val is int) {
       return val == 1;

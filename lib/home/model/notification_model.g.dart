@@ -14,15 +14,19 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) =>
       json['content'] as String,
       json['sent_by'] as String,
       json['created_at'] as String,
-      notification_type: json['notification_type'] as String,
-      postData: PostModel.fromJson(json['postData'] as Map<String, dynamic>),
+      notification_type: NotificationModel.getNotificationType(
+          json['notification_type'] as String),
+      postData: json['postData'] == null
+          ? null
+          : PostModel.fromJson(json['postData'] as Map<String, dynamic>),
       userData: UserModel.fromJson(json['userData'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
     <String, dynamic>{
-      'notification_type': instance.notification_type,
-      'postData': instance.postData.toJson(),
+      'notification_type':
+          _$NotificationTypeEnumMap[instance.notification_type]!,
+      'postData': instance.postData?.toJson(),
       'userData': instance.userData.toJson(),
       'id': instance.id,
       'user_id': instance.user_id,
@@ -31,3 +35,10 @@ Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
       'sent_by': instance.sent_by,
       'created_at': instance.created_at,
     };
+
+const _$NotificationTypeEnumMap = {
+  NotificationType.comment: 'comment',
+  NotificationType.like: 'like',
+  NotificationType.follow: 'follow',
+  NotificationType.unknown: 'unknown',
+};

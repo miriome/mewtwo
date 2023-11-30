@@ -26,6 +26,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.white
+        ),
           scaffoldBackgroundColor: const Color(0xFFFEFEFE),
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xFF6EC6CA)

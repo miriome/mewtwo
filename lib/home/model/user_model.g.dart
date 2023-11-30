@@ -10,7 +10,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: Utility.parseInt(json['id']),
       followers: Utility.parseInt(json['followers']),
       myFollow: Utility.parseBool(json['myFollow']),
-      styles: json['styles'] as String,
+      styles: Utility.parseStr(json['styles']),
       username: json['username'] as String,
       name: json['name'] as String,
       photo_url: json['photo_url'] as String,
