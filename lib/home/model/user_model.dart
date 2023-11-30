@@ -18,7 +18,9 @@ class UserModel {
   final int followers;
   @JsonKey(fromJson: Utility.parseBool, toJson: Utility.bool2int)
   final bool myFollow;
-  final String styles, username, name, photo_url;
+  @JsonKey(fromJson: Utility.parseStr)
+  final String styles;
+  final String username, name, photo_url;
   final String? email, password, pronouns, weight, height, bust, waist, hips;
   final List<PostModel>? posts;
 
