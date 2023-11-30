@@ -1,19 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
-import 'package:mewtwo/utils.dart';
 
 class SearchPostTile extends StatelessWidget {
   final PostModel post;
+  final void Function() onTap;
 
-  const SearchPostTile({Key? key, required this.post}) : super(key: key);
+  const SearchPostTile({Key? key, required this.post, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => MainPlatform.goToPostDetails(post.id),
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),

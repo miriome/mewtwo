@@ -168,7 +168,10 @@ class _SearchPageState extends State<SearchPage> {
                   }, itemCount: store.userResults.length,),
                   SliverAlignedGrid.count(
                     itemBuilder: (context, index) {
-                      return SearchPostTile(post: store.postResults[index]);
+                      return SearchPostTile(post: store.postResults[index], onTap: () {
+                        store.searchBarFocusNode.unfocus();
+                        MainPlatform.goToPostDetails(store.postResults[index].id);
+                      },);
                     },
                     itemCount: store.postResults.length,
                     crossAxisCount: 2,
