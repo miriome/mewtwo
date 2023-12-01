@@ -9,7 +9,7 @@ part of 'user_model.dart';
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: Utility.parseInt(json['id']),
       followers: Utility.parseInt(json['followers']),
-      myFollow: Utility.parseBool(json['myFollow']),
+      my_follow: Utility.parseBool(json['my_follow']),
       styles: Utility.parseStr(json['styles']),
       username: json['username'] as String,
       name: json['name'] as String,
@@ -30,7 +30,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': Utility.int2Str(instance.id),
       'followers': Utility.int2Str(instance.followers),
-      'myFollow': Utility.bool2int(instance.myFollow),
+      'my_follow': Utility.bool2int(instance.my_follow),
       'styles': instance.styles,
       'username': instance.username,
       'name': instance.name,

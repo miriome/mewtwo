@@ -4,7 +4,7 @@ import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/home_page/widgets/home_post_tile.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class HomePage extends StatefulWidget {

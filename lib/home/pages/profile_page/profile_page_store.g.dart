@@ -29,6 +29,29 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
       (_$followersComputed ??= Computed<int>(() => super.followers,
               name: '_ProfilePageStore.followers'))
           .value;
+  Computed<bool>? _$isOwnProfileComputed;
+
+  @override
+  bool get isOwnProfile =>
+      (_$isOwnProfileComputed ??= Computed<bool>(() => super.isOwnProfile,
+              name: '_ProfilePageStore.isOwnProfile'))
+          .value;
+
+  late final _$_selfUserIdAtom =
+      Atom(name: '_ProfilePageStore._selfUserId', context: context);
+
+  @override
+  int? get _selfUserId {
+    _$_selfUserIdAtom.reportRead();
+    return super._selfUserId;
+  }
+
+  @override
+  set _selfUserId(int? value) {
+    _$_selfUserIdAtom.reportWrite(value, super._selfUserId, () {
+      super._selfUserId = value;
+    });
+  }
 
   late final _$_userAtom =
       Atom(name: '_ProfilePageStore._user', context: context);
@@ -61,7 +84,8 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
     return '''
 likes: ${likes},
 posts: ${posts},
-followers: ${followers}
+followers: ${followers},
+isOwnProfile: ${isOwnProfile}
     ''';
   }
 }

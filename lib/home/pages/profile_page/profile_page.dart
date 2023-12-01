@@ -1,21 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
+import 'package:mewtwo/safety/api/api.dart';
+import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  final int? userId;
+  const ProfilePage({Key? key, this.userId}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final ProfilePageStore store = ProfilePageStore(widget.userId);
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
@@ -25,10 +30,10 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     });
+    store.init().then((_) => store.load());
+
     super.initState();
   }
-
-  final store = ProfilePageStore()..load();
 
   @override
   Widget build(BuildContext context) {
@@ -111,17 +116,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Text(
                       "asd",
-                      style:
-                          GoogleFonts.roboto(
-                            height: 1,
-                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
+                      style: GoogleFonts.roboto(
+                          height: 1, fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
                     ),
                     Text(
                       store.user?.username ?? "",
-                      style:
-                          GoogleFonts.roboto(
-                            height: 1,
-                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
+                      style: GoogleFonts.roboto(
+                          height: 1, fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
                     )
                   ],
                 )
@@ -134,7 +135,12 @@ class _ProfilePageState extends State<ProfilePage> {
           child: IconButton(
               onPressed: () {
                 if (store.user != null) {
-                  MainPlatform.showOwnProfileActions(store.user!);
+                  if (store.isOwnProfile) {
+                    MainPlatform.showOwnProfileActions(store.user!);
+                  } else {
+                    showOtherProfileOptions();
+                  }
+                  
                 }
               },
               iconSize: 30,
@@ -144,7 +150,6 @@ class _ProfilePageState extends State<ProfilePage> {
               )),
         ),
       ],
-      automaticallyImplyLeading: false,
       surfaceTintColor: Colors.white,
     );
   }
@@ -193,8 +198,72 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: 14,
           ),
           textAlign: TextAlign.center,
-        )
+        ),
+        if (!store.isOwnProfile) ...[
+          const SizedBox(
+            width: 24,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF8474A1), width: (store.user?.my_follow ?? false) ? 0 : 2),
+                color: (store.user?.my_follow ?? false) ? const Color(0xFF8474A1) : Colors.white,
+                borderRadius: BorderRadius.circular(20)),
+            child: Text(
+              (store.user?.my_follow ?? false) ? "Following" : "Follow",
+              style: TextStyle(
+                  color: (store.user?.my_follow ?? false) ? Colors.white : const Color(0xFF8474A1),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+          GestureDetector(
+            onTap: () {
+              MainPlatform.goToChat(store.user!);
+            },
+            child: const Icon(Icons.chat_bubble, color: Color(0xFFFFDD94), size: 24,),
+          )
+        ]
       ],
+    );
+  }
+
+  void showOtherProfileOptions() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        cancelButton: CupertinoActionSheetAction(
+            
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel', style: TextStyle(color: Color (0xFF7D7878))),
+          ),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            
+            
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              ReportContentRoute(reportType: ReportType.user, typeId: store.user!.id.toString()).push(context);
+            },
+            child: const Text('Report User', style: TextStyle(color: Color (0xFF7D7878)),),
+          ),
+          CupertinoActionSheetAction(
+            
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Block User', style: TextStyle(color: Color (0xFF7D7878))),
+          ),
+          
+        ],
+      ),
     );
   }
 }

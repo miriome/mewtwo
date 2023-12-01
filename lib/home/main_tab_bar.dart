@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/main.dart';
 import 'package:mewtwo/utils.dart';
 
