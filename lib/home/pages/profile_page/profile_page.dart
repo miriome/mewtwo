@@ -167,16 +167,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget get measurements {
     // Change this to dynamic lmao
-    const units = "cm";
+    const heightUnits = "cm";
+    const otherUnits = "in";
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Height: ${store.user?.height ?? "-"} $units",
+          "Height: ${store.user?.height ?? "-"} $heightUnits",
           style: GoogleFonts.roboto(color: const Color(0xFF7D7878), fontSize: 14),
         ),
         Text(
-          "Bust: ${store.user?.bust ?? "-"} $units | Waist: ${store.user?.waist ?? "-"} $units | Hips: ${store.user?.hips ?? "-"} $units",
+          "Bust: ${store.user?.bust ?? "-"} $otherUnits | Waist: ${store.user?.waist ?? "-"} $otherUnits | Hips: ${store.user?.hips ?? "-"} $otherUnits",
           style: GoogleFonts.roboto(color: const Color(0xFF7D7878), fontSize: 14),
         )
       ],
