@@ -29,6 +29,29 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
       (_$followersComputed ??= Computed<int>(() => super.followers,
               name: '_ProfilePageStore.followers'))
           .value;
+  Computed<bool>? _$isOwnProfileComputed;
+
+  @override
+  bool get isOwnProfile =>
+      (_$isOwnProfileComputed ??= Computed<bool>(() => super.isOwnProfile,
+              name: '_ProfilePageStore.isOwnProfile'))
+          .value;
+
+  late final _$_selfUserIdAtom =
+      Atom(name: '_ProfilePageStore._selfUserId', context: context);
+
+  @override
+  int? get _selfUserId {
+    _$_selfUserIdAtom.reportRead();
+    return super._selfUserId;
+  }
+
+  @override
+  set _selfUserId(int? value) {
+    _$_selfUserIdAtom.reportWrite(value, super._selfUserId, () {
+      super._selfUserId = value;
+    });
+  }
 
   late final _$_userAtom =
       Atom(name: '_ProfilePageStore._user', context: context);
@@ -48,6 +71,42 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
     });
   }
 
+  late final _$_isLoadingAtom =
+      Atom(name: '_ProfilePageStore._isLoading', context: context);
+
+  bool get isLoading {
+    _$_isLoadingAtom.reportRead();
+    return super._isLoading;
+  }
+
+  @override
+  bool get _isLoading => isLoading;
+
+  @override
+  set _isLoading(bool value) {
+    _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
+      super._isLoading = value;
+    });
+  }
+
+  late final _$_isFollowingUserAtom =
+      Atom(name: '_ProfilePageStore._isFollowingUser', context: context);
+
+  bool get isFollowingUser {
+    _$_isFollowingUserAtom.reportRead();
+    return super._isFollowingUser;
+  }
+
+  @override
+  bool get _isFollowingUser => isFollowingUser;
+
+  @override
+  set _isFollowingUser(bool value) {
+    _$_isFollowingUserAtom.reportWrite(value, super._isFollowingUser, () {
+      super._isFollowingUser = value;
+    });
+  }
+
   late final _$loadAsyncAction =
       AsyncAction('_ProfilePageStore.load', context: context);
 
@@ -56,12 +115,29 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
     return _$loadAsyncAction.run(() => super.load());
   }
 
+  late final _$blockUserAsyncAction =
+      AsyncAction('_ProfilePageStore.blockUser', context: context);
+
+  @override
+  Future<bool> blockUser() {
+    return _$blockUserAsyncAction.run(() => super.blockUser());
+  }
+
+  late final _$toggleUserFollowAsyncAction =
+      AsyncAction('_ProfilePageStore.toggleUserFollow', context: context);
+
+  @override
+  Future<bool> toggleUserFollow() {
+    return _$toggleUserFollowAsyncAction.run(() => super.toggleUserFollow());
+  }
+
   @override
   String toString() {
     return '''
 likes: ${likes},
 posts: ${posts},
-followers: ${followers}
+followers: ${followers},
+isOwnProfile: ${isOwnProfile}
     ''';
   }
 }

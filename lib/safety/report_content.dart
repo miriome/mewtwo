@@ -65,9 +65,6 @@ class ReportContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: BackButton(onPressed: () {
-            SystemNavigator.pop(animated: true);
-          }),
           backgroundColor: Colors.white,
           elevation: 0,
         ),

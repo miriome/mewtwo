@@ -593,5 +593,278 @@ final getNotificationsApiProvider =
 
 typedef GetNotificationsApiRef
     = AutoDisposeFutureProviderRef<List<NotificationModel>>;
+String _$blockUserApiHash() => r'1cdee139a1d8c4fd592c60d7d7b232a45d7bf59a';
+
+/// See also [blockUserApi].
+@ProviderFor(blockUserApi)
+const blockUserApiProvider = BlockUserApiFamily();
+
+/// See also [blockUserApi].
+class BlockUserApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [blockUserApi].
+  const BlockUserApiFamily();
+
+  /// See also [blockUserApi].
+  BlockUserApiProvider call({
+    required int userId,
+  }) {
+    return BlockUserApiProvider(
+      userId: userId,
+    );
+  }
+
+  @override
+  BlockUserApiProvider getProviderOverride(
+    covariant BlockUserApiProvider provider,
+  ) {
+    return call(
+      userId: provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'blockUserApiProvider';
+}
+
+/// See also [blockUserApi].
+class BlockUserApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [blockUserApi].
+  BlockUserApiProvider({
+    required int userId,
+  }) : this._internal(
+          (ref) => blockUserApi(
+            ref as BlockUserApiRef,
+            userId: userId,
+          ),
+          from: blockUserApiProvider,
+          name: r'blockUserApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$blockUserApiHash,
+          dependencies: BlockUserApiFamily._dependencies,
+          allTransitiveDependencies:
+              BlockUserApiFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  BlockUserApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final int userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(BlockUserApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: BlockUserApiProvider._internal(
+        (ref) => create(ref as BlockUserApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _BlockUserApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BlockUserApiProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin BlockUserApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+}
+
+class _BlockUserApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with BlockUserApiRef {
+  _BlockUserApiProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as BlockUserApiProvider).userId;
+}
+
+String _$toggleUserFollowApiHash() =>
+    r'8bc55cb6113634141ec732990c720a8bf986b5de';
+
+/// See also [toggleUserFollowApi].
+@ProviderFor(toggleUserFollowApi)
+const toggleUserFollowApiProvider = ToggleUserFollowApiFamily();
+
+/// See also [toggleUserFollowApi].
+class ToggleUserFollowApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [toggleUserFollowApi].
+  const ToggleUserFollowApiFamily();
+
+  /// See also [toggleUserFollowApi].
+  ToggleUserFollowApiProvider call({
+    required int userId,
+    required bool followToggle,
+  }) {
+    return ToggleUserFollowApiProvider(
+      userId: userId,
+      followToggle: followToggle,
+    );
+  }
+
+  @override
+  ToggleUserFollowApiProvider getProviderOverride(
+    covariant ToggleUserFollowApiProvider provider,
+  ) {
+    return call(
+      userId: provider.userId,
+      followToggle: provider.followToggle,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'toggleUserFollowApiProvider';
+}
+
+/// See also [toggleUserFollowApi].
+class ToggleUserFollowApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [toggleUserFollowApi].
+  ToggleUserFollowApiProvider({
+    required int userId,
+    required bool followToggle,
+  }) : this._internal(
+          (ref) => toggleUserFollowApi(
+            ref as ToggleUserFollowApiRef,
+            userId: userId,
+            followToggle: followToggle,
+          ),
+          from: toggleUserFollowApiProvider,
+          name: r'toggleUserFollowApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$toggleUserFollowApiHash,
+          dependencies: ToggleUserFollowApiFamily._dependencies,
+          allTransitiveDependencies:
+              ToggleUserFollowApiFamily._allTransitiveDependencies,
+          userId: userId,
+          followToggle: followToggle,
+        );
+
+  ToggleUserFollowApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+    required this.followToggle,
+  }) : super.internal();
+
+  final int userId;
+  final bool followToggle;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(ToggleUserFollowApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ToggleUserFollowApiProvider._internal(
+        (ref) => create(ref as ToggleUserFollowApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+        followToggle: followToggle,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _ToggleUserFollowApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ToggleUserFollowApiProvider &&
+        other.userId == userId &&
+        other.followToggle == followToggle;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+    hash = _SystemHash.combine(hash, followToggle.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ToggleUserFollowApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+
+  /// The parameter `followToggle` of this provider.
+  bool get followToggle;
+}
+
+class _ToggleUserFollowApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with ToggleUserFollowApiRef {
+  _ToggleUserFollowApiProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as ToggleUserFollowApiProvider).userId;
+  @override
+  bool get followToggle => (origin as ToggleUserFollowApiProvider).followToggle;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

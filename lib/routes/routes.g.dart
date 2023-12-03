@@ -18,7 +18,13 @@ RouteBase get $mainRoute => GoRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: 'reportContent',
+          parentNavigatorKey: ReportContentRoute.$parentNavigatorKey,
           factory: $ReportContentRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'OtherProfilePage',
+          parentNavigatorKey: OtherProfilePageRoute.$parentNavigatorKey,
+          factory: $OtherProfilePageRouteExtension._fromState,
         ),
       ],
     );
@@ -71,6 +77,29 @@ const _$ReportTypeEnumMap = {
   ReportType.comment: 'comment',
   ReportType.user: 'user',
 };
+
+extension $OtherProfilePageRouteExtension on OtherProfilePageRoute {
+  static OtherProfilePageRoute _fromState(GoRouterState state) =>
+      OtherProfilePageRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/base/OtherProfilePage',
+        queryParams: {
+          'user-id': userId.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
@@ -250,10 +279,16 @@ extension $NotificationPageRouteExtension on NotificationPageRoute {
 }
 
 extension $ProfilePageRouteExtension on ProfilePageRoute {
-  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute();
+  static ProfilePageRoute _fromState(GoRouterState state) => ProfilePageRoute(
+        userId:
+            _$convertMapValue('user-id', state.uri.queryParameters, int.parse),
+      );
 
   String get location => GoRouteData.$location(
         '/ProfilePage',
+        queryParams: {
+          if (userId != null) 'user-id': userId!.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -264,4 +299,13 @@ extension $ProfilePageRouteExtension on ProfilePageRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
 }

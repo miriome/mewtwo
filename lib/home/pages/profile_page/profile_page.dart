@@ -1,21 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
+import 'package:mewtwo/safety/api/api.dart';
+import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
+import 'package:mobx/mobx.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  final int? userId;
+  const ProfilePage({Key? key, this.userId}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final ProfilePageStore store = ProfilePageStore(widget.userId);
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
@@ -25,14 +33,23 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     });
+    store.init().then((_) => store.load());
+
     super.initState();
   }
 
-  final store = ProfilePageStore()..load();
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return ReactionBuilder(
+      builder: (context) {
+        return reaction((_) => store.isLoading, (isLoading) {
+          if (isLoading) {
+            EasyLoading.show();
+          } else {
+            EasyLoading.dismiss();
+          }
+        });
+      },
       child: Observer(builder: (context) {
         return Scaffold(
           appBar: appBar,
@@ -111,17 +128,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Text(
                       "asd",
-                      style:
-                          GoogleFonts.roboto(
-                            height: 1,
-                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
+                      style: GoogleFonts.roboto(
+                          height: 1, fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
                     ),
                     Text(
                       store.user?.username ?? "",
-                      style:
-                          GoogleFonts.roboto(
-                            height: 1,
-                            fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
+                      style: GoogleFonts.roboto(
+                          height: 1, fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF6EC6CA)),
                     )
                   ],
                 )
@@ -134,7 +147,11 @@ class _ProfilePageState extends State<ProfilePage> {
           child: IconButton(
               onPressed: () {
                 if (store.user != null) {
-                  MainPlatform.showOwnProfileActions(store.user!);
+                  if (store.isOwnProfile) {
+                    MainPlatform.showOwnProfileActions(store.user!);
+                  } else {
+                    showOtherProfileOptions();
+                  }
                 }
               },
               iconSize: 30,
@@ -144,7 +161,6 @@ class _ProfilePageState extends State<ProfilePage> {
               )),
         ),
       ],
-      automaticallyImplyLeading: false,
       surfaceTintColor: Colors.white,
     );
   }
@@ -193,8 +209,112 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: 14,
           ),
           textAlign: TextAlign.center,
-        )
+        ),
+        if (!store.isOwnProfile) ...[
+          const SizedBox(
+            width: 24,
+          ),
+          GestureDetector(
+            onTap: () => store.toggleUserFollow(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFF8474A1), width: (store.isFollowingUser) ? 0 : 2),
+                  color: (store.isFollowingUser) ? const Color(0xFF8474A1) : Colors.white,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                (store.isFollowingUser) ? "Following" : "Follow",
+                style: TextStyle(
+                    color: (store.isFollowingUser) ? Colors.white : const Color(0xFF8474A1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 24,
+          ),
+          GestureDetector(
+            onTap: () {
+              MainPlatform.goToChat(store.user!);
+            },
+            child: const Icon(
+              Icons.chat_bubble,
+              color: Color(0xFFFFDD94),
+              size: 24,
+            ),
+          )
+        ]
       ],
+    );
+  }
+
+  void showOtherProfileOptions() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext modalContext) => CupertinoActionSheet(
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(modalContext);
+          },
+          child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
+        ),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(modalContext);
+              ReportContentRoute(reportType: ReportType.user, typeId: store.user!.id.toString()).push(context);
+            },
+            child: const Text(
+              'Report User',
+              style: TextStyle(color: Color(0xFF7D7878)),
+            ),
+          ),
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () async {
+              Navigator.pop(modalContext);
+              _showBlockUserDialog(context);
+            },
+            child: const Text('Block User', style: TextStyle(color: Color(0xFF7D7878))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showBlockUserDialog(BuildContext parentContext) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Block User'),
+          content: const Text('"Are you sure you want to block this user?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Approve', style: TextStyle(color: Colors.red)),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                final blocked = await store.blockUser();
+                if (blocked) {
+                  if (parentContext.mounted) {
+                    Fluttertoast.showToast(msg: "You have successfully blocked ${store.user?.username ?? "the user"}", gravity: ToastGravity.CENTER);
+                    HomePageRoute().go(parentContext);
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
