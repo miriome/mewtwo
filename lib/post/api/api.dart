@@ -29,3 +29,43 @@ Future<PostModel?> getPostDetailsApi(GetPostDetailsApiRef ref, {required int pos
   }
   return null;
 }
+
+@riverpod
+Future<bool> deleteCommentApi(DeleteCommentApiRef ref, {required int commentId}) async {
+  final body = {'comment_id': commentId.toString()};
+  try {
+    final res = await (await Networking.instance).post(path: "post/deleteComment", body: body);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
+
+@riverpod
+Future<bool> addCommentApi(AddCommentApiRef ref, {required int postId, required String comment}) async {
+  final body = {'post_id': postId.toString(), 'comment': comment};
+  try {
+    final res = await (await Networking.instance).post(path: "post/comment", body: body);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}

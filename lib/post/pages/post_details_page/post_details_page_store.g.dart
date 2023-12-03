@@ -9,19 +9,33 @@ part of 'post_details_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
-  Computed<List<CommentModel>>? _$commentsComputed;
+  Computed<int>? _$commentsLengthComputed;
 
   @override
-  List<CommentModel> get comments =>
-      (_$commentsComputed ??= Computed<List<CommentModel>>(() => super.comments,
-              name: '_PostDetailsPageStore.comments'))
+  int get commentsLength =>
+      (_$commentsLengthComputed ??= Computed<int>(() => super.commentsLength,
+              name: '_PostDetailsPageStore.commentsLength'))
           .value;
+  Computed<List<CommentModel>>? _$visibleCommentsComputed;
+
+  @override
+  List<CommentModel> get visibleComments => (_$visibleCommentsComputed ??=
+          Computed<List<CommentModel>>(() => super.visibleComments,
+              name: '_PostDetailsPageStore.visibleComments'))
+      .value;
   Computed<bool>? _$isMyPostComputed;
 
   @override
   bool get isMyPost =>
       (_$isMyPostComputed ??= Computed<bool>(() => super.isMyPost,
               name: '_PostDetailsPageStore.isMyPost'))
+          .value;
+  Computed<bool>? _$canAddCommentComputed;
+
+  @override
+  bool get canAddComment =>
+      (_$canAddCommentComputed ??= Computed<bool>(() => super.canAddComment,
+              name: '_PostDetailsPageStore.canAddComment'))
           .value;
 
   late final _$_selfUserIdAtom =
@@ -76,6 +90,38 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$_commentsAtom =
+      Atom(name: '_PostDetailsPageStore._comments', context: context);
+
+  @override
+  ObservableList<CommentModel> get _comments {
+    _$_commentsAtom.reportRead();
+    return super._comments;
+  }
+
+  @override
+  set _comments(ObservableList<CommentModel> value) {
+    _$_commentsAtom.reportWrite(value, super._comments, () {
+      super._comments = value;
+    });
+  }
+
+  late final _$showAllCommentsAtom =
+      Atom(name: '_PostDetailsPageStore.showAllComments', context: context);
+
+  @override
+  bool get showAllComments {
+    _$showAllCommentsAtom.reportRead();
+    return super.showAllComments;
+  }
+
+  @override
+  set showAllComments(bool value) {
+    _$showAllCommentsAtom.reportWrite(value, super.showAllComments, () {
+      super.showAllComments = value;
+    });
+  }
+
   late final _$isMeasurementsVisibleAtom = Atom(
       name: '_PostDetailsPageStore.isMeasurementsVisible', context: context);
 
@@ -93,12 +139,41 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$currentEditingCommentAtom = Atom(
+      name: '_PostDetailsPageStore.currentEditingComment', context: context);
+
+  @override
+  String get currentEditingComment {
+    _$currentEditingCommentAtom.reportRead();
+    return super.currentEditingComment;
+  }
+
+  @override
+  set currentEditingComment(String value) {
+    _$currentEditingCommentAtom.reportWrite(value, super.currentEditingComment,
+        () {
+      super.currentEditingComment = value;
+    });
+  }
+
+  late final _$togglePostLikeAsyncAction =
+      AsyncAction('_PostDetailsPageStore.togglePostLike', context: context);
+
+  @override
+  Future<void> togglePostLike() {
+    return _$togglePostLikeAsyncAction.run(() => super.togglePostLike());
+  }
+
   @override
   String toString() {
     return '''
+showAllComments: ${showAllComments},
 isMeasurementsVisible: ${isMeasurementsVisible},
-comments: ${comments},
-isMyPost: ${isMyPost}
+currentEditingComment: ${currentEditingComment},
+commentsLength: ${commentsLength},
+visibleComments: ${visibleComments},
+isMyPost: ${isMyPost},
+canAddComment: ${canAddComment}
     ''';
   }
 }
