@@ -26,6 +26,11 @@ RouteBase get $mainRoute => GoRouteData.$route(
           parentNavigatorKey: OtherProfilePageRoute.$parentNavigatorKey,
           factory: $OtherProfilePageRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'postDetails',
+          parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
+          factory: $PostDetailsRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -88,6 +93,28 @@ extension $OtherProfilePageRouteExtension on OtherProfilePageRoute {
         '/base/OtherProfilePage',
         queryParams: {
           'user-id': userId.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $PostDetailsRouteExtension on PostDetailsRoute {
+  static PostDetailsRoute _fromState(GoRouterState state) => PostDetailsRoute(
+        postId: int.parse(state.uri.queryParameters['post-id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/base/postDetails',
+        queryParams: {
+          'post-id': postId.toString(),
         },
       );
 

@@ -5,6 +5,7 @@ import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
@@ -18,7 +19,8 @@ class HomePostTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () => onLikeToggle(post.id),
-      onTap: () => MainPlatform.goToPostDetails(post.id),
+      onTap: () => PostDetailsRoute(postId: post.id).push(context),
+      // MainPlatform.goToPostDetails(post.id),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),

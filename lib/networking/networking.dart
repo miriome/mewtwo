@@ -38,8 +38,8 @@ class Networking {
     return await dio.post(path, data: body);
   }
 
-  Future<Response> get({required String path, Map<String, dynamic>? params}) async {
-    return await dio.get(path, queryParameters: params);
+  Future<Response> get<T>({required String path, Map<String, dynamic>? params, Options? options}) async {
+    return await dio.get<T>(path, queryParameters: params, options: options);
   }
 }
 

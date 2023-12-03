@@ -6,6 +6,7 @@ import 'package:mewtwo/home/pages/home_page/home_page.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page.dart';
 import 'package:mewtwo/home/pages/search_page/search_page.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:mewtwo/home/routes/routes.dart';
@@ -20,7 +21,8 @@ part 'routes.g.dart';
 
 // Root Routes start ------------------------------------
 
-@TypedGoRoute<MainRoute>(path: '/base', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes])
+@TypedGoRoute<MainRoute>(
+    path: '/base', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes, ...PostRoutes.typedRoutes])
 class MainRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {

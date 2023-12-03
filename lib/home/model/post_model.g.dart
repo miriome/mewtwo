@@ -21,6 +21,9 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       posted_by: json['posted_by'] == null
           ? null
           : UserModel.fromJson(json['posted_by'] as Map<String, dynamic>),
+      comments: (json['comments'] as List<dynamic>?)
+          ?.map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
@@ -36,6 +39,7 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'my_like': instance.my_like,
       'hashtag': instance.hashtag,
       'posted_by': instance.posted_by?.toJson(),
+      'comments': instance.comments?.map((e) => e.toJson()).toList(),
     };
 
 // **************************************************************************
