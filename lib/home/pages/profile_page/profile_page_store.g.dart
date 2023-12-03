@@ -89,6 +89,24 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
     });
   }
 
+  late final _$_isFollowingUserAtom =
+      Atom(name: '_ProfilePageStore._isFollowingUser', context: context);
+
+  bool get isFollowingUser {
+    _$_isFollowingUserAtom.reportRead();
+    return super._isFollowingUser;
+  }
+
+  @override
+  bool get _isFollowingUser => isFollowingUser;
+
+  @override
+  set _isFollowingUser(bool value) {
+    _$_isFollowingUserAtom.reportWrite(value, super._isFollowingUser, () {
+      super._isFollowingUser = value;
+    });
+  }
+
   late final _$loadAsyncAction =
       AsyncAction('_ProfilePageStore.load', context: context);
 
@@ -103,6 +121,14 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
   @override
   Future<bool> blockUser() {
     return _$blockUserAsyncAction.run(() => super.blockUser());
+  }
+
+  late final _$toggleUserFollowAsyncAction =
+      AsyncAction('_ProfilePageStore.toggleUserFollow', context: context);
+
+  @override
+  Future<bool> toggleUserFollow() {
+    return _$toggleUserFollowAsyncAction.run(() => super.toggleUserFollow());
   }
 
   @override

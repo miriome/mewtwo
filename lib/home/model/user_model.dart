@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
+import 'package:mobx/mobx.dart';
 
 part 'user_model.g.dart';
 
@@ -16,6 +17,8 @@ class UserModel {
     toJson: Utility.int2Str
   )
   final int followers;
+
+  
   @JsonKey(fromJson: Utility.parseBool, toJson: Utility.bool2int)
   final bool my_follow;
   @JsonKey(fromJson: Utility.parseStr)

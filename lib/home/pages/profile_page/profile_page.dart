@@ -214,18 +214,21 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(
             width: 24,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFF8474A1), width: (store.user?.my_follow ?? false) ? 0 : 2),
-                color: (store.user?.my_follow ?? false) ? const Color(0xFF8474A1) : Colors.white,
-                borderRadius: BorderRadius.circular(20)),
-            child: Text(
-              (store.user?.my_follow ?? false) ? "Following" : "Follow",
-              style: TextStyle(
-                  color: (store.user?.my_follow ?? false) ? Colors.white : const Color(0xFF8474A1),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
+          GestureDetector(
+            onTap: () => store.toggleUserFollow(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFF8474A1), width: (store.isFollowingUser) ? 0 : 2),
+                  color: (store.isFollowingUser) ? const Color(0xFF8474A1) : Colors.white,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                (store.isFollowingUser) ? "Following" : "Follow",
+                style: TextStyle(
+                    color: (store.isFollowingUser) ? Colors.white : const Color(0xFF8474A1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ),
           const SizedBox(

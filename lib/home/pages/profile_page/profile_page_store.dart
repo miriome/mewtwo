@@ -22,11 +22,10 @@ abstract class _ProfilePageStore with Store {
   Future<void> init() async {
     final sp = await SharedPreferences.getInstance();
     if (sp.containsKey("k_id")) {
-        _selfUserId = sp.getInt("k_id");
-      }
+      _selfUserId = sp.getInt("k_id");
+    }
   }
-  
-  
+
   @readonly
   UserModel? _user;
 
@@ -35,7 +34,6 @@ abstract class _ProfilePageStore with Store {
 
   @computed
   List<PostModel> get posts => _user?.posts ?? [];
-  
 
   @computed
   int get followers => _user?.followers ?? 0;
@@ -46,12 +44,13 @@ abstract class _ProfilePageStore with Store {
   @readonly
   bool _isLoading = false;
 
-  
+  @readonly
+  bool _isFollowingUser = false;
+
   @action
   Future<void> load() async {
     // TODO: Maybe shouldnt be null. Even home page should pass in a user ID instead.
     final userIdToLoad = _userId ?? _selfUserId;
-    
 
     if (userIdToLoad == null) {
       return;
@@ -60,6 +59,7 @@ abstract class _ProfilePageStore with Store {
     final res = await Mew.pc.read(userInfoApiProvider.future);
     if (res != null) {
       _user = res;
+      _isFollowingUser = res.my_follow;
     }
   }
 
@@ -79,7 +79,20 @@ abstract class _ProfilePageStore with Store {
     final res = await Mew.pc.read(blockUserApiProvider.future);
     listener.close();
     return res;
-    
+  }
 
+  @action
+  Future<bool> toggleUserFollow() async {
+    final userIdToBlock = _userId ?? _selfUserId;
+    if (userIdToBlock == null) {
+      return false;
+    }
+    if (isOwnProfile) {
+      return false;
+    }
+    final blockUserApiProvider = ToggleUserFollowApiProvider(userId: userIdToBlock, followToggle: !_isFollowingUser);
+    final res = await Mew.pc.read(blockUserApiProvider.future);
+    _isFollowingUser = !_isFollowingUser;
+    return res;
   }
 }
