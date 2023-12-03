@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
@@ -39,7 +40,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return ReactionBuilder(
       builder: (context) {
         return reaction((_) => store.isLoading, (isLoading) {
@@ -48,8 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
           } else {
             EasyLoading.dismiss();
           }
-           
-         });
+        });
       },
       child: Observer(builder: (context) {
         return Scaffold(
@@ -153,7 +152,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   } else {
                     showOtherProfileOptions();
                   }
-                  
                 }
               },
               iconSize: 30,
@@ -237,7 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               MainPlatform.goToChat(store.user!);
             },
-            child: const Icon(Icons.chat_bubble, color: Color(0xFFFFDD94), size: 24,),
+            child: const Icon(
+              Icons.chat_bubble,
+              color: Color(0xFFFFDD94),
+              size: 24,
+            ),
           )
         ]
       ],
@@ -249,70 +251,67 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext modalContext) => CupertinoActionSheet(
         cancelButton: CupertinoActionSheetAction(
-            
-            onPressed: () {
-              Navigator.pop(modalContext);
-            },
-            child: const Text('Cancel', style: TextStyle(color: Color (0xFF7D7878))),
-          ),
+          onPressed: () {
+            Navigator.pop(modalContext);
+          },
+          child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
+        ),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
-            
-            
             isDestructiveAction: true,
             onPressed: () {
               Navigator.pop(modalContext);
               ReportContentRoute(reportType: ReportType.user, typeId: store.user!.id.toString()).push(context);
             },
-            child: const Text('Report User', style: TextStyle(color: Color (0xFF7D7878)),),
+            child: const Text(
+              'Report User',
+              style: TextStyle(color: Color(0xFF7D7878)),
+            ),
           ),
           CupertinoActionSheetAction(
-            
             isDestructiveAction: true,
             onPressed: () async {
               Navigator.pop(modalContext);
               _showBlockUserDialog(context);
-           
             },
-            child: const Text('Block User', style: TextStyle(color: Color (0xFF7D7878))),
+            child: const Text('Block User', style: TextStyle(color: Color(0xFF7D7878))),
           ),
-          
         ],
       ),
     );
   }
 
-
   Future<void> _showBlockUserDialog(BuildContext parentContext) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Block User'),
-        content: const Text('"Are you sure you want to block this user?'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('Approve', style: TextStyle(color: Colors.red)),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              final blocked = await store.blockUser();
-              if (blocked) {
-                if (parentContext.mounted) {
-                  HomePageRoute().go(parentContext);
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Block User'),
+          content: const Text('"Are you sure you want to block this user?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Approve', style: TextStyle(color: Colors.red)),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                final blocked = await store.blockUser();
+                if (blocked) {
+                  if (parentContext.mounted) {
+                    Fluttertoast.showToast(msg: "You have successfully blocked ${store.user?.username ?? "the user"}", gravity: ToastGravity.CENTER);
+                    HomePageRoute().go(parentContext);
+                  }
                 }
-              }
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
