@@ -71,12 +71,38 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
     });
   }
 
+  late final _$_isLoadingAtom =
+      Atom(name: '_ProfilePageStore._isLoading', context: context);
+
+  bool get isLoading {
+    _$_isLoadingAtom.reportRead();
+    return super._isLoading;
+  }
+
+  @override
+  bool get _isLoading => isLoading;
+
+  @override
+  set _isLoading(bool value) {
+    _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
+      super._isLoading = value;
+    });
+  }
+
   late final _$loadAsyncAction =
       AsyncAction('_ProfilePageStore.load', context: context);
 
   @override
   Future<void> load() {
     return _$loadAsyncAction.run(() => super.load());
+  }
+
+  late final _$blockUserAsyncAction =
+      AsyncAction('_ProfilePageStore.blockUser', context: context);
+
+  @override
+  Future<bool> blockUser() {
+    return _$blockUserAsyncAction.run(() => super.blockUser());
   }
 
   @override

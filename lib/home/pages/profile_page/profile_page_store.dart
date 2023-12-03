@@ -42,6 +42,10 @@ abstract class _ProfilePageStore with Store {
 
   @computed
   bool get isOwnProfile => _userId == _selfUserId && _selfUserId != null;
+
+  @readonly
+  bool _isLoading = false;
+
   
   @action
   Future<void> load() async {
@@ -57,5 +61,25 @@ abstract class _ProfilePageStore with Store {
     if (res != null) {
       _user = res;
     }
+  }
+
+  @action
+  Future<bool> blockUser() async {
+    final userIdToBlock = _userId ?? _selfUserId;
+    if (userIdToBlock == null) {
+      return false;
+    }
+    if (isOwnProfile) {
+      return false;
+    }
+    final blockUserApiProvider = BlockUserApiProvider(userId: userIdToBlock);
+    final listener = Mew.pc.listen(blockUserApiProvider, (previous, next) {
+      _isLoading = next.isLoading;
+    });
+    final res = await Mew.pc.read(blockUserApiProvider.future);
+    listener.close();
+    return res;
+    
+
   }
 }

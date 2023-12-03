@@ -12,11 +12,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() => runApp(ProviderScope(
       parent: Mew.pc,
-      child: const MyApp(),
+      child: MyApp(),
     ));
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  
+  final router = GoRouter(
+          navigatorKey: rootNavigatorKey,
+          routes: $appRoutes, initialLocation: HomePageRoute().location);
 
   // This widget is the root of your application.
   @override
@@ -48,10 +52,8 @@ class MyApp extends StatelessWidget {
           // counter didn't reset back to zero; the application is not restarted.
           primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
           textTheme: GoogleFonts.robotoTextTheme()),
-      builder: EasyLoading.init(), // TODO: Remove this
-      routerConfig: GoRouter(
-          navigatorKey: rootNavigatorKey,
-          routes: $appRoutes, initialLocation: HomePageRoute().location),
+      builder: EasyLoading.init(),
+      routerConfig: router,
     );
   }
 }

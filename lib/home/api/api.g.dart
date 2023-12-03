@@ -593,5 +593,132 @@ final getNotificationsApiProvider =
 
 typedef GetNotificationsApiRef
     = AutoDisposeFutureProviderRef<List<NotificationModel>>;
+String _$blockUserApiHash() => r'1cdee139a1d8c4fd592c60d7d7b232a45d7bf59a';
+
+/// See also [blockUserApi].
+@ProviderFor(blockUserApi)
+const blockUserApiProvider = BlockUserApiFamily();
+
+/// See also [blockUserApi].
+class BlockUserApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [blockUserApi].
+  const BlockUserApiFamily();
+
+  /// See also [blockUserApi].
+  BlockUserApiProvider call({
+    required int userId,
+  }) {
+    return BlockUserApiProvider(
+      userId: userId,
+    );
+  }
+
+  @override
+  BlockUserApiProvider getProviderOverride(
+    covariant BlockUserApiProvider provider,
+  ) {
+    return call(
+      userId: provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'blockUserApiProvider';
+}
+
+/// See also [blockUserApi].
+class BlockUserApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [blockUserApi].
+  BlockUserApiProvider({
+    required int userId,
+  }) : this._internal(
+          (ref) => blockUserApi(
+            ref as BlockUserApiRef,
+            userId: userId,
+          ),
+          from: blockUserApiProvider,
+          name: r'blockUserApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$blockUserApiHash,
+          dependencies: BlockUserApiFamily._dependencies,
+          allTransitiveDependencies:
+              BlockUserApiFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  BlockUserApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final int userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(BlockUserApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: BlockUserApiProvider._internal(
+        (ref) => create(ref as BlockUserApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _BlockUserApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BlockUserApiProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin BlockUserApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+}
+
+class _BlockUserApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with BlockUserApiRef {
+  _BlockUserApiProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as BlockUserApiProvider).userId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -117,3 +117,24 @@ Future<List<NotificationModel>> getNotificationsApi(GetNotificationsApiRef ref) 
   }
   return [];
 }
+
+@riverpod
+Future<bool> blockUserApi(BlockUserApiRef ref, {required int userId}) async {
+  final body = {'target_id': userId.toString()};
+  try {
+    final res = await (await Networking.instance).post(path: "users/blockUser", body: body);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
+
