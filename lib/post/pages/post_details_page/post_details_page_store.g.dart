@@ -16,6 +16,29 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
       (_$commentsComputed ??= Computed<List<CommentModel>>(() => super.comments,
               name: '_PostDetailsPageStore.comments'))
           .value;
+  Computed<bool>? _$isMyPostComputed;
+
+  @override
+  bool get isMyPost =>
+      (_$isMyPostComputed ??= Computed<bool>(() => super.isMyPost,
+              name: '_PostDetailsPageStore.isMyPost'))
+          .value;
+
+  late final _$_selfUserIdAtom =
+      Atom(name: '_PostDetailsPageStore._selfUserId', context: context);
+
+  @override
+  int? get _selfUserId {
+    _$_selfUserIdAtom.reportRead();
+    return super._selfUserId;
+  }
+
+  @override
+  set _selfUserId(int? value) {
+    _$_selfUserIdAtom.reportWrite(value, super._selfUserId, () {
+      super._selfUserId = value;
+    });
+  }
 
   late final _$_isLoadingAtom =
       Atom(name: '_PostDetailsPageStore._isLoading', context: context);
@@ -53,10 +76,29 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$isMeasurementsVisibleAtom = Atom(
+      name: '_PostDetailsPageStore.isMeasurementsVisible', context: context);
+
+  @override
+  bool get isMeasurementsVisible {
+    _$isMeasurementsVisibleAtom.reportRead();
+    return super.isMeasurementsVisible;
+  }
+
+  @override
+  set isMeasurementsVisible(bool value) {
+    _$isMeasurementsVisibleAtom.reportWrite(value, super.isMeasurementsVisible,
+        () {
+      super.isMeasurementsVisible = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-comments: ${comments}
+isMeasurementsVisible: ${isMeasurementsVisible},
+comments: ${comments},
+isMyPost: ${isMyPost}
     ''';
   }
 }

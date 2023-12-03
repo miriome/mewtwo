@@ -24,7 +24,7 @@ class Webview extends StatelessWidget {
     return Observer(
       builder: (context) {
         return Scaffold(
-          appBar: AppBar(title: Text(title ?? store.title, style: TextStyle(color: Colors.white),)),
+          appBar: AppBar(title: Text(title ?? store.title, style: const TextStyle(color: Colors.white),)),
           body: WebViewWidget(controller: store.controller),
         );
       }

@@ -53,6 +53,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   timeago: ^3.6.0
   detectable_text_field: ^3.0.1
+  url_launcher: ^6.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
