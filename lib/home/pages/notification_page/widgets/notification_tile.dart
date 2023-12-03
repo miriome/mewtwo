@@ -3,6 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/home/model/notification_model.dart';
+import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/post/pages/post_details_page/post_details_page.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class NotificationTile extends StatelessWidget {
@@ -12,14 +16,14 @@ class NotificationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onNotificationTap,
+      onTap: () => onNotificationTap(context),
       child: Row(
         children: [
           const SizedBox(
             width: 8,
           ),
           GestureDetector(
-            onTap: () => MainPlatform.goToOtherUserProfile(notification.userData),
+            onTap: () => OtherProfilePageRoute(userId: notification.userData.id).push(context),
             child: CircleAvatar(
               radius: 20,
               backgroundColor: const Color(0xFF6EC6CA),
@@ -49,24 +53,25 @@ class NotificationTile extends StatelessWidget {
     );
   }
 
-  void onNotificationTap() {
+  void onNotificationTap(BuildContext context) {
     switch (notification.notification_type) {
       case NotificationType.comment:
         final postId = Utility.parseInt(notification.post_id, -1);
         if (postId == -1) {
           return;
         }
-        MainPlatform.goToPostDetails(postId);
+        PostDetailsRoute(postId: postId).push(context);
+        
         return;
       case NotificationType.follow:
-        MainPlatform.goToOtherUserProfile(notification.userData);
+      OtherProfilePageRoute(userId: notification.userData.id).push(context);
         return;
       case NotificationType.like:
         final postId = Utility.parseInt(notification.post_id, -1);
         if (postId == -1) {
           return;
         }
-        MainPlatform.goToPostDetails(postId);
+        PostDetailsRoute(postId: postId).push(context);
         return;
       default:
         return;
@@ -83,7 +88,7 @@ class NotificationTile extends StatelessWidget {
               TextSpan(
                   text: notification.userData.username,
                   style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w700),
-                  recognizer: TapGestureRecognizer()..onTap = () => MainPlatform.goToOtherUserProfile(notification.userData)
+                  recognizer: TapGestureRecognizer()..onTap = () => OtherProfilePageRoute(userId: notification.userData.id).push(context)
                   ),
               const TextSpan(text: " commented on your post")
             ]),
@@ -96,7 +101,7 @@ class NotificationTile extends StatelessWidget {
               TextSpan(
                   text: notification.userData.username,
                   style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w700),
-                  recognizer: TapGestureRecognizer()..onTap = () => MainPlatform.goToOtherUserProfile(notification.userData)
+                  recognizer: TapGestureRecognizer()..onTap = () => OtherProfilePageRoute(userId: notification.userData.id).push(context)
                   ),
               const TextSpan(text: " started following you")
             ]),
@@ -109,7 +114,7 @@ class NotificationTile extends StatelessWidget {
               TextSpan(
                   text: notification.userData.username,
                   style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w700),
-                  recognizer: TapGestureRecognizer()..onTap = () => MainPlatform.goToOtherUserProfile(notification.userData)
+                  recognizer: TapGestureRecognizer()..onTap = () => OtherProfilePageRoute(userId: notification.userData.id).push(context)
                   ),
               const TextSpan(text: " liked your post")
             ]),

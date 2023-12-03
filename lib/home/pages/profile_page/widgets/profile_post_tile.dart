@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
+import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class ProfilePostTile extends StatelessWidget {
@@ -18,7 +20,7 @@ class ProfilePostTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return GestureDetector(
-        onTap: () => MainPlatform.goToPostDetails(post.id),
+        onTap: () => PostDetailsRoute(postId: post.id).push(context),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),

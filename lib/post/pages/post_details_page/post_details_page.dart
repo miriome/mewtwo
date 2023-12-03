@@ -23,7 +23,6 @@ import 'package:detectable_text_field/detectable_text_field.dart';
 class PostDetailsPage extends StatefulWidget {
   final int postId;
 
-
   const PostDetailsPage({Key? key, required this.postId}) : super(key: key);
   @override
   State<PostDetailsPage> createState() => _PostDetailsPageState();
@@ -76,7 +75,10 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                   SliverToBoxAdapter(child: statsRow(post)),
                   postInfo(post),
                   commentsList(),
-                  const SliverToBoxAdapter(child: SizedBox(height: 8,)),
+                  const SliverToBoxAdapter(
+                      child: SizedBox(
+                    height: 8,
+                  )),
                   writeComment
                 ]),
               )
@@ -148,12 +150,17 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (post.posted_by != null) {
-                OtherProfilePageRoute(userId: post.posted_by!.id).push(context);
+                final sp = await SharedPreferences.getInstance();
+                if (context.mounted) {
+                  if (sp.containsKey("k_id")) {
+                    ProfilePageRoute(userId: sp.getInt("k_id")).go(context);
+                  } else {
+                    OtherProfilePageRoute(userId: post.posted_by!.id).push(context);
+                  }
+                }
               }
-              
-              
             },
             child: Text(post.posted_by?.username ?? "",
                 style: const TextStyle(
@@ -221,22 +228,24 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             ),
           ),
           IconButton.filled(
-                  onPressed: store.canAddComment ? () {
-                    store.addComment(postId: widget.postId).then((success) {
-                      if (success) {
-                        commentController.clear();
-                      }
-                    });
-                  } : null,
-                  disabledColor: Colors.black,
-                  constraints: const BoxConstraints(),
-                  iconSize: 28,
-                  padding: EdgeInsets.zero,
-                  icon: const Icon(
-                    Icons.arrow_upward,
-                    color: Colors.white,
-                    size: 24,
-                  ))
+              onPressed: store.canAddComment
+                  ? () {
+                      store.addComment(postId: widget.postId).then((success) {
+                        if (success) {
+                          commentController.clear();
+                        }
+                      });
+                    }
+                  : null,
+              disabledColor: Colors.black,
+              constraints: const BoxConstraints(),
+              iconSize: 28,
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+                size: 24,
+              ))
         ],
       ),
     );
@@ -246,9 +255,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
     return MultiSliver(
       children: [
         if (!store.showAllComments)
-        GestureDetector(
-          onTap: () => store.showAllComments = true,
-          child: Text("View all ${store.commentsLength} comments")),
+          GestureDetector(
+              onTap: () => store.showAllComments = true, child: Text("View all ${store.commentsLength} comments")),
         SliverList.separated(
           separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {

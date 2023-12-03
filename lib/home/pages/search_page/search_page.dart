@@ -6,6 +6,8 @@ import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/seach_post_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/search_page_search_bar.dart';
+import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -119,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
                   SliverList.builder(itemBuilder: (context, index) {
                     final user = store.userResults[index];
                     return GestureDetector(
-                      onTap: () => MainPlatform.goToOtherUserProfile(user),
+                      onTap: () => OtherProfilePageRoute(userId: user.id).push(context),
                       behavior: HitTestBehavior.opaque,
                       child: Padding(
                         padding: const EdgeInsets.all(8),
@@ -170,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
                     itemBuilder: (context, index) {
                       return SearchPostTile(post: store.postResults[index], onTap: () {
                         store.searchBarFocusNode.unfocus();
-                        MainPlatform.goToPostDetails(store.postResults[index].id);
+                        PostDetailsRoute(postId: store.postResults[index].id).push(context);
                       },);
                     },
                     itemCount: store.postResults.length,
