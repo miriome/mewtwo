@@ -13,17 +13,20 @@ class ProfilePageStore extends _ProfilePageStore with _$ProfilePageStore {
 }
 
 abstract class _ProfilePageStore with Store {
-  final int? _userId;
+  int? _userId;
   _ProfilePageStore(this._userId);
 
   @observable
   int? _selfUserId;
 
   Future<void> init() async {
+    
     final sp = await SharedPreferences.getInstance();
     if (sp.containsKey("k_id")) {
+      _userId ??= sp.getInt("k_id");
       _selfUserId = sp.getInt("k_id");
     }
+    
   }
 
   @readonly

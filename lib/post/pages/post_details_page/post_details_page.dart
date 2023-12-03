@@ -58,14 +58,18 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: Stack(
-                  children: [
-                    PostImage(imageUrl: post.image),
-                    if (post.chat_enabled) const PositionedDirectional(bottom: 4, start: 4, child: ShoppableIcon()),
-                    if (post.posted_by != null && store.isMeasurementsVisible)
-                      PositionedDirectional(
-                          start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
-                  ],
+                child: InteractiveViewer(
+                  minScale: 1,
+                  maxScale: 3,
+                  child: Stack(
+                    children: [
+                      PostImage(imageUrl: post.image),
+                      if (post.chat_enabled) const PositionedDirectional(bottom: 4, start: 4, child: ShoppableIcon()),
+                      if (post.posted_by != null && store.isMeasurementsVisible)
+                        PositionedDirectional(
+                            start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
+                    ],
+                  ),
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),

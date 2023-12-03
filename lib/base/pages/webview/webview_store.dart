@@ -8,6 +8,7 @@ part 'webview_store.g.dart';
 class WebviewStore extends _WebviewStore with _$WebviewStore {}
 
 abstract class _WebviewStore with Store {
+
   _WebviewStore() {
     _controller.setNavigationDelegate(
       NavigationDelegate(
