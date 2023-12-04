@@ -37,7 +37,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
     ..init()
     ..load();
   final transformationController = TransformationController();
-  late final animationController = AnimationController(vsync: this);
+  late final smallHeartAnimationController = AnimationController(vsync: this);
+  late final bigHeartAnimationController = AnimationController(vsync: this);
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
@@ -48,10 +49,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +89,23 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                   child: GestureDetector(
                     onDoubleTap: () {
                       store.togglePostLike();
-                      animationController.forward();
+                      if (post.my_like) {
+                        smallHeartAnimationController.forward();
+                      bigHeartAnimationController.forward();
+                      }
+                      
                     },
                     child: Stack(
                       children: [
                         PostImage(imageUrl: post.image),
+                        Positioned.fill(
+                          child: const Icon(Icons.favorite, color: Colors.white, size: 80,).animate(controller: bigHeartAnimationController, autoPlay: false, onComplete: (controller) {
+                            Future.delayed(const Duration(milliseconds: 300), () {
+                            controller.reverse();
+
+                            });
+                          }).fadeIn(duration: const Duration(milliseconds: 100)).scaleXY(duration: const Duration(milliseconds: 200),begin:  1, end: 1.3),
+                        ),
                         if (post.chat_enabled)
                           PositionedDirectional(
                             bottom: 8,
@@ -156,14 +165,14 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
         GestureDetector(
           onTap: () {
             store.togglePostLike();
-            animationController.forward();
+            smallHeartAnimationController.forward();
           },
           child: Icon(
             post.my_like ? Icons.favorite : Icons.favorite_outline,
             color: const Color(0xFFFA897B),
           )
               .animate(
-                  controller: animationController,
+                  controller: smallHeartAnimationController,
                   autoPlay: false,
                   onComplete: (controller) {
                     controller.reverse();
