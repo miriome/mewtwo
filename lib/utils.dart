@@ -82,6 +82,14 @@ class MainPlatform {
       Log.instance.d(e.toString());
     }
   }
+  
+    static Future<void> goToPostDetails(int postId) async {
+    try {
+      await platform.invokeMethod('goToScreen', {"screen": 'postDetails', "postId": postId});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
 
   
 

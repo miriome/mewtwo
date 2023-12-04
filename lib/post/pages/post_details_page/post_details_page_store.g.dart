@@ -139,6 +139,24 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$isShopableDescriptionVisibleAtom = Atom(
+      name: '_PostDetailsPageStore.isShopableDescriptionVisible',
+      context: context);
+
+  @override
+  bool get isShopableDescriptionVisible {
+    _$isShopableDescriptionVisibleAtom.reportRead();
+    return super.isShopableDescriptionVisible;
+  }
+
+  @override
+  set isShopableDescriptionVisible(bool value) {
+    _$isShopableDescriptionVisibleAtom
+        .reportWrite(value, super.isShopableDescriptionVisible, () {
+      super.isShopableDescriptionVisible = value;
+    });
+  }
+
   late final _$currentEditingCommentAtom = Atom(
       name: '_PostDetailsPageStore.currentEditingComment', context: context);
 
@@ -185,6 +203,7 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     return '''
 showAllComments: ${showAllComments},
 isMeasurementsVisible: ${isMeasurementsVisible},
+isShopableDescriptionVisible: ${isShopableDescriptionVisible},
 currentEditingComment: ${currentEditingComment},
 commentsLength: ${commentsLength},
 visibleComments: ${visibleComments},

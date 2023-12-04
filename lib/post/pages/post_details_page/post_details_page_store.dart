@@ -58,6 +58,9 @@ abstract class _PostDetailsPageStore with Store {
   bool isMeasurementsVisible = false;
 
   @observable
+  bool isShopableDescriptionVisible = false;
+
+  @observable
   String currentEditingComment = "";
 
   @computed

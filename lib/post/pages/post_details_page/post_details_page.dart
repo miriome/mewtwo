@@ -78,12 +78,31 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       children: [
                         PostImage(imageUrl: post.image),
                         if (post.chat_enabled)
-                          const PositionedDirectional(
-                              bottom: 8,
-                              start: 8,
-                              child: ShoppableIcon(
-                                size: 24,
-                              )),
+                          PositionedDirectional(
+                            bottom: 8,
+                            start: 8,
+                            child: GestureDetector(
+                              onTap: () => store.isShopableDescriptionVisible = !store.isShopableDescriptionVisible,
+                              child: const ShoppableIcon(
+                                  size: 24,
+                                ),
+                            ),
+                          ),
+                        if (store.isShopableDescriptionVisible)
+                          PositionedDirectional(
+                            bottom: 8,
+                            start: 56,
+                            child: Container(
+                              width: 180,
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: const Color(0xFF7D7878).withOpacity(0.8)
+                              ),
+                              child: Text("There is an item in this post that you can buy!", style: TextStyle(
+                                height: 1,
+                                fontSize: 15, color: Colors.white.withOpacity(0.65)),)),
+                          ),
                         if (post.posted_by != null && store.isMeasurementsVisible)
                           PositionedDirectional(
                               start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
