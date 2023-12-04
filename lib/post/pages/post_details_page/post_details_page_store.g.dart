@@ -174,6 +174,23 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$interactiveViewStateAtom = Atom(
+      name: '_PostDetailsPageStore.interactiveViewState', context: context);
+
+  @override
+  Matrix4 get interactiveViewState {
+    _$interactiveViewStateAtom.reportRead();
+    return super.interactiveViewState;
+  }
+
+  @override
+  set interactiveViewState(Matrix4 value) {
+    _$interactiveViewStateAtom.reportWrite(value, super.interactiveViewState,
+        () {
+      super.interactiveViewState = value;
+    });
+  }
+
   late final _$togglePostLikeAsyncAction =
       AsyncAction('_PostDetailsPageStore.togglePostLike', context: context);
 
@@ -205,6 +222,7 @@ showAllComments: ${showAllComments},
 isMeasurementsVisible: ${isMeasurementsVisible},
 isShopableDescriptionVisible: ${isShopableDescriptionVisible},
 currentEditingComment: ${currentEditingComment},
+interactiveViewState: ${interactiveViewState},
 commentsLength: ${commentsLength},
 visibleComments: ${visibleComments},
 isMyPost: ${isMyPost},

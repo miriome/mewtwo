@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
@@ -62,6 +63,9 @@ abstract class _PostDetailsPageStore with Store {
 
   @observable
   String currentEditingComment = "";
+
+  @observable
+  Matrix4 interactiveViewState = Matrix4.zero();
 
   @computed
   bool get canAddComment => currentEditingComment.isNotEmpty;

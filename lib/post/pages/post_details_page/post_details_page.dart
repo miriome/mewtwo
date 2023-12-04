@@ -34,6 +34,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   late final store = PostDetailsPageStore(postId: widget.postId)
     ..init()
     ..load();
+  final transformationController = TransformationController();
   @override
   void initState() {
      MainPlatform.addMethodCallhandler((call) async {
@@ -70,8 +71,15 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             slivers: [
               SliverToBoxAdapter(
                 child: InteractiveViewer(
+                  transformationController: transformationController,
                   minScale: 1,
                   maxScale: 3,
+                  onInteractionStart: (details) {
+                    store.interactiveViewState = transformationController.value;
+                  },
+                  onInteractionEnd: (_) {
+                    transformationController.value = store.interactiveViewState;
+                  }, 
                   child: GestureDetector(
                     onDoubleTap: () => store.togglePostLike(),
                     child: Stack(
