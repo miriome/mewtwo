@@ -54,6 +54,7 @@ dependencies:
   timeago: ^3.6.0
   detectable_text_field: ^3.0.1
   url_launcher: ^6.2.1
+  flutter_svg: ^2.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

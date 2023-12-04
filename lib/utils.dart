@@ -121,6 +121,9 @@ class Utility {
     if (val is bool) {
       return val;
     }
+    if (val is String) {
+      return int.tryParse(val) == 1; 
+    }
     return false;
   }
 

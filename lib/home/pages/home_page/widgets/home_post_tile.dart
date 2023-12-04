@@ -41,7 +41,7 @@ class HomePostTile extends StatelessWidget {
               const PositionedDirectional(
                 bottom: 6,
                 start: 6,
-                child: ShoppableIcon())
+                child: ShoppableIcon(size: 16,))
             ],
           ),
         ),

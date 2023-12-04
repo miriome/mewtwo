@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ShoppableIcon extends StatelessWidget {
-const ShoppableIcon({ Key? key }) : super(key: key);
+  final double size;
+const ShoppableIcon({ Key? key, required this.size }) : super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -9,9 +10,9 @@ const ShoppableIcon({ Key? key }) : super(key: key);
       child: Container(
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: Color(0xFFD9D9D9).withOpacity(0.45)
+          color: const Color(0xFFD9D9D9).withOpacity(0.45)
         ),
-        child: Icon(Icons.shopping_bag_outlined, size: 16),
+        child: Icon(Icons.shopping_bag_outlined, size: size, color: Colors.white,),
       ),
     );
   }

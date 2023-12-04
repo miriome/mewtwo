@@ -24,7 +24,7 @@ class SearchPostTile extends StatelessWidget {
             child: Stack(
               children: [
                 PostImage(imageUrl: post.image),
-                if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon()),
+                if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon(size: 16,)),
               ],
             )),
       ),

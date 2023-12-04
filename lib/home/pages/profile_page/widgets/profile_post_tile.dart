@@ -34,7 +34,7 @@ class ProfilePostTile extends StatelessWidget {
                 Column(
                   children: [
                     PostImage(imageUrl: post.image),
-                    if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon()),
+                    if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon(size: 16,)),
                     cardFooter,
                   ],
                 ),

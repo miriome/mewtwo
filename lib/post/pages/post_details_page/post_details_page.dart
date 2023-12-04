@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mewtwo/post/utils.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:mewtwo/utils.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
@@ -61,14 +62,23 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 child: InteractiveViewer(
                   minScale: 1,
                   maxScale: 3,
-                  child: Stack(
-                    children: [
-                      PostImage(imageUrl: post.image),
-                      if (post.chat_enabled) const PositionedDirectional(bottom: 4, start: 4, child: ShoppableIcon()),
-                      if (post.posted_by != null && store.isMeasurementsVisible)
-                        PositionedDirectional(
-                            start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
-                    ],
+                  child: GestureDetector(
+                    onDoubleTap: () => store.togglePostLike(),
+                    child: Stack(
+                      children: [
+                        PostImage(imageUrl: post.image),
+                        if (post.chat_enabled)
+                          const PositionedDirectional(
+                              bottom: 8,
+                              start: 8,
+                              child: ShoppableIcon(
+                                size: 24,
+                              )),
+                        if (post.posted_by != null && store.isMeasurementsVisible)
+                          PositionedDirectional(
+                              start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -113,16 +123,14 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
         const Spacer(),
-        IconButton(
-            iconSize: 30,
-            onPressed: () {
-              store.isMeasurementsVisible = !store.isMeasurementsVisible;
-            },
-            icon: Image.asset(
-              'assets/icons/measuring_tape.png',
-              height: 35,
-              width: 35,
-            )),
+        GestureDetector(
+          onTap: () => store.isMeasurementsVisible = !store.isMeasurementsVisible,
+          child: SvgPicture.asset(
+            'assets/icons/measuring_tape.svg',
+            height: 32,
+            width: 32,
+          ),
+        ),
         if (post.chat_enabled) ...[
           const SizedBox(width: 16),
           IconButton(
@@ -158,7 +166,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               if (post.posted_by != null) {
                 final sp = await SharedPreferences.getInstance();
                 if (context.mounted) {
-                  if (sp.containsKey("k_id")) {
+                  if (sp.containsKey("k_id") && sp.getInt("k_id") == post.posted_by!.id) {
                     ProfilePageRoute(userId: sp.getInt("k_id")).go(context);
                   } else {
                     OtherProfilePageRoute(userId: post.posted_by!.id).push(context);

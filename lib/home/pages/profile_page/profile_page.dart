@@ -126,8 +126,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    
                     Text(
-                      "asd",
+                      store.user?.name ?? "",
                       style: GoogleFonts.roboto(
                           height: 1, fontSize: 20, fontWeight: FontWeight.w700, color: const Color(0xFF7D7878)),
                     ),
@@ -155,9 +156,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
               },
               iconSize: 30,
-              icon: const Icon(
-                Icons.menu,
-                color: Color(0xFF8474A1),
+              icon: Icon(
+                store.isOwnProfile ? Icons.more_vert : Icons.menu,
+                color: const Color(0xFF8474A1),
               )),
         ),
       ],
