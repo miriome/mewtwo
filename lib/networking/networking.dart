@@ -41,5 +41,9 @@ class Networking {
   Future<Response> get<T>({required String path, Map<String, dynamic>? params, Options? options}) async {
     return await dio.get<T>(path, queryParameters: params, options: options);
   }
+
+  Future<Response> delete({required String path, Map<dynamic, dynamic>? body}) async {
+    return await dio.delete(path, data: body);
+  }
 }
 

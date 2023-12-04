@@ -164,6 +164,22 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     return _$togglePostLikeAsyncAction.run(() => super.togglePostLike());
   }
 
+  late final _$deletePostAsyncAction =
+      AsyncAction('_PostDetailsPageStore.deletePost', context: context);
+
+  @override
+  Future<bool> deletePost() {
+    return _$deletePostAsyncAction.run(() => super.deletePost());
+  }
+
+  late final _$markPostSoldAsyncAction =
+      AsyncAction('_PostDetailsPageStore.markPostSold', context: context);
+
+  @override
+  Future<bool> markPostSold() {
+    return _$markPostSoldAsyncAction.run(() => super.markPostSold());
+  }
+
   @override
   String toString() {
     return '''

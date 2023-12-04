@@ -428,5 +428,261 @@ class _AddCommentApiProviderElement
   @override
   String get comment => (origin as AddCommentApiProvider).comment;
 }
+
+String _$deletePostApiHash() => r'9bc1aa142f74f8396e8c94dd59276e8ee6c39831';
+
+/// See also [deletePostApi].
+@ProviderFor(deletePostApi)
+const deletePostApiProvider = DeletePostApiFamily();
+
+/// See also [deletePostApi].
+class DeletePostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [deletePostApi].
+  const DeletePostApiFamily();
+
+  /// See also [deletePostApi].
+  DeletePostApiProvider call({
+    required int postId,
+  }) {
+    return DeletePostApiProvider(
+      postId: postId,
+    );
+  }
+
+  @override
+  DeletePostApiProvider getProviderOverride(
+    covariant DeletePostApiProvider provider,
+  ) {
+    return call(
+      postId: provider.postId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deletePostApiProvider';
+}
+
+/// See also [deletePostApi].
+class DeletePostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [deletePostApi].
+  DeletePostApiProvider({
+    required int postId,
+  }) : this._internal(
+          (ref) => deletePostApi(
+            ref as DeletePostApiRef,
+            postId: postId,
+          ),
+          from: deletePostApiProvider,
+          name: r'deletePostApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deletePostApiHash,
+          dependencies: DeletePostApiFamily._dependencies,
+          allTransitiveDependencies:
+              DeletePostApiFamily._allTransitiveDependencies,
+          postId: postId,
+        );
+
+  DeletePostApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.postId,
+  }) : super.internal();
+
+  final int postId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(DeletePostApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeletePostApiProvider._internal(
+        (ref) => create(ref as DeletePostApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        postId: postId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _DeletePostApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeletePostApiProvider && other.postId == postId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, postId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeletePostApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `postId` of this provider.
+  int get postId;
+}
+
+class _DeletePostApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with DeletePostApiRef {
+  _DeletePostApiProviderElement(super.provider);
+
+  @override
+  int get postId => (origin as DeletePostApiProvider).postId;
+}
+
+String _$markPostSoldApiHash() => r'58be5a1729b060662b9783c94641f231e1214331';
+
+/// See also [markPostSoldApi].
+@ProviderFor(markPostSoldApi)
+const markPostSoldApiProvider = MarkPostSoldApiFamily();
+
+/// See also [markPostSoldApi].
+class MarkPostSoldApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [markPostSoldApi].
+  const MarkPostSoldApiFamily();
+
+  /// See also [markPostSoldApi].
+  MarkPostSoldApiProvider call({
+    required int postId,
+  }) {
+    return MarkPostSoldApiProvider(
+      postId: postId,
+    );
+  }
+
+  @override
+  MarkPostSoldApiProvider getProviderOverride(
+    covariant MarkPostSoldApiProvider provider,
+  ) {
+    return call(
+      postId: provider.postId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'markPostSoldApiProvider';
+}
+
+/// See also [markPostSoldApi].
+class MarkPostSoldApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [markPostSoldApi].
+  MarkPostSoldApiProvider({
+    required int postId,
+  }) : this._internal(
+          (ref) => markPostSoldApi(
+            ref as MarkPostSoldApiRef,
+            postId: postId,
+          ),
+          from: markPostSoldApiProvider,
+          name: r'markPostSoldApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$markPostSoldApiHash,
+          dependencies: MarkPostSoldApiFamily._dependencies,
+          allTransitiveDependencies:
+              MarkPostSoldApiFamily._allTransitiveDependencies,
+          postId: postId,
+        );
+
+  MarkPostSoldApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.postId,
+  }) : super.internal();
+
+  final int postId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(MarkPostSoldApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: MarkPostSoldApiProvider._internal(
+        (ref) => create(ref as MarkPostSoldApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        postId: postId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _MarkPostSoldApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MarkPostSoldApiProvider && other.postId == postId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, postId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin MarkPostSoldApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `postId` of this provider.
+  int get postId;
+}
+
+class _MarkPostSoldApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with MarkPostSoldApiRef {
+  _MarkPostSoldApiProviderElement(super.provider);
+
+  @override
+  int get postId => (origin as MarkPostSoldApiProvider).postId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

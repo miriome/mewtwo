@@ -113,7 +113,18 @@ abstract class _PostDetailsPageStore with Store {
     post.likes += toggle ? 1 : -1;
 
     await Mew.pc.read(likePostProvider.future);
-
-    
   }
+
+  @action
+  Future<bool> deletePost() async {
+    final deletePostProvider = DeletePostApiProvider(postId: postId);
+    return await Mew.pc.read(deletePostProvider.future);
+  }
+
+  @action
+  Future<bool> markPostSold() async {
+    final markPostSoldProvider = MarkPostSoldApiProvider(postId: postId);
+    return await Mew.pc.read(markPostSoldProvider.future);
+  }
+  
 }

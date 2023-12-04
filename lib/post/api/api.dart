@@ -69,3 +69,43 @@ Future<bool> addCommentApi(AddCommentApiRef ref, {required int postId, required 
   }
   return false;
 }
+
+@riverpod
+Future<bool> deletePostApi(DeletePostApiRef ref, {required int postId}) async {
+  try {
+    final res = await (await Networking.instance).delete(path: "post/${postId.toString()}");
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
+
+@riverpod
+Future<bool> markPostSoldApi(MarkPostSoldApiRef ref, {required int postId}) async {
+  
+  final body = {'chat_enabled': 0.toString()};
+  try {
+    final res = await (await Networking.instance).post(path: "post/markSold/$postId", body: body);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
