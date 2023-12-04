@@ -25,6 +25,11 @@ class _SearchPageState extends State<SearchPage> {
   final store = SearchPageStore();
 
   @override
+  void didUpdateWidget(covariant SearchPage oldWidget) {
+    store.searchTerm = widget.initialSearchTerm;
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "viewWillAppear") {

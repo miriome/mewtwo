@@ -106,7 +106,6 @@ class PostOptions {
               onPressed: () async {
                 Navigator.of(context).pop();
                 final deleted = await store.deletePost();
-                store.load();
                 if (deleted) {
                   if (parentContext.mounted) {
                     Fluttertoast.showToast(msg: "Post deleted", gravity: ToastGravity.CENTER);

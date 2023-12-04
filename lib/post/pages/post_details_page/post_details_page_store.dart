@@ -15,7 +15,7 @@ class PostDetailsPageStore extends _PostDetailsPageStore with _$PostDetailsPageS
 
 abstract class _PostDetailsPageStore with Store {
   final int postId;
-  final int _visibleCommentsLength = 1;
+  final int _visibleCommentsLength = 3;
   _PostDetailsPageStore({required this.postId});
 
   @observable
@@ -49,6 +49,9 @@ abstract class _PostDetailsPageStore with Store {
     if (showAllComments) {
       return _comments;
     }
+    if (_comments.length <= _visibleCommentsLength) {
+      return _comments;
+    }
     return _comments.sublist(_comments.length - _visibleCommentsLength);
   }
 
@@ -80,7 +83,7 @@ abstract class _PostDetailsPageStore with Store {
     if (res != null) {
       _post = res;
       _comments = ObservableList.of(res.comments ?? []);
-      showAllComments = _comments.length < _visibleCommentsLength;
+      showAllComments = _comments.length <= _visibleCommentsLength;
       
     }
     listener.close();

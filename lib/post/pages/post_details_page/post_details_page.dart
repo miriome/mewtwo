@@ -21,6 +21,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:mewtwo/utils.dart';
 import 'package:detectable_text_field/detectable_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final int postId;
@@ -30,20 +32,22 @@ class PostDetailsPage extends StatefulWidget {
   State<PostDetailsPage> createState() => _PostDetailsPageState();
 }
 
-class _PostDetailsPageState extends State<PostDetailsPage> {
+class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderStateMixin {
   late final store = PostDetailsPageStore(postId: widget.postId)
     ..init()
     ..load();
   final transformationController = TransformationController();
+  late final animationController = AnimationController(vsync: this);
   @override
   void initState() {
-     MainPlatform.addMethodCallhandler((call) async {
+    MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "viewWillAppear") {
         store.load();
       }
     });
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -63,11 +67,16 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               "${post.posted_by?.username ?? ""}'s post",
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF6EC6CA)),
             ),
-            actions: [IconButton(onPressed: () {
-              PostOptions.show(context, store: store);
-            }, icon: const Icon(Icons.more_vert))],
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    PostOptions.show(context, store: store);
+                  },
+                  icon: const Icon(Icons.more_vert))
+            ],
           ),
           body: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverToBoxAdapter(
                 child: InteractiveViewer(
@@ -79,9 +88,12 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                   },
                   onInteractionEnd: (_) {
                     transformationController.value = store.interactiveViewState;
-                  }, 
+                  },
                   child: GestureDetector(
-                    onDoubleTap: () => store.togglePostLike(),
+                    onDoubleTap: () {
+                      store.togglePostLike();
+                      animationController.forward();
+                    },
                     child: Stack(
                       children: [
                         PostImage(imageUrl: post.image),
@@ -92,8 +104,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             child: GestureDetector(
                               onTap: () => store.isShopableDescriptionVisible = !store.isShopableDescriptionVisible,
                               child: const ShoppableIcon(
-                                  size: 24,
-                                ),
+                                size: 24,
+                              ),
                             ),
                           ),
                         if (store.isShopableDescriptionVisible)
@@ -101,15 +113,15 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             bottom: 8,
                             start: 56,
                             child: Container(
-                              width: 180,
-                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: const Color(0xFF7D7878).withOpacity(0.8)
-                              ),
-                              child: Text("There is an item in this post that you can buy!", style: TextStyle(
-                                height: 1,
-                                fontSize: 15, color: Colors.white.withOpacity(0.65)),)),
+                                width: 180,
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: const Color(0xFF7D7878).withOpacity(0.8)),
+                                child: Text(
+                                  "There is an item in this post that you can buy!",
+                                  style: TextStyle(height: 1, fontSize: 15, color: Colors.white.withOpacity(0.65)),
+                                )),
                           ),
                         if (post.posted_by != null && store.isMeasurementsVisible)
                           PositionedDirectional(
@@ -144,11 +156,19 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         GestureDetector(
           onTap: () {
             store.togglePostLike();
+            animationController.forward();
           },
           child: Icon(
             post.my_like ? Icons.favorite : Icons.favorite_outline,
             color: const Color(0xFFFA897B),
-          ),
+          )
+              .animate(
+                  controller: animationController,
+                  autoPlay: false,
+                  onComplete: (controller) {
+                    controller.reverse();
+                  })
+              .scaleXY(begin: 1, end: 1.5, duration: const Duration(milliseconds: 100)),
         ),
         const SizedBox(
           width: 4,
@@ -231,6 +251,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
         return DetectableText(
           text: TextUtils.replaceEmoji(post.caption),
           detectionRegExp: detectionRegExp()!,
+          trimLength: 999999999999,
           detectedStyle: TextStyle(
             fontSize: 16,
             color: Theme.of(context).primaryColor,
@@ -242,11 +263,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               return;
             }
             final url = !tappedText.startsWith("https://") ? "https://$tappedText" : tappedText;
-
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Webview(
-                      url: url,
-                    )));
+            launchUrl(Uri.parse(url));
           },
           lessStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
           moreStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
@@ -254,5 +271,4 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
       })
     ]);
   }
-
 }

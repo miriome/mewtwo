@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
+import 'package:mewtwo/post/utils.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
@@ -23,14 +25,18 @@ class _CommentsSectionState extends State<CommentsSection> {
   final TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context){
-    return MultiSliver(children: [
-      commentsList(),
-                  const SliverToBoxAdapter(
-                      child: SizedBox(
-                    height: 8,
-                  )),
-                  writeComment
-    ]);
+    return Observer(
+      builder: (context) {
+        return MultiSliver(children: [
+          commentsList(),
+                      const SliverToBoxAdapter(
+                          child: SizedBox(
+                        height: 8,
+                      )),
+                      writeComment
+        ]);
+      }
+    );
   }
 
   Widget get writeComment {
@@ -81,7 +87,11 @@ class _CommentsSectionState extends State<CommentsSection> {
       children: [
         if (!widget.store.showAllComments)
           GestureDetector(
-              onTap: () => widget.store.showAllComments = true, child: Text("View all ${widget.store.commentsLength} comments")),
+            behavior: HitTestBehavior.opaque,
+              onTap: () => widget.store.showAllComments = true, child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text("View all ${widget.store.commentsLength} comments"),
+              )),
         SliverList.separated(
           separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
@@ -112,7 +122,8 @@ class _CommentsSectionState extends State<CommentsSection> {
                   children: [
                     Expanded(
                       child: Text(
-                        comment.comment,
+                        TextUtils.replaceEmoji(comment.comment)
+                        ,
                         style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
                         maxLines: 10,
                       ),
@@ -164,6 +175,7 @@ class _CommentsSectionState extends State<CommentsSection> {
                 Navigator.pop(modalContext);
                 if (isMyComment) {
                   widget.store.deleteComment(comment.id);
+                  return;
                 }
                 ReportContentRoute(reportType: ReportType.comment, typeId: comment.id.toString()).push(context);
               },

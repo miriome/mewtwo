@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
                           itemBuilder: (context, index) {
-                            return ProfilePostTile(post: store.posts[index]);
+                            return ProfilePostTile(post: store.posts[index], store: store);
                           },
                           itemCount: store.posts.length,
                         ),

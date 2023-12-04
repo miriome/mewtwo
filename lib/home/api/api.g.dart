@@ -722,7 +722,7 @@ class _BlockUserApiProviderElement
 }
 
 String _$toggleUserFollowApiHash() =>
-    r'8bc55cb6113634141ec732990c720a8bf986b5de';
+    r'e25657c320ff6940e0bc1ae48bcce7ed1fbbf761';
 
 /// See also [toggleUserFollowApi].
 @ProviderFor(toggleUserFollowApi)

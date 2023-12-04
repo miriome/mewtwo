@@ -95,7 +95,7 @@ abstract class _ProfilePageStore with Store {
     }
     final blockUserApiProvider = ToggleUserFollowApiProvider(userId: userIdToBlock, followToggle: !_isFollowingUser);
     final res = await Mew.pc.read(blockUserApiProvider.future);
-    _isFollowingUser = !_isFollowingUser;
+    load();
     return res;
   }
 }

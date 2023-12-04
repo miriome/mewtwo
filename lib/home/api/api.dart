@@ -140,7 +140,7 @@ Future<bool> blockUserApi(BlockUserApiRef ref, {required int userId}) async {
 
 @riverpod
 Future<bool> toggleUserFollowApi(ToggleUserFollowApiRef ref, {required int userId, required bool followToggle}) async {
-  final body = {'target_id': userId.toString(), "is_follow": followToggle.toString()};
+  final body = {'target_id': userId.toString(), "is_follow": followToggle ? 1 : 0};
   try {
     final res = await (await Networking.instance).post(path: "users/follow", body: body);
     Map response = res.data;

@@ -55,6 +55,7 @@ dependencies:
   detectable_text_field: ^3.0.1
   url_launcher: ^6.2.1
   flutter_svg: ^2.0.9
+  flutter_animate: ^4.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

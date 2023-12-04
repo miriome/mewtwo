@@ -4,21 +4,24 @@ import 'package:intl/intl.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/home/model/post_model.dart';
+import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 
 class ProfilePostTile extends StatelessWidget {
   final PostModel post;
+  final ProfilePageStore store;
   const ProfilePostTile({
     Key? key,
     required this.post,
+    required this.store,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return GestureDetector(
-        onTap: () => PostDetailsRoute(postId: post.id).push(context),
+        onTap: () => PostDetailsRoute(postId: post.id).push(context).then((value) => store.load()),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),

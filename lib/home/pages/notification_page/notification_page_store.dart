@@ -17,14 +17,14 @@ abstract class _NotificationPageStore with Store {
 
   @action
   Future<void> load() async {
-    final getNotificationsProvider = getNotificationsApiProvider;
+    // final getNotificationsProvider = getNotificationsApiProvider;
 
-    final listener = Mew.pc.listen(getNotificationsProvider, (previous, next) {
-      _isLoading = next.isLoading;
-    });
-    final res = await Mew.pc.read(getNotificationsProvider.future);
-    _notifications = ObservableList.of(res);
-    listener.close();
+    // final listener = Mew.pc.listen(getNotificationsProvider, (previous, next) {
+    //   _isLoading = next.isLoading;
+    // });
+    // final res = await Mew.pc.read(getNotificationsProvider.future);
+    // _notifications = ObservableList.of(res);
+    // listener.close();
   }
   
 }

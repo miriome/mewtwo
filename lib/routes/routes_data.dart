@@ -23,7 +23,8 @@ class SearchPageRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SearchPage(initialSearchTerm: initialSearchTerm ?? '',);
+    return SearchPage(
+      initialSearchTerm: initialSearchTerm ?? '',);
   }
 }
 
