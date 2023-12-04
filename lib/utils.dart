@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 
 class MaterialColorGenerator {
@@ -22,7 +23,7 @@ class MaterialColorGenerator {
   }
 }
 
-enum Screens { forgetPassword, likedPosts, chats, chat, newPost }
+enum Screens { forgetPassword, likedPosts, chats, chat, newPost, editPost }
 
 // TODO: remove this when not needed or refactor into something better.
 class MainPlatform {
@@ -71,6 +72,18 @@ class MainPlatform {
       Log.instance.d(e.toString());
     }
   }
+
+  static Future<void> goToEditPost(PostModel post) async {
+    final postJson = jsonEncode(post.toJson());
+    try {
+      await platform
+          .invokeMethod('goToScreen', {"screen": Screens.editPost.name, "postModelJson": postJson});
+    } on PlatformException catch (e) {
+      Log.instance.d(e.toString());
+    }
+  }
+
+  
 
   static Future<void> showOwnProfileActions(UserModel user) async {
     final userJson = jsonEncode(user.toJson());

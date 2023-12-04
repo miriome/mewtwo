@@ -27,14 +27,24 @@ class ProfilePostTile extends StatelessWidget {
               color: Colors.white,
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.25), offset: const Offset(0, 4), blurRadius: 4)]),
           child: ClipRRect(
-            borderRadius:
-                BorderRadiusDirectional.circular(4),
+            borderRadius: BorderRadiusDirectional.circular(4),
             child: Stack(
               children: [
                 Column(
                   children: [
-                    PostImage(imageUrl: post.image),
-                    if (post.chat_enabled) const PositionedDirectional(bottom: 6, start: 6, child: ShoppableIcon(size: 16,)),
+                    Stack(
+                      children: [
+                        PostImage(imageUrl: post.image),
+                        if (post.chat_enabled)
+                      const PositionedDirectional(
+                          bottom: 6,
+                          start: 6,
+                          child: ShoppableIcon(
+                            size: 16,
+                          )),
+                      ],
+                    ),
+                    
                     cardFooter,
                   ],
                 ),

@@ -20,7 +20,7 @@ class _MainTabBarState extends State<MainTabBar> {
     MainPlatform.addMethodCallhandler((call) async {
       switch(call.method) {
         case "goToMyProfile":
-          widget.child.goBranch(4);
+          ProfilePageRoute().go(context);
           break;
         case 'goToSearch':
         if (call.arguments is String) {

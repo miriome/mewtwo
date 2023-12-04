@@ -27,11 +27,8 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear" && call.arguments is String) {
-        if (call.arguments == SearchPageRoute(initialSearchTerm: "").location) {
-          store.loadSelfUserData();
-        }
-        
+      if (call.method == "viewWillAppear") {
+        store.loadSelfUserData();
       }
       if (call.method == "modifyInitialSearchTerm" && call.arguments is String) {
         store.searchTerm = call.arguments;
@@ -118,7 +115,8 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                   )),
-                  SliverList.builder(itemBuilder: (context, index) {
+                  SliverList.builder(
+                    itemBuilder: (context, index) {
                     final user = store.userResults[index];
                     return GestureDetector(
                       onTap: () => OtherProfilePageRoute(userId: user.id).push(context),

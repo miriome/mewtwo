@@ -27,10 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear" && call.arguments is String) {
-        if (call.arguments == ProfilePageRoute().location) {
-          store.load();
-        }
+      if (call.method == "viewWillAppear") {
+        store.load();
       }
     });
     store.init().then((_) => store.load());

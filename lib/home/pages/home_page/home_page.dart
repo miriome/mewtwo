@@ -20,10 +20,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear" && call.arguments is String) {
-        if (call.arguments == HomePageRoute().location) {
-          store.loadPosts();
-        }
+      if (call.method == "viewWillAppear") {
+        store.loadPosts();
         
       }});
     super.initState();

@@ -41,26 +41,31 @@ abstract class _PostModel with Store {
   final String created_at;
   @JsonKey(
     fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
   )
   final int id;
   //try. if not stick to int
   @JsonKey(
     fromJson: Utility.parseBool,
+    toJson: Utility.bool2int
   )
   final bool chat_enabled;
   @JsonKey(
     fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
   )
   final int added_by;
 
   @observable
   @JsonKey(
     fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
   )
   int likes;
   //try. if not stick to int
   @JsonKey(
     fromJson: Utility.parseBool,
+    toJson: Utility.bool2int
   )
   @observable
   bool my_like;
