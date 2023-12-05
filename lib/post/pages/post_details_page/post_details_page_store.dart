@@ -40,6 +40,9 @@ abstract class _PostDetailsPageStore with Store {
   @observable
   bool showAllComments = true;
 
+  @readonly
+  bool _isCommentSending = false;
+
 
   @computed
   int get commentsLength => _comments.length;
@@ -99,9 +102,11 @@ abstract class _PostDetailsPageStore with Store {
   }
 
   Future<bool> addComment({required int postId}) async {
+    _isCommentSending = true;
     final addCommentProvider = AddCommentApiProvider(comment: currentEditingComment, postId: postId);
     final res = await Mew.pc.read(addCommentProvider.future);
     if (res) {
+      _isCommentSending = false;
       currentEditingComment = "";
       load();
       

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';
@@ -41,14 +42,21 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
   late final bigHeartAnimationController = AnimationController(vsync: this);
   @override
   void initState() {
-    MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear") {
-        store.load();
-      }
-    });
+    MainPlatform.addMethodCallhandler(appearOnLoad);
     super.initState();
   }
 
+  Future<void> appearOnLoad(MethodCall call) async {
+    if (call.method == "viewWillAppear") {
+      store.load();
+    }
+  }
+
+  @override
+  void dispose() {
+    MainPlatform.removeMethodCallHandler(appearOnLoad);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,20 +99,28 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                       store.togglePostLike();
                       if (post.my_like) {
                         smallHeartAnimationController.forward();
-                      bigHeartAnimationController.forward();
+                        bigHeartAnimationController.forward();
                       }
-                      
                     },
                     child: Stack(
                       children: [
                         PostImage(imageUrl: post.image),
                         Positioned.fill(
-                          child: const Icon(Icons.favorite, color: Colors.white, size: 80,).animate(controller: bigHeartAnimationController, autoPlay: false, onComplete: (controller) {
-                            Future.delayed(const Duration(milliseconds: 300), () {
-                            controller.reverse();
-
-                            });
-                          }).fadeIn(duration: const Duration(milliseconds: 100)).scaleXY(duration: const Duration(milliseconds: 200),begin:  1, end: 1.3),
+                          child: const Icon(
+                            Icons.favorite,
+                            color: Colors.white,
+                            size: 80,
+                          )
+                              .animate(
+                                  controller: bigHeartAnimationController,
+                                  autoPlay: false,
+                                  onComplete: (controller) {
+                                    Future.delayed(const Duration(milliseconds: 300), () {
+                                      controller.reverse();
+                                    });
+                                  })
+                              .fadeIn(duration: const Duration(milliseconds: 100))
+                              .scaleXY(duration: const Duration(milliseconds: 200), begin: 1, end: 1.3),
                         ),
                         if (post.chat_enabled)
                           PositionedDirectional(

@@ -15,7 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 class CommentsSection extends StatefulWidget {
   final PostDetailsPageStore store;
   final int postId;
-const CommentsSection({ Key? key, required this.store, required this.postId }) : super(key: key);
+  const CommentsSection({Key? key, required this.store, required this.postId}) : super(key: key);
 
   @override
   State<CommentsSection> createState() => _CommentsSectionState();
@@ -24,19 +24,17 @@ const CommentsSection({ Key? key, required this.store, required this.postId }) :
 class _CommentsSectionState extends State<CommentsSection> {
   final TextEditingController commentController = TextEditingController();
   @override
-  Widget build(BuildContext context){
-    return Observer(
-      builder: (context) {
-        return MultiSliver(children: [
-          commentsList(),
-                      const SliverToBoxAdapter(
-                          child: SizedBox(
-                        height: 8,
-                      )),
-                      writeComment
-        ]);
-      }
-    );
+  Widget build(BuildContext context) {
+    return Observer(builder: (context) {
+      return MultiSliver(children: [
+        commentsList(),
+        const SliverToBoxAdapter(
+            child: SizedBox(
+          height: 8,
+        )),
+        writeComment
+      ]);
+    });
   }
 
   Widget get writeComment {
@@ -46,6 +44,7 @@ class _CommentsSectionState extends State<CommentsSection> {
           Expanded(
             child: TextField(
               style: const TextStyle(fontSize: 14),
+              enabled: !widget.store.isCommentSending,
               controller: commentController,
               onChanged: (text) {
                 widget.store.currentEditingComment = text;
@@ -59,24 +58,32 @@ class _CommentsSectionState extends State<CommentsSection> {
             ),
           ),
           IconButton.filled(
-              onPressed: widget.store.canAddComment
-                  ? () {
-                      widget.store.addComment(postId: widget.postId).then((success) {
-                        if (success) {
-                          commentController.clear();
+              onPressed: widget.store.isCommentSending
+                  ? null
+                  : widget.store.canAddComment
+                      ? () {
+                          widget.store.addComment(postId: widget.postId).then((success) {
+                            if (success) {
+                              commentController.clear();
+                            }
+                          });
                         }
-                      });
-                    }
-                  : null,
-              disabledColor: Colors.black,
+                      : null,                      
               constraints: const BoxConstraints(),
+              
               iconSize: 28,
               padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.arrow_upward,
-                color: Colors.white,
-                size: 24,
-              ))
+              icon: widget.store.isCommentSending
+                  ? Container(
+                    color: Colors.white,
+                    child: const CircularProgressIndicator(
+                    ),
+                  )
+                  : const Icon(
+                      Icons.arrow_upward,
+                      color: Colors.white,
+                      size: 24,
+                    ))
         ],
       ),
     );
@@ -87,8 +94,9 @@ class _CommentsSectionState extends State<CommentsSection> {
       children: [
         if (!widget.store.showAllComments)
           GestureDetector(
-            behavior: HitTestBehavior.opaque,
-              onTap: () => widget.store.showAllComments = true, child: Padding(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => widget.store.showAllComments = true,
+              child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text("View all ${widget.store.commentsLength} comments"),
               )),
@@ -122,8 +130,7 @@ class _CommentsSectionState extends State<CommentsSection> {
                   children: [
                     Expanded(
                       child: Text(
-                        TextUtils.replaceEmoji(comment.comment)
-                        ,
+                        TextUtils.replaceEmoji(comment.comment),
                         style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
                         maxLines: 10,
                       ),

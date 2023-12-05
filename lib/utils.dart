@@ -46,6 +46,19 @@ class MainPlatform {
     });
   }
 
+  static void removeMethodCallHandler(Future<dynamic> Function(MethodCall) handler) {
+    final result = _handlers.remove(handler);
+    if (!result) {
+      return;
+    }
+    platform.setMethodCallHandler((call) async {
+      for (var element in _handlers) {
+        element.call(call);
+      }
+      return;
+    });
+  }
+
   static Future<void> goToScreen(Screens screen) async {
     try {
       await platform.invokeMethod('goToScreen', {"screen": screen.name});

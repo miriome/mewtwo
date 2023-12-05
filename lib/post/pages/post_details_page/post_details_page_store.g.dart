@@ -122,6 +122,24 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
     });
   }
 
+  late final _$_isCommentSendingAtom =
+      Atom(name: '_PostDetailsPageStore._isCommentSending', context: context);
+
+  bool get isCommentSending {
+    _$_isCommentSendingAtom.reportRead();
+    return super._isCommentSending;
+  }
+
+  @override
+  bool get _isCommentSending => isCommentSending;
+
+  @override
+  set _isCommentSending(bool value) {
+    _$_isCommentSendingAtom.reportWrite(value, super._isCommentSending, () {
+      super._isCommentSending = value;
+    });
+  }
+
   late final _$isMeasurementsVisibleAtom = Atom(
       name: '_PostDetailsPageStore.isMeasurementsVisible', context: context);
 
