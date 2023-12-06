@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
@@ -15,7 +13,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class SearchPage extends StatefulWidget {
   final String initialSearchTerm;
-  const SearchPage({Key? key, required this.initialSearchTerm}) : super(key: key);
+
+  SearchPage({Key? key, required this.initialSearchTerm}) : super(key: key ?? GlobalKey<_SearchPageState>()) {
+    if (key is GlobalKey<_SearchPageState>) {
+      key.currentState?.store.searchTerm = initialSearchTerm;
+    }
+  }
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -24,11 +27,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final store = SearchPageStore();
 
-  @override
-  void didUpdateWidget(covariant SearchPage oldWidget) {
-    store.searchTerm = widget.initialSearchTerm;
-    super.didUpdateWidget(oldWidget);
-  }
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
@@ -55,10 +53,10 @@ class _SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Observer(builder: (context) {
         return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: GestureDetector(
-              onTap: () => store.searchBarFocusNode.unfocus(),
+            body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: GestureDetector(
+            onTap: () => store.searchBarFocusNode.unfocus(),
             child: RefreshIndicator(
               onRefresh: () async {
                 store.search();
@@ -122,61 +120,66 @@ class _SearchPageState extends State<SearchPage> {
                   )),
                   SliverList.builder(
                     itemBuilder: (context, index) {
-                    final user = store.userResults[index];
-                    return GestureDetector(
-                      onTap: () => OtherProfilePageRoute(userId: user.id).push(context),
-                      behavior: HitTestBehavior.opaque,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundColor: const Color(0xFF6EC6CA),
-                              foregroundImage: user.photo_url == "https://miromie.com/uploads/"
-                                  ? null
-                                  : CachedNetworkImageProvider(
-                                      user.photo_url,
-                                    ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  user.name,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text(
-                                  user.username,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(
-                                      0xFF6EC6CA,
+                      final user = store.userResults[index];
+                      return GestureDetector(
+                        onTap: () => OtherProfilePageRoute(userId: user.id).push(context),
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundColor: const Color(0xFF6EC6CA),
+                                foregroundImage: user.photo_url == "https://miromie.com/uploads/"
+                                    ? null
+                                    : CachedNetworkImageProvider(
+                                        user.photo_url,
+                                      ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    user.name,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                  Text(
+                                    user.username,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(
+                                        0xFF6EC6CA,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }, itemCount: store.userResults.length,),
+                      );
+                    },
+                    itemCount: store.userResults.length,
+                  ),
                   SliverAlignedGrid.count(
                     itemBuilder: (context, index) {
-                      return SearchPostTile(post: store.postResults[index], onTap: () {
-                        store.searchBarFocusNode.unfocus();
-                        PostDetailsRoute(postId: store.postResults[index].id).push(context);
-                      },);
+                      return SearchPostTile(
+                        post: store.postResults[index],
+                        onTap: () {
+                          store.searchBarFocusNode.unfocus();
+                          PostDetailsRoute(postId: store.postResults[index].id).push(context);
+                        },
+                      );
                     },
                     itemCount: store.postResults.length,
                     crossAxisCount: 2,
