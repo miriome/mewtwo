@@ -90,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
                           if (currentStyle == "All") {
                             isCurrentStyleSelected = store.searchTerm == "";
                           } else {
-                            isCurrentStyleSelected = store.searchTerm == currentStyle;
+                            isCurrentStyleSelected = store.searchTerm.toLowerCase() == currentStyle.toLowerCase();
                           }
                           return GestureDetector(
                             onTap: () {

@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,8 +28,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final int postId;
+  final bool isFromApp;
 
-  const PostDetailsPage({Key? key, required this.postId}) : super(key: key);
+  const PostDetailsPage({Key? key, required this.postId, required this.isFromApp}) : super(key: key);
   @override
   State<PostDetailsPage> createState() => _PostDetailsPageState();
 }
@@ -60,118 +62,126 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Observer(builder: (context) {
-        final post = store.post;
-        if (post == null) {
-          return Container();
+    return PopScope(
+      canPop: !widget.isFromApp,
+      onPopInvoked: (_) {
+        if (widget.isFromApp) {
+          SystemNavigator.pop(animated: true);
         }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "${post.posted_by?.username ?? ""}'s post",
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF6EC6CA)),
-            ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    PostOptions.show(context, store: store);
-                  },
-                  icon: const Icon(Icons.more_vert))
-            ],
-          ),
-          body: CustomScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            slivers: [
-              SliverToBoxAdapter(
-                child: InteractiveViewer(
-                  transformationController: transformationController,
-                  minScale: 1,
-                  maxScale: 3,
-                  onInteractionStart: (details) {
-                    store.interactiveViewState = transformationController.value;
-                  },
-                  onInteractionEnd: (_) {
-                    transformationController.value = store.interactiveViewState;
-                  },
-                  child: GestureDetector(
-                    onDoubleTap: () {
-                      store.togglePostLike();
-                      if (post.my_like) {
-                        smallHeartAnimationController.forward();
-                        bigHeartAnimationController.forward();
-                      }
+      },
+      child: SafeArea(
+        child: Observer(builder: (context) {
+          final post = store.post;
+          if (post == null) {
+            return Container();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "${post.posted_by?.username ?? ""}'s post",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF6EC6CA)),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      PostOptions.show(context, store: store);
                     },
-                    child: Stack(
-                      children: [
-                        PostImage(imageUrl: post.image),
-                        Positioned.fill(
-                          child: const Icon(
-                            Icons.favorite,
-                            color: Colors.white,
-                            size: 80,
-                          )
-                              .animate(
-                                  controller: bigHeartAnimationController,
-                                  autoPlay: false,
-                                  onComplete: (controller) {
-                                    Future.delayed(const Duration(milliseconds: 300), () {
-                                      controller.reverse();
-                                    });
-                                  })
-                              .fadeIn(duration: const Duration(milliseconds: 100))
-                              .scaleXY(duration: const Duration(milliseconds: 200), begin: 1, end: 1.3),
-                        ),
-                        if (post.chat_enabled)
-                          PositionedDirectional(
-                            bottom: 8,
-                            start: 8,
-                            child: GestureDetector(
-                              onTap: () => store.isShopableDescriptionVisible = !store.isShopableDescriptionVisible,
-                              child: const ShoppableIcon(
-                                size: 24,
+                    icon: const Icon(Icons.more_vert))
+              ],
+            ),
+            body: CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: InteractiveViewer(
+                    transformationController: transformationController,
+                    minScale: 1,
+                    maxScale: 3,
+                    onInteractionStart: (details) {
+                      store.interactiveViewState = transformationController.value;
+                    },
+                    onInteractionEnd: (_) {
+                      transformationController.value = store.interactiveViewState;
+                    },
+                    child: GestureDetector(
+                      onDoubleTap: () {
+                        store.togglePostLike();
+                        if (post.my_like) {
+                          smallHeartAnimationController.forward();
+                          bigHeartAnimationController.forward();
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          PostImage(imageUrl: post.image),
+                          Positioned.fill(
+                            child: const Icon(
+                              Icons.favorite,
+                              color: Colors.white,
+                              size: 80,
+                            )
+                                .animate(
+                                    controller: bigHeartAnimationController,
+                                    autoPlay: false,
+                                    onComplete: (controller) {
+                                      Future.delayed(const Duration(milliseconds: 300), () {
+                                        controller.reverse();
+                                      });
+                                    })
+                                .fadeIn(duration: const Duration(milliseconds: 100))
+                                .scaleXY(duration: const Duration(milliseconds: 200), begin: 1, end: 1.3),
+                          ),
+                          if (post.chat_enabled)
+                            PositionedDirectional(
+                              bottom: 8,
+                              start: 8,
+                              child: GestureDetector(
+                                onTap: () => store.isShopableDescriptionVisible = !store.isShopableDescriptionVisible,
+                                child: const ShoppableIcon(
+                                  size: 24,
+                                ),
                               ),
                             ),
-                          ),
-                        if (store.isShopableDescriptionVisible)
-                          PositionedDirectional(
-                            bottom: 8,
-                            start: 56,
-                            child: Container(
-                                width: 180,
-                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: const Color(0xFF7D7878).withOpacity(0.8)),
-                                child: Text(
-                                  "There is an item in this post that you can buy!",
-                                  style: TextStyle(height: 1, fontSize: 15, color: Colors.white.withOpacity(0.65)),
-                                )),
-                          ),
-                        if (post.posted_by != null && store.isMeasurementsVisible)
-                          PositionedDirectional(
-                              start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
-                      ],
+                          if (store.isShopableDescriptionVisible)
+                            PositionedDirectional(
+                              bottom: 8,
+                              start: 56,
+                              child: Container(
+                                  width: 180,
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: const Color(0xFF7D7878).withOpacity(0.8)),
+                                  child: Text(
+                                    "There is an item in this post that you can buy!",
+                                    style: TextStyle(height: 1, fontSize: 15, color: Colors.white.withOpacity(0.65)),
+                                  )),
+                            ),
+                          if (post.posted_by != null && store.isMeasurementsVisible)
+                            PositionedDirectional(
+                                start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: MultiSliver(children: [
-                  SliverToBoxAdapter(child: statsRow(post)),
-                  postInfo(post),
-                  CommentsSection(
-                    store: store,
-                    postId: widget.postId,
-                  )
-                ]),
-              )
-            ],
-          ),
-        );
-      }),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: MultiSliver(children: [
+                    SliverToBoxAdapter(child: statsRow(post)),
+                    postInfo(post),
+                    CommentsSection(
+                      store: store,
+                      postId: widget.postId,
+                    )
+                  ]),
+                )
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -284,7 +294,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
           basicStyle: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
           onTap: (tappedText) {
             if (tappedText.startsWith("#")) {
-              SearchPageRoute(initialSearchTerm: tappedText).go(context);
+              SearchPageRoute(initialSearchTerm: tappedText.removePrefix("#")).go(context);
               return;
             }
             final url = !tappedText.startsWith("https://") ? "https://$tappedText" : tappedText;

@@ -13,7 +13,7 @@ List<RouteBase> get $appRoutes => [
     ];
 
 RouteBase get $mainRoute => GoRouteData.$route(
-      path: '/base',
+      path: '/',
       factory: $MainRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
@@ -38,7 +38,7 @@ extension $MainRouteExtension on MainRoute {
   static MainRoute _fromState(GoRouterState state) => MainRoute();
 
   String get location => GoRouteData.$location(
-        '/base',
+        '/',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -60,7 +60,7 @@ extension $ReportContentRouteExtension on ReportContentRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/base/reportContent',
+        '/reportContent',
         queryParams: {
           'report-type': _$ReportTypeEnumMap[reportType],
           'type-id': typeId,
@@ -90,7 +90,7 @@ extension $OtherProfilePageRouteExtension on OtherProfilePageRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/base/OtherProfilePage',
+        '/OtherProfilePage',
         queryParams: {
           'user-id': userId.toString(),
         },
@@ -109,12 +109,16 @@ extension $OtherProfilePageRouteExtension on OtherProfilePageRoute {
 extension $PostDetailsRouteExtension on PostDetailsRoute {
   static PostDetailsRoute _fromState(GoRouterState state) => PostDetailsRoute(
         postId: int.parse(state.uri.queryParameters['post-id']!),
+        isFromApp: _$convertMapValue(
+                'is-from-app', state.uri.queryParameters, _$boolConverter) ??
+            false,
       );
 
   String get location => GoRouteData.$location(
-        '/base/postDetails',
+        '/postDetails',
         queryParams: {
           'post-id': postId.toString(),
+          if (isFromApp != false) 'is-from-app': isFromApp.toString(),
         },
       );
 
@@ -131,6 +135,26 @@ extension $PostDetailsRouteExtension on PostDetailsRoute {
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
       entries.singleWhere((element) => element.value == value).key;
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }
 
 RouteBase get $unauthorizedRoute => GoRouteData.$route(
@@ -326,13 +350,4 @@ extension $ProfilePageRouteExtension on ProfilePageRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
-}
-
-T? _$convertMapValue<T>(
-  String key,
-  Map<String, String> map,
-  T Function(String) converter,
-) {
-  final value = map[key];
-  return value == null ? null : converter(value);
 }

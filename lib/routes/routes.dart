@@ -22,7 +22,7 @@ part 'routes.g.dart';
 // Root Routes start ------------------------------------
 
 @TypedGoRoute<MainRoute>(
-    path: '/base', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes, ...PostRoutes.typedRoutes])
+    path: '/', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes, ...PostRoutes.typedRoutes])
 class MainRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {

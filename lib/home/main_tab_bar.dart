@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/main.dart';
 import 'package:mewtwo/utils.dart';
@@ -27,6 +28,11 @@ class _MainTabBarState extends State<MainTabBar> {
             SearchPageRoute(initialSearchTerm: call.arguments).go(context);
           } else {
             SearchPageRoute().go(context);
+          }
+          break;
+        case 'goToPostDetails':
+        if (call.arguments is int) {
+            PostDetailsRoute(postId: call.arguments).pushReplacement(context);
           }
           break;
       }

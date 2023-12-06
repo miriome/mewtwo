@@ -3,10 +3,11 @@ part of 'routes.dart';
 
 class PostDetailsRoute extends GoRouteData {
   final int postId;
+  final bool isFromApp;
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
-  PostDetailsRoute({required this.postId});
+  PostDetailsRoute({required this.postId, this.isFromApp = false});
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return PostDetailsPage(postId: postId,);
+    return PostDetailsPage(postId: postId, isFromApp: isFromApp);
   }
 }

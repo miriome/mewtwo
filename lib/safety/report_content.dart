@@ -23,7 +23,7 @@ class ReportContent extends StatelessWidget {
                 bool reported = await store.submitReport(type: type, id: typeId);
                 if (reported) {
                   if (context.mounted) {
-                    SystemNavigator.pop(animated: true);
+                    Navigator.of(context).pop();
                     MainPlatform.showIOSAlert(
                         "${type.name.capitalize()} has been reported. Our staff will take measures based on your valuable feedback.");
                   }
@@ -31,7 +31,10 @@ class ReportContent extends StatelessWidget {
               }
             : null,
         style: ButtonStyle(
-            foregroundColor: store.isSubmitButtonEnabled ? null : const MaterialStatePropertyAll(Color(0xFF7D7878)),
+            foregroundColor: const MaterialStatePropertyAll(Colors.transparent),
+            backgroundColor: store.isSubmitButtonEnabled
+                ? const MaterialStatePropertyAll(Color(0xFF6EC6CA))
+                : const MaterialStatePropertyAll(Color(0xFF7D7878)),
             elevation: const MaterialStatePropertyAll(0),
             shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
             padding: const MaterialStatePropertyAll(EdgeInsetsDirectional.symmetric(horizontal: 44, vertical: 8))),
