@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/routes/route_utils.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   
   final router = GoRouter(
           navigatorKey: rootNavigatorKey,
-          routes: $appRoutes, initialLocation: HomePageRoute().location);
+          routes: $appRoutes, initialLocation: LoginRoute().location);
 
   // This widget is the root of your application.
   @override
@@ -35,6 +36,13 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           iconTheme: IconThemeData(
             color: Color(0xFF8474A1)
+          )
+        ),
+        filledButtonTheme: const FilledButtonThemeData(
+          style: ButtonStyle(
+            elevation: MaterialStatePropertyAll(0),
+            backgroundColor: MaterialStatePropertyAll(Color(0xFF6EC6CA)),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
           )
         ),
           scaffoldBackgroundColor: const Color(0xFFFEFEFE),

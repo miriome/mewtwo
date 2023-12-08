@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mewtwo/auth/login/login_page_store.dart';
+import 'package:mewtwo/routes/routes.dart';
+import 'package:mewtwo/unauth/pages/login/login_page_store.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 
 class LoginPage extends ConsumerWidget {
@@ -159,13 +161,19 @@ class LoginPage extends ConsumerWidget {
   }
 
   Widget startHere() {
-    return TextButton(
-        onPressed: () {},
-        child: const Text.rich(TextSpan(children: [
-          TextSpan(text: "Don't have an account? "),
-          TextSpan(
-              text: "Start here!", style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w700))
-        ], style: TextStyle(color: Colors.black, fontSize: 12))));
+    return Builder(
+      builder: (context) {
+        return TextButton(
+            onPressed: () {
+              SelectPronounsRoute().push(context);
+            },
+            child: const Text.rich(TextSpan(children: [
+              TextSpan(text: "Don't have an account? "),
+              TextSpan(
+                  text: "Start here!", style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w700))
+            ], style: TextStyle(color: Colors.black, fontSize: 12))));
+      }
+    );
   }
 
   Widget privacyPolicy() {

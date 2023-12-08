@@ -165,6 +165,14 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
           path: 'login',
           factory: $LoginRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'select-pronouns',
+          factory: $SelectPronounsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'select-style',
+          factory: $SelectStyleRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -191,6 +199,41 @@ extension $LoginRouteExtension on LoginRoute {
 
   String get location => GoRouteData.$location(
         '/unauth/login',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectPronounsRouteExtension on SelectPronounsRoute {
+  static SelectPronounsRoute _fromState(GoRouterState state) =>
+      SelectPronounsRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-pronouns',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectStyleRouteExtension on SelectStyleRoute {
+  static SelectStyleRoute _fromState(GoRouterState state) => SelectStyleRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-style',
       );
 
   void go(BuildContext context) => context.go(location);

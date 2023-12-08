@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
@@ -256,8 +257,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
               if (post.posted_by != null) {
                 final sp = await SharedPreferences.getInstance();
                 if (context.mounted) {
-                  if (sp.containsKey("k_id") && sp.getInt("k_id") == post.posted_by!.id) {
-                    ProfilePageRoute(userId: sp.getInt("k_id")).go(context);
+                  if (sp.containsKey(Constants.kKeyId) && sp.getInt(Constants.kKeyId) == post.posted_by!.id) {
+                    ProfilePageRoute(userId: sp.getInt(Constants.kKeyId)).go(context);
                   } else {
                     OtherProfilePageRoute(userId: post.posted_by!.id).push(context);
                   }

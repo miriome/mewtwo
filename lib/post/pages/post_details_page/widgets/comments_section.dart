@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
@@ -158,8 +159,8 @@ class _CommentsSectionState extends State<CommentsSection> {
   void showCommentOptions(BuildContext context, {required CommentModel comment}) async {
     final sp = await SharedPreferences.getInstance();
     int? myUserId;
-    if (sp.containsKey("k_id")) {
-      myUserId = sp.getInt("k_id");
+    if (sp.containsKey(Constants.kKeyId)) {
+      myUserId = sp.getInt(Constants.kKeyId);
     }
     if (myUserId == null) {
       return;

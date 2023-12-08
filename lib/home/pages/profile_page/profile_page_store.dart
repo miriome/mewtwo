@@ -1,4 +1,5 @@
 import 'package:dartx/dartx.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
@@ -22,9 +23,9 @@ abstract class _ProfilePageStore with Store {
   Future<void> init() async {
     
     final sp = await SharedPreferences.getInstance();
-    if (sp.containsKey("k_id")) {
-      _userId ??= sp.getInt("k_id");
-      _selfUserId = sp.getInt("k_id");
+    if (sp.containsKey(Constants.kKeyId)) {
+      _userId ??= sp.getInt(Constants.kKeyId);
+      _selfUserId = sp.getInt(Constants.kKeyId);
     }
     
   }

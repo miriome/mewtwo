@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/post_model.dart';
@@ -83,8 +84,8 @@ abstract class _SearchPageStore with Store {
   Future<void> loadSelfUserData() async {
     final sp = await SharedPreferences.getInstance();
     int? selfUserId;
-    if (sp.containsKey("k_id")) {
-      selfUserId = sp.getInt("k_id");
+    if (sp.containsKey(Constants.kKeyId)) {
+      selfUserId = sp.getInt(Constants.kKeyId);
     }
     if (selfUserId == null) {
       return;

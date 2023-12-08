@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mewtwo/auth/routes/routes.dart';
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/home/main_tab_bar.dart';
 import 'package:mewtwo/home/pages/home_page/home_page.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page.dart';
@@ -30,7 +30,7 @@ class MainRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<UnauthorizedRoute>(path: '/unauth', routes: [...AuthRoutes.typedRoutes])
+@TypedGoRoute<UnauthorizedRoute>(path: '/unauth', routes: [...UnauthRoutes.typedRoutes])
 class UnauthorizedRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
