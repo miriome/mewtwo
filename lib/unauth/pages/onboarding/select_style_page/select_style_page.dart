@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/constants.dart';
+import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/pages/onboarding/select_style_page/select_style_page_store.dart';
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectStylePage extends StatelessWidget {
@@ -43,6 +45,7 @@ class SelectStylePage extends StatelessWidget {
                       sp.setString(Constants.kKeyStyles, store.selectedStyles.join(","));
                       if (context.mounted) {
                         // push new route
+                        SignUpRoute().push(context);
                       }
                   }, child: const Text("Next", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),),
               ),

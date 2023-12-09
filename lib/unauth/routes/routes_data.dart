@@ -22,3 +22,10 @@ class SelectStyleRoute extends GoRouteData {
     return SelectStylePage();
   }
 }
+
+class SignUpRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SignUpPage();
+  }
+}

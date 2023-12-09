@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mewtwo/unauth/pages/login/login_page.dart';
 import 'package:mewtwo/unauth/pages/onboarding/select_pronouns_page.dart';
 import 'package:mewtwo/unauth/pages/onboarding/select_style_page/select_style_page.dart';
+import 'package:mewtwo/unauth/pages/onboarding/sign_up_page/sign_up_page.dart';
 
 part 'routes_data.dart';
 
@@ -16,6 +17,9 @@ class UnauthRoutes {
     ),
     TypedGoRoute<SelectStyleRoute>(
       path: 'select-style',
+    ),
+    TypedGoRoute<SignUpRoute>(
+      path: 'sign-up',
     )
   ];
 }

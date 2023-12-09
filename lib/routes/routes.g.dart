@@ -173,6 +173,10 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
           path: 'select-style',
           factory: $SelectStyleRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'sign-up',
+          factory: $SignUpRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -234,6 +238,23 @@ extension $SelectStyleRouteExtension on SelectStyleRoute {
 
   String get location => GoRouteData.$location(
         '/unauth/select-style',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SignUpRouteExtension on SignUpRoute {
+  static SignUpRoute _fromState(GoRouterState state) => SignUpRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/sign-up',
       );
 
   void go(BuildContext context) => context.go(location);
