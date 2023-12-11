@@ -26,6 +26,20 @@ class SelectStyleRoute extends GoRouteData {
 class SignUpRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SignUpPage();
+    return const SignUpPage();
+  }
+}
+
+class CreateProfileRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateProfilePage();
+  }
+}
+
+class MeasurementsRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return MeasurementsPage();
   }
 }

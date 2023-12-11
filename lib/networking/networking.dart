@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const tokenKey = "flutterk_access_token";
@@ -13,12 +13,13 @@ class Networking {
     }
     final sp = await SharedPreferences.getInstance();
     String token = "";
-      if (sp.containsKey("k_access_token")) {
-        token = sp.getString("k_access_token") ?? "";  
+      if (sp.containsKey(Constants.kKeyToken)) {
+        token = sp.getString(Constants.kKeyToken) ?? "";  
       }
       
       final options = BaseOptions(
-      baseUrl: "https://miromie.com/api/",
+      baseUrl: "http://localhost:8080/api/",
+      // baseUrl: "https://miromie.com/api/",
       headers: {
         'Authorization': "Bearer $token",
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -36,6 +37,10 @@ class Networking {
 
   Future<Response> post({required String path, Map<dynamic, dynamic>? body}) async {
     return await dio.post(path, data: body);
+  }
+
+  Future<Response> postForm({required String path, required FormData data}) async {
+    return await dio.post(path, data: data);
   }
 
   Future<Response> get<T>({required String path, Map<String, dynamic>? params, Options? options}) async {

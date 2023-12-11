@@ -14,9 +14,13 @@ class SelectStylePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          actions: const [
-            Text("Skip", style: TextStyle(fontSize: 12, color: Color(0xFF7D7878))),
-            SizedBox(
+          actions:  [
+            GestureDetector(
+              onTap: () {
+                SignUpRoute().push(context);
+              },
+              child: const Text("Skip", style: TextStyle(fontSize: 12, color: Color(0xFF7D7878)))),
+            const SizedBox(
               width: 28,
             )
           ],
