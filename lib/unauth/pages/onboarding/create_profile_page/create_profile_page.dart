@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -121,7 +122,16 @@ class CreateProfilePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: FilledButton(
-                      onPressed: store.name.isEmpty ? null : () {},
+                      onPressed: store.name.isEmpty ? null : () async {
+                        EasyLoading.show();
+                        final success = await store.editProfile();
+                        if (EasyLoading.isShow) {
+                          EasyLoading.dismiss();
+                        }
+                        if (success && context.mounted) {
+                          MeasurementsRoute().push(context);
+                        }
+                      },
                       child: const Text(
                         "Next",
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

@@ -640,5 +640,183 @@ class _EditProfileApiProviderElement
   @override
   bool get isDeletePhoto => (origin as EditProfileApiProvider).isDeletePhoto;
 }
+
+String _$editMeasurementsApiHash() =>
+    r'69121e00f40afe3e9764b76e1b4dc6ece30ae21f';
+
+/// See also [editMeasurementsApi].
+@ProviderFor(editMeasurementsApi)
+const editMeasurementsApiProvider = EditMeasurementsApiFamily();
+
+/// See also [editMeasurementsApi].
+class EditMeasurementsApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [editMeasurementsApi].
+  const EditMeasurementsApiFamily();
+
+  /// See also [editMeasurementsApi].
+  EditMeasurementsApiProvider call({
+    int? height,
+    int? bust,
+    int? waist,
+    int? hips,
+  }) {
+    return EditMeasurementsApiProvider(
+      height: height,
+      bust: bust,
+      waist: waist,
+      hips: hips,
+    );
+  }
+
+  @override
+  EditMeasurementsApiProvider getProviderOverride(
+    covariant EditMeasurementsApiProvider provider,
+  ) {
+    return call(
+      height: provider.height,
+      bust: provider.bust,
+      waist: provider.waist,
+      hips: provider.hips,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editMeasurementsApiProvider';
+}
+
+/// See also [editMeasurementsApi].
+class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [editMeasurementsApi].
+  EditMeasurementsApiProvider({
+    int? height,
+    int? bust,
+    int? waist,
+    int? hips,
+  }) : this._internal(
+          (ref) => editMeasurementsApi(
+            ref as EditMeasurementsApiRef,
+            height: height,
+            bust: bust,
+            waist: waist,
+            hips: hips,
+          ),
+          from: editMeasurementsApiProvider,
+          name: r'editMeasurementsApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editMeasurementsApiHash,
+          dependencies: EditMeasurementsApiFamily._dependencies,
+          allTransitiveDependencies:
+              EditMeasurementsApiFamily._allTransitiveDependencies,
+          height: height,
+          bust: bust,
+          waist: waist,
+          hips: hips,
+        );
+
+  EditMeasurementsApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.height,
+    required this.bust,
+    required this.waist,
+    required this.hips,
+  }) : super.internal();
+
+  final int? height;
+  final int? bust;
+  final int? waist;
+  final int? hips;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(EditMeasurementsApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditMeasurementsApiProvider._internal(
+        (ref) => create(ref as EditMeasurementsApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        height: height,
+        bust: bust,
+        waist: waist,
+        hips: hips,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _EditMeasurementsApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditMeasurementsApiProvider &&
+        other.height == height &&
+        other.bust == bust &&
+        other.waist == waist &&
+        other.hips == hips;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, height.hashCode);
+    hash = _SystemHash.combine(hash, bust.hashCode);
+    hash = _SystemHash.combine(hash, waist.hashCode);
+    hash = _SystemHash.combine(hash, hips.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditMeasurementsApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `height` of this provider.
+  int? get height;
+
+  /// The parameter `bust` of this provider.
+  int? get bust;
+
+  /// The parameter `waist` of this provider.
+  int? get waist;
+
+  /// The parameter `hips` of this provider.
+  int? get hips;
+}
+
+class _EditMeasurementsApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with EditMeasurementsApiRef {
+  _EditMeasurementsApiProviderElement(super.provider);
+
+  @override
+  int? get height => (origin as EditMeasurementsApiProvider).height;
+  @override
+  int? get bust => (origin as EditMeasurementsApiProvider).bust;
+  @override
+  int? get waist => (origin as EditMeasurementsApiProvider).waist;
+  @override
+  int? get hips => (origin as EditMeasurementsApiProvider).hips;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

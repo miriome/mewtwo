@@ -101,3 +101,33 @@ Future<bool> editProfileApi(EditProfileApiRef ref,
   }
   return false;
 }
+
+@riverpod
+Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref,
+    {int? height, int? bust, int? waist, int? hips}) async {
+      final body = {
+        'height': height == null ? "" : height.toString(),
+        'bust': bust == null ? "" : bust.toString(),
+        'waist': waist == null ? "" : waist.toString(),
+        'hips': hips == null ? "" : hips.toString(),
+      };
+  
+
+  try {
+    final res = await (await Networking.instance).post(path: "users/editMeasurement", body: body);
+    Map response = res.data;
+
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
+

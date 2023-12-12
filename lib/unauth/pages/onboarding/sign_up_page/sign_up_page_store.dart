@@ -118,7 +118,6 @@ abstract class _SignUpPageStore with Store {
   Future<bool> submit() async {
     // Initial validation
     if (formKey.currentState!.validate()) {
-      EasyLoading.show();
       formKey.currentState!.save();
       // Check duplicate
       await checkIfFieldsRegistered();
@@ -127,14 +126,8 @@ abstract class _SignUpPageStore with Store {
         // Call api to create account if can validate agn.
         final signuProvider = SignUpApiProvider(username: username, email: email, password: password);
         final signupSuccess = await Mew.pc.read(signuProvider.future);
-        if (EasyLoading.isShow) {
-          EasyLoading.dismiss();
-        }
         return signupSuccess;
       }
-    }
-    if (EasyLoading.isShow) {
-      EasyLoading.dismiss();
     }
     return false;
   }
