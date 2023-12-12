@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/constants.dart';
+import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/mew.dart';
@@ -9,6 +11,7 @@ import 'package:mewtwo/routes/route_utils.dart';
 
 import 'package:mewtwo/utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(ProviderScope(
       parent: Mew.pc,
@@ -18,8 +21,17 @@ void main() => runApp(ProviderScope(
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final router =
-      GoRouter(navigatorKey: rootNavigatorKey, routes: $appRoutes, initialLocation: LoginRoute().location);
+  final router = GoRouter(
+      navigatorKey: rootNavigatorKey,
+      routes: $appRoutes,
+      initialLocation: LoginRoute().location,
+      redirect: (context, state) async {
+        final sp = await SharedPreferences.getInstance();
+        if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
+          return HomePageRoute().location;
+        }
+        return null;
+      });
 
   // This widget is the root of your application.
   @override
@@ -30,23 +42,23 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
-        if (states.contains(MaterialState.disabled)) {
-          return TextStyle(color: Theme.of(context).disabledColor);
-        }
-        if (states.contains(MaterialState.error)) {
-          return TextStyle(color: Theme.of(context).colorScheme.error);
-        }
-        if (states.contains(MaterialState.focused)) {
-          return TextStyle(color: Theme.of(context).colorScheme.primary);
-        }
-        return const TextStyle(color: Color(0xFF8474A1));
-      }),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color(0xFF8474A1)), borderRadius: BorderRadius.circular(12)),
+              if (states.contains(MaterialState.disabled)) {
+                return TextStyle(color: Theme.of(context).disabledColor);
+              }
+              if (states.contains(MaterialState.error)) {
+                return TextStyle(color: Theme.of(context).colorScheme.error);
+              }
+              if (states.contains(MaterialState.focused)) {
+                return TextStyle(color: Theme.of(context).colorScheme.primary);
+              }
+              return const TextStyle(color: Color(0xFF8474A1));
+            }),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Color(0xFF8474A1)), borderRadius: BorderRadius.circular(12)),
           ),
           appBarTheme: const AppBarTheme(
-            titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+              titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               foregroundColor: Colors.white,

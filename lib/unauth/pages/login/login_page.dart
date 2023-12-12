@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/home/pages/home_page/home_page.dart';
+import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/pages/login/login_page_store.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';
@@ -16,41 +19,44 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Observer(
       builder: (context) {
-        return Scaffold(
-          body: Container(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 92,
-                    ),
-                    header(),
-                    const SizedBox(
-                      height: 52,
-                    ),
-                    usernameInput(),
-                    const SizedBox(height: 20),
-                    passwordInput(),
-                    forgetPassword(),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    signInButton(),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    startHere(),
-                    const Spacer(),
-                    privacyPolicy(),
-                    const SizedBox(
-                      height: 48,
-                    ),
-                  ],
-                ),
-              )),
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            body: Container(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 92,
+                      ),
+                      header(),
+                      const SizedBox(
+                        height: 52,
+                      ),
+                      usernameInput(),
+                      const SizedBox(height: 20),
+                      passwordInput(),
+                      forgetPassword(),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      signInButton(),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      startHere(),
+                      const Spacer(),
+                      privacyPolicy(),
+                      const SizedBox(
+                        height: 48,
+                      ),
+                    ],
+                  ),
+                )),
+          ),
         );
       }
     );
@@ -144,23 +150,30 @@ class LoginPage extends ConsumerWidget {
   }
 
   Widget signInButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ButtonStyle(
-          elevation: const MaterialStatePropertyAll(0),
-          shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-          padding: const MaterialStatePropertyAll(EdgeInsetsDirectional.symmetric(horizontal: 44, vertical: 8))),
-      child: SizedBox(
-        width: 122,
-        height: 44,
-        child: Center(
-          child: Text(
-            "Sign in",
-            style: GoogleFonts.roboto(
-                textStyle: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
+    return Builder(
+      builder: (context) {
+        return FilledButton(
+          onPressed: () async {
+            EasyLoading.show();
+            final loginSuccess = await store.login();
+            EasyLoading.dismiss();
+            if (loginSuccess && context.mounted) {
+              HomePageRoute().go(context);
+            }
+          },
+          child: SizedBox(
+            width: 122,
+            height: 44,
+            child: Center(
+              child: Text(
+                "Sign in",
+                style: GoogleFonts.roboto(
+                    textStyle: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 

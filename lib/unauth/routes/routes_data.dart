@@ -2,7 +2,7 @@ part of 'routes.dart';
 
 
 class LoginRoute extends GoRouteData {
-
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return LoginPage();

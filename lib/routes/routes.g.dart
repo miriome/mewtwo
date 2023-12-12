@@ -163,6 +163,7 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: 'login',
+          parentNavigatorKey: LoginRoute.$parentNavigatorKey,
           factory: $LoginRouteExtension._fromState,
         ),
         GoRouteData.$route(

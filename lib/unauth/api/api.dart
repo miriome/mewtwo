@@ -11,9 +11,35 @@ part 'api.g.dart';
 final dio = Dio();
 
 @riverpod
-Future<void> loginApi(LoginApiRef ref, {required String username, required String password}) async {
-  // Using package:http, we fetch a random activity from the Bored API.
-  final response = await dio.get('https://dart.dev');
+Future<bool> loginApi(LoginApiRef ref,
+    {required String username, required String password}) async {
+  final body = {
+    'username': username,
+    'password': password
+  };
+
+  try {
+    final res = await (await Networking.instance).post(path: "auth/login", body: body);
+    Map response = res.data;
+
+    if (response['status'] == false || response['data']['id'] == null || response['access_token'] == null) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    final userId = Utility.parseInt(response['data']['id']);
+    final token = Utility.parseStr(response['access_token']);
+    final sp = await SharedPreferences.getInstance();
+    await sp.setInt(Constants.kKeyId, userId);
+    await sp.setString(Constants.kKeyToken, token);
+    Networking.reset();
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
 }
 
 enum ExistingAccountFieldKey { username, email }

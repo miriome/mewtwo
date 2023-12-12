@@ -2,11 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const tokenKey = "flutterk_access_token";
 
 class Networking {
   final dio = Dio();
   static Networking? _singleton;
+  // static const domain = "http://localhost:8080";
+  static const domain = "https://miromie.com";
+  static const imageDomain = "$domain/uploads/";
+  
+  
   static void reset() {
     _singleton = null;
   }
@@ -21,8 +25,7 @@ class Networking {
       }
       
       final options = BaseOptions(
-      baseUrl: "http://localhost:8080/api/",
-      // baseUrl: "https://miromie.com/api/",
+      baseUrl: "$domain/api/",
       headers: {
         'Authorization': "Bearer $token",
         'Content-Type': 'application/x-www-form-urlencoded'

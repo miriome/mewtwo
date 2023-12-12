@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/unauth/api/api.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mobx/mobx.dart';
@@ -17,17 +18,12 @@ abstract class _LoginPageStore with Store {
   @observable
   bool isPasswordHidden = true;
 
-  @readonly
-  bool _isLoading = false;
 
   @action
-  Future<void> login() async {
+  Future<bool> login() async {
     final loginProvider = LoginApiProvider(username: _usernameController.text, password: _passwordController.text);
-    final listener = Mew.pc.listen(loginProvider, (previous, next) { 
-      _isLoading = next.isLoading;
-    });
-    await Mew.pc.read(loginProvider.future);
-    listener.close();
+    final res =await Mew.pc.read(loginProvider.future);
+    return res;
   }
 
   

@@ -6,7 +6,7 @@ part of 'api.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginApiHash() => r'c2ebbf8fef74d938b6434c94aee3547af38f6f4d';
+String _$loginApiHash() => r'f40e84914bbff2b2f2be5f89b6244e4830622b63';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const loginApiProvider = LoginApiFamily();
 
 /// See also [loginApi].
-class LoginApiFamily extends Family<AsyncValue<void>> {
+class LoginApiFamily extends Family<AsyncValue<bool>> {
   /// See also [loginApi].
   const LoginApiFamily();
 
@@ -75,7 +75,7 @@ class LoginApiFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [loginApi].
-class LoginApiProvider extends AutoDisposeFutureProvider<void> {
+class LoginApiProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [loginApi].
   LoginApiProvider({
     required String username,
@@ -114,7 +114,7 @@ class LoginApiProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(LoginApiRef provider) create,
+    FutureOr<bool> Function(LoginApiRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -132,7 +132,7 @@ class LoginApiProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<bool> createElement() {
     return _LoginApiProviderElement(this);
   }
 
@@ -153,7 +153,7 @@ class LoginApiProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin LoginApiRef on AutoDisposeFutureProviderRef<void> {
+mixin LoginApiRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `username` of this provider.
   String get username;
 
@@ -161,7 +161,7 @@ mixin LoginApiRef on AutoDisposeFutureProviderRef<void> {
   String get password;
 }
 
-class _LoginApiProviderElement extends AutoDisposeFutureProviderElement<void>
+class _LoginApiProviderElement extends AutoDisposeFutureProviderElement<bool>
     with LoginApiRef {
   _LoginApiProviderElement(super.provider);
 

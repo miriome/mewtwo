@@ -6,6 +6,7 @@ import 'package:mewtwo/unauth/pages/onboarding/measurements_page/measurements_pa
 import 'package:mewtwo/unauth/pages/onboarding/select_pronouns_page.dart';
 import 'package:mewtwo/unauth/pages/onboarding/select_style_page/select_style_page.dart';
 import 'package:mewtwo/unauth/pages/onboarding/sign_up_page/sign_up_page.dart';
+import 'package:mewtwo/routes/route_utils.dart';
 
 part 'routes_data.dart';
 
