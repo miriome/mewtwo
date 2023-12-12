@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
@@ -23,8 +24,8 @@ abstract class _PostDetailsPageStore with Store {
 
   Future<void> init() async {
     final sp = await SharedPreferences.getInstance();
-    if (sp.containsKey("k_id")) {
-      _selfUserId = sp.getInt("k_id");
+    if (sp.containsKey(Constants.kKeyId)) {
+      _selfUserId = sp.getInt(Constants.kKeyId);
     }
   }
 

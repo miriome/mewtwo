@@ -163,7 +163,28 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: 'login',
+          parentNavigatorKey: LoginRoute.$parentNavigatorKey,
           factory: $LoginRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'select-pronouns',
+          factory: $SelectPronounsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'select-style',
+          factory: $SelectStyleRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'sign-up',
+          factory: $SignUpRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'create-profile',
+          factory: $CreateProfileRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'measurements',
+          factory: $MeasurementsRouteExtension._fromState,
         ),
       ],
     );
@@ -191,6 +212,94 @@ extension $LoginRouteExtension on LoginRoute {
 
   String get location => GoRouteData.$location(
         '/unauth/login',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectPronounsRouteExtension on SelectPronounsRoute {
+  static SelectPronounsRoute _fromState(GoRouterState state) =>
+      SelectPronounsRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-pronouns',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectStyleRouteExtension on SelectStyleRoute {
+  static SelectStyleRoute _fromState(GoRouterState state) => SelectStyleRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-style',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SignUpRouteExtension on SignUpRoute {
+  static SignUpRoute _fromState(GoRouterState state) => SignUpRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/sign-up',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateProfileRouteExtension on CreateProfileRoute {
+  static CreateProfileRoute _fromState(GoRouterState state) =>
+      CreateProfileRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/create-profile',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $MeasurementsRouteExtension on MeasurementsRoute {
+  static MeasurementsRoute _fromState(GoRouterState state) =>
+      MeasurementsRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/measurements',
       );
 
   void go(BuildContext context) => context.go(location);

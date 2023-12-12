@@ -61,29 +61,11 @@ mixin _$LoginPageStore on _LoginPageStore, Store {
     });
   }
 
-  late final _$_isLoadingAtom =
-      Atom(name: '_LoginPageStore._isLoading', context: context);
-
-  bool get isLoading {
-    _$_isLoadingAtom.reportRead();
-    return super._isLoading;
-  }
-
-  @override
-  bool get _isLoading => isLoading;
-
-  @override
-  set _isLoading(bool value) {
-    _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
-      super._isLoading = value;
-    });
-  }
-
   late final _$loginAsyncAction =
       AsyncAction('_LoginPageStore.login', context: context);
 
   @override
-  Future<void> login() {
+  Future<bool> login() {
     return _$loginAsyncAction.run(() => super.login());
   }
 

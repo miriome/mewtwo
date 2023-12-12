@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mewtwo/auth/routes/routes.dart';
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/home/main_tab_bar.dart';
 import 'package:mewtwo/home/pages/home_page/home_page.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page.dart';
@@ -10,6 +12,7 @@ import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:mewtwo/home/routes/routes.dart';
+import 'package:mewtwo/utils.dart';
 import 'route_utils.dart';
 part 'routes_data.dart';
 part 'routes.g.dart';
@@ -25,17 +28,30 @@ part 'routes.g.dart';
     path: '/', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes, ...PostRoutes.typedRoutes])
 class MainRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return Container();
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    return HomePageRoute().location;
   }
-}
 
-@TypedGoRoute<UnauthorizedRoute>(path: '/unauth', routes: [...AuthRoutes.typedRoutes])
-class UnauthorizedRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return Container();
   }
+  
+}
+
+@TypedGoRoute<UnauthorizedRoute>(path: '/unauth', routes: [...UnauthRoutes.typedRoutes])
+class UnauthorizedRoute extends GoRouteData {
+
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    return LoginRoute().location;
+  }
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return Container();
+  }
+  
 }
 
 // Root routes end ------------------------------------
@@ -82,7 +98,6 @@ class UnauthorizedRoute extends GoRouteData {
 ])
 class MainTabShellRoute extends StatefulShellRouteData {
   const MainTabShellRoute();
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
   @override
   Widget builder(
     BuildContext context,

@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
+import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
@@ -110,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   radius: 25,
                   backgroundColor: const Color(0xFF6EC6CA),
                   foregroundImage:
-                      store.user?.photo_url == "https://miromie.com/uploads/" || store.user?.photo_url == null
+                      store.user?.photo_url == Networking.imageDomain || store.user?.photo_url == null
                           ? null
                           : CachedNetworkImageProvider(
                               store.user?.photo_url ?? "",

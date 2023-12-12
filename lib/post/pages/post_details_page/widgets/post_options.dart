@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
@@ -12,8 +13,8 @@ class PostOptions {
   static Future<void> show(BuildContext context, {required PostDetailsPageStore store}) async {
     final sp = await SharedPreferences.getInstance();
     int? myUserId;
-    if (sp.containsKey("k_id")) {
-      myUserId = sp.getInt("k_id");
+    if (sp.containsKey(Constants.kKeyId)) {
+      myUserId = sp.getInt(Constants.kKeyId);
     }
     if (myUserId == null) {
       return;

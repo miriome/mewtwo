@@ -156,7 +156,7 @@ class Utility {
       return val;
     }
     if (val is String) {
-      return int.tryParse(val) == 1; 
+      return int.tryParse(val) == 1 || val == "true"; 
     }
     return false;
   }
@@ -179,6 +179,9 @@ class Utility {
   }
 
   static int parseInt(dynamic val, [int defaultVal = 0]) {
+    if (val is int) {
+      return val;
+    }
     return int.tryParse(val) ?? defaultVal;
   }
 }

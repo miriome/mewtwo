@@ -1,7 +1,6 @@
 part of 'routes.dart';
 
 class HomePageRoute extends GoRouteData {
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const HomePage();
@@ -9,6 +8,7 @@ class HomePageRoute extends GoRouteData {
 }
 
 class NewPostRoute extends GoRouteData {
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
     // Currently routes to native new post screen.
@@ -29,6 +29,7 @@ class SearchPageRoute extends GoRouteData {
 }
 
 class ProfilePageRoute extends GoRouteData {
+
   final int? userId;
   ProfilePageRoute({this.userId});
   @override
@@ -38,7 +39,6 @@ class ProfilePageRoute extends GoRouteData {
 }
 
 class NotificationPageRoute extends GoRouteData {
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return NotificationPage();
