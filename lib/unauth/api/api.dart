@@ -4,6 +4,7 @@ import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'api.g.dart';
 
@@ -65,6 +66,7 @@ Future<bool> signUpApi(SignUpApiRef ref,
     final token = Utility.parseStr(response['access_token']);
     await sp.setInt(Constants.kKeyId, userId);
     await sp.setString(Constants.kKeyToken, token);
+    Networking.reset();
     return true;
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
@@ -81,7 +83,8 @@ Future<bool> editProfileApi(EditProfileApiRef ref,
   final data = FormData.fromMap({
     "name": displayName,
     'delete_photo': isDeletePhoto ? 1 : 0,
-    if (fileBytes != null) "file": MultipartFile.fromBytes(fileBytes)
+    if (fileBytes != null)
+      "file": MultipartFile.fromBytes(fileBytes, filename: "image.jpg", contentType: MediaType('image', 'jpg'))
   });
 
   try {
@@ -103,15 +106,13 @@ Future<bool> editProfileApi(EditProfileApiRef ref,
 }
 
 @riverpod
-Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref,
-    {int? height, int? bust, int? waist, int? hips}) async {
-      final body = {
-        'height': height == null ? "" : height.toString(),
-        'bust': bust == null ? "" : bust.toString(),
-        'waist': waist == null ? "" : waist.toString(),
-        'hips': hips == null ? "" : hips.toString(),
-      };
-  
+Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref, {int? height, int? bust, int? waist, int? hips}) async {
+  final body = {
+    'height': height == null ? "" : height.toString(),
+    'bust': bust == null ? "" : bust.toString(),
+    'waist': waist == null ? "" : waist.toString(),
+    'hips': hips == null ? "" : hips.toString(),
+  };
 
   try {
     final res = await (await Networking.instance).post(path: "users/editMeasurement", body: body);
@@ -130,4 +131,3 @@ Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref,
   }
   return false;
 }
-

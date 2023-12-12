@@ -84,7 +84,9 @@ class LoginPage extends ConsumerWidget {
             controller: store.usernameController,
             maxLines: 1,
             style: const TextStyle(fontSize: 20),
-            decoration: const InputDecoration(border: InputBorder.none, isDense: true),
+            decoration: const InputDecoration(
+              enabledBorder: InputBorder.none,
+              border: InputBorder.none, isDense: true),
           )
         ],
       ),
@@ -110,7 +112,9 @@ class LoginPage extends ConsumerWidget {
                   controller: store.passwordController,
                   maxLines: 1,
                   style: const TextStyle(fontSize: 20),
-                  decoration: const InputDecoration(border: InputBorder.none, isDense: true),
+                  decoration: const InputDecoration(
+                    enabledBorder: InputBorder.none,
+                    border: InputBorder.none, isDense: true),
                 )
               ],
             ),

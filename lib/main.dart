@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final router =
-      GoRouter(navigatorKey: rootNavigatorKey, routes: $appRoutes, initialLocation: CreateProfileRoute().location);
+      GoRouter(navigatorKey: rootNavigatorKey, routes: $appRoutes, initialLocation: LoginRoute().location);
 
   // This widget is the root of your application.
   @override

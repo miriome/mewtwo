@@ -320,7 +320,7 @@ class _CheckAccountFieldExistApiProviderElement
   String get value => (origin as CheckAccountFieldExistApiProvider).value;
 }
 
-String _$signUpApiHash() => r'0cb971489a7d8aa4b9ae299306ab10927a88a9db';
+String _$signUpApiHash() => r'9450c7eff844f15d623be606b410b6d342cf68e9';
 
 /// See also [signUpApi].
 @ProviderFor(signUpApi)
@@ -480,7 +480,7 @@ class _SignUpApiProviderElement extends AutoDisposeFutureProviderElement<bool>
   String get password => (origin as SignUpApiProvider).password;
 }
 
-String _$editProfileApiHash() => r'f4f7fa9e74472eb6bdcad11388999876e1dd2196';
+String _$editProfileApiHash() => r'9b9285c81374d83fcfe7b156cb5564d9c46a38ad';
 
 /// See also [editProfileApi].
 @ProviderFor(editProfileApi)

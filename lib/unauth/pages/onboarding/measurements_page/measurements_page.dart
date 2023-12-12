@@ -35,6 +35,7 @@ class MeasurementsPage extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Form(
+                    key: store.formKey,
                     child: Column(children: [
                       const SizedBox(
                         height: 16,

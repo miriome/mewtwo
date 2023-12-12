@@ -7,6 +7,9 @@ const tokenKey = "flutterk_access_token";
 class Networking {
   final dio = Dio();
   static Networking? _singleton;
+  static void reset() {
+    _singleton = null;
+  }
   static Future<Networking> get instance async {
     if (_singleton != null) {
       return _singleton!;
