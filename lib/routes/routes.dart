@@ -43,11 +43,6 @@ class MainRoute extends GoRouteData {
 class UnauthorizedRoute extends GoRouteData {
 
   @override
-  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
-    return LoginRoute().location;
-  }
-
-  @override
   Widget build(BuildContext context, GoRouterState state) {
     return Container();
   }
