@@ -3,12 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/constants.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
-import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/routes/route_utils.dart';
-
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +38,18 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
+          switchTheme: SwitchThemeData(
+            trackColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                  return const Color(0xFF787D7D);
+              }
+              return null;
+            }),
+            thumbColor: const MaterialStatePropertyAll(Colors.white),
+            trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
+            
+            
+          ),
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
@@ -87,7 +97,7 @@ class MyApp extends StatelessWidget {
           // "hot reload" (press "r" in the console where you ran "flutter run",
           // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
           // counter didn't reset back to zero; the application is not restarted.
-          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
+          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA) ),
           textTheme: GoogleFonts.robotoTextTheme()),
       builder: EasyLoading.init(),
       routerConfig: router,

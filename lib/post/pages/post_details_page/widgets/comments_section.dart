@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
 import 'package:mewtwo/post/utils.dart';
+import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';

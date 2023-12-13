@@ -1,9 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/utils.dart';
-import 'package:mobx/mobx.dart';
 
 part 'user_model.g.dart';
+
+enum MeasurementPrivacy {
+  all,
+  following,
+  unknown
+}
 
 @JsonSerializable(explicitToJson: true)
 class UserModel {
@@ -27,6 +32,19 @@ class UserModel {
   final String? email, password, pronouns, weight, height, bust, waist, hips;
   final List<PostModel>? posts;
 
+  @JsonKey(fromJson: _parseMeasurementPrivacy, toJson: _getMeasurementPrivacy)
+  final MeasurementPrivacy measurementPrivacy;
+
+  
+  static MeasurementPrivacy _parseMeasurementPrivacy(String? privacyString) {
+    return MeasurementPrivacy.values.asNameMap()[privacyString] ?? MeasurementPrivacy.unknown;
+  }
+
+  static String _getMeasurementPrivacy(MeasurementPrivacy privacyEnum) {
+    return privacyEnum.name;
+  }
+  
+
   UserModel(
       {required this.id,
       required this.followers,
@@ -40,6 +58,7 @@ class UserModel {
       required this.bust,
       required this.waist,
       required this.hips,
+      required this.measurementPrivacy,
       this.posts,
       this.email,
       this.password,

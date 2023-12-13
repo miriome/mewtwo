@@ -29,17 +29,3 @@ class SignUpRoute extends GoRouteData {
     return const SignUpPage();
   }
 }
-
-class CreateProfileRoute extends GoRouteData {
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return CreateProfilePage();
-  }
-}
-
-class MeasurementsRoute extends GoRouteData {
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return MeasurementsPage();
-  }
-}

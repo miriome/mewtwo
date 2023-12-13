@@ -4,10 +4,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mewtwo/base/widgets/miromie_title.dart';
+import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/pages/onboarding/sign_up_page/invalid_password_criteria_dialog.dart';
 import 'package:mewtwo/unauth/pages/onboarding/sign_up_page/sign_up_page_store.dart';
-import 'package:mewtwo/unauth/routes/routes.dart';
 
 class SignUpPage extends ConsumerWidget {
   const SignUpPage({Key? key}) : super(key: key);

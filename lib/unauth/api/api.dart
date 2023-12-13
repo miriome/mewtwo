@@ -1,5 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/constants.dart';
+import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -132,12 +133,13 @@ Future<bool> editProfileApi(EditProfileApiRef ref,
 }
 
 @riverpod
-Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref, {int? height, int? bust, int? waist, int? hips}) async {
+Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref, {int? height, int? bust, int? waist, int? hips, required MeasurementPrivacy privacy}) async {
   final body = {
     'height': height == null ? "" : height.toString(),
     'bust': bust == null ? "" : bust.toString(),
     'waist': waist == null ? "" : waist.toString(),
     'hips': hips == null ? "" : hips.toString(),
+    'measurementPrivacy' : privacy.name
   };
 
   try {
