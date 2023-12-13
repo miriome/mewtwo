@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/home/pages/profile_page/profile_page_store.dart';
 import 'package:mewtwo/home/pages/profile_page/widgets/profile_post_tile.dart';
 import 'package:mewtwo/networking/networking.dart';
@@ -166,6 +167,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget get measurements {
+
+
+    final user = store.user;
+    if (!store.isOwnProfile && user != null) {
+      if (user.measurementPrivacy == MeasurementPrivacy.following) {
+        return const Text("This user has only allowed followers to view their measurements.", textAlign: TextAlign.center,);
+      }
+    }
+    
     // Change this to dynamic lmao
     const heightUnits = "cm";
     const otherUnits = "in";
