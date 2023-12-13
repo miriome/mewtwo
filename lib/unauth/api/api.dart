@@ -139,7 +139,7 @@ Future<bool> editMeasurementsApi(EditMeasurementsApiRef ref, {int? height, int? 
     'bust': bust == null ? "" : bust.toString(),
     'waist': waist == null ? "" : waist.toString(),
     'hips': hips == null ? "" : hips.toString(),
-    'measurement_privacy' : privacy.name
+    'measurementPrivacy' : privacy.name
   };
 
   try {

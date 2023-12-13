@@ -31,8 +31,20 @@ RouteBase get $mainRoute => GoRouteData.$route(
           factory: $CreateProfileRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'measurements',
+          path: 'edit-profile',
+          factory: $EditProfileRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'create-measurements',
           factory: $CreateMeasurementsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'edit-measurements',
+          factory: $EditMeasurementsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'edit-styles',
+          factory: $EditStylesRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'postDetails',
@@ -132,12 +144,64 @@ extension $CreateProfileRouteExtension on CreateProfileRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $EditProfileRouteExtension on EditProfileRoute {
+  static EditProfileRoute _fromState(GoRouterState state) => EditProfileRoute();
+
+  String get location => GoRouteData.$location(
+        '/edit-profile',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 extension $CreateMeasurementsRouteExtension on CreateMeasurementsRoute {
   static CreateMeasurementsRoute _fromState(GoRouterState state) =>
       CreateMeasurementsRoute();
 
   String get location => GoRouteData.$location(
-        '/measurements',
+        '/create-measurements',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $EditMeasurementsRouteExtension on EditMeasurementsRoute {
+  static EditMeasurementsRoute _fromState(GoRouterState state) =>
+      EditMeasurementsRoute();
+
+  String get location => GoRouteData.$location(
+        '/edit-measurements',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $EditStylesRouteExtension on EditStylesRoute {
+  static EditStylesRoute _fromState(GoRouterState state) => EditStylesRoute();
+
+  String get location => GoRouteData.$location(
+        '/edit-styles',
       );
 
   void go(BuildContext context) => context.go(location);

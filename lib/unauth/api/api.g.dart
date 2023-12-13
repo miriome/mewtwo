@@ -642,7 +642,7 @@ class _EditProfileApiProviderElement
 }
 
 String _$editMeasurementsApiHash() =>
-    r'5b60e8d5a0b91c8010eab1c39dabd1e50a577cbd';
+    r'61f02afc2151a5dc3ab7ced91398d206e9cbdea2';
 
 /// See also [editMeasurementsApi].
 @ProviderFor(editMeasurementsApi)

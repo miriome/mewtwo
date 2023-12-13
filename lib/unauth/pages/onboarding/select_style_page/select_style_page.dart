@@ -13,52 +13,66 @@ class SelectStylePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          actions:  [
-            GestureDetector(
-              onTap: () {
-                SignUpRoute().push(context);
-              },
-              child: const Text("Skip", style: TextStyle(fontSize: 12, color: Color(0xFF7D7878)))),
-            const SizedBox(
-              width: 28,
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                "Which of these styles do you like?",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              ),
+          appBar: AppBar(
+            actions: [
+              GestureDetector(
+                  onTap: () {
+                    SignUpRoute().push(context);
+                  },
+                  child: const Text("Skip", style: TextStyle(fontSize: 12, color: Color(0xFF7D7878)))),
               const SizedBox(
-                height: 44,
-              ),
-              Expanded(child: stylesGrid),
-              const SizedBox(height: 24,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: FilledButton(
-                  style: const ButtonStyle(elevation: MaterialStatePropertyAll(0)),
-                  onPressed: () async {
-                    final sp = await SharedPreferences.getInstance();
-                      sp.setString(Constants.kKeyStyles, store.selectedStyles.join(","));
-                      if (context.mounted) {
-                        // push new route
-                        SignUpRoute().push(context);
-                      }
-                  }, child: const Text("Next", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),),
-              ),
-                
+                width: 28,
+              )
             ],
           ),
-        ),
-      ),
+          body: buildBody()),
     );
+  }
+
+  Widget buildBody() {
+    return Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              "Which of these styles do you like?",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 44,
+            ),
+            Expanded(child: stylesGrid),
+            const SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: FilledButton(
+                style: const ButtonStyle(elevation: MaterialStatePropertyAll(0)),
+                onPressed: () async {
+                  await onCtaTap(context);
+                },
+                child: const Text(
+                  "Next",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Future<void> onCtaTap(BuildContext context) async {
+    final sp = await SharedPreferences.getInstance();
+    sp.setString(Constants.kKeyStyles, store.selectedStyles.join(","));
+    if (context.mounted) {
+      SignUpRoute().push(context);
+    }
   }
 
   Widget get stylesGrid {
@@ -70,10 +84,10 @@ class SelectStylePage extends StatelessWidget {
           onTap: () {
             if (store.selectedStyles.contains(style)) {
               store.selectedStyles.remove(style);
-              return;  
+              return;
             }
             store.selectedStyles.add(style);
-            },
+          },
           child: Material(
             elevation: 5,
             borderRadius: BorderRadius.circular(6),
@@ -85,19 +99,19 @@ class SelectStylePage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Observer(
-                      builder: (context) {
-                        return AspectRatio(
-                          aspectRatio: 100 / 143,
-                          child: Image.asset(
-                            'assets/images/styles/$style.jpg',
-                            fit: BoxFit.cover,
-                            color: store.selectedStyles.contains(style) ? Theme.of(context).primaryColor.withOpacity(0.5): null,
-                            colorBlendMode: BlendMode.srcOver,
-                          ),
-                        );
-                      }
-                    ),
+                    Observer(builder: (context) {
+                      return AspectRatio(
+                        aspectRatio: 100 / 143,
+                        child: Image.asset(
+                          'assets/images/styles/$style.jpg',
+                          fit: BoxFit.cover,
+                          color: store.selectedStyles.contains(style)
+                              ? Theme.of(context).primaryColor.withOpacity(0.5)
+                              : null,
+                          colorBlendMode: BlendMode.srcOver,
+                        ),
+                      );
+                    }),
                     Text(
                       style,
                       style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),

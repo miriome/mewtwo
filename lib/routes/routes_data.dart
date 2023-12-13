@@ -28,15 +28,6 @@ class SearchPageRoute extends GoRouteData {
   }
 }
 
-class ProfilePageRoute extends GoRouteData {
-
-  final int? userId;
-  ProfilePageRoute({this.userId});
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return ProfilePage(userId: userId,);
-  }
-}
 
 class NotificationPageRoute extends GoRouteData {
   @override

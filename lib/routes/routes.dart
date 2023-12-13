@@ -79,9 +79,7 @@ class UnauthorizedRoute extends GoRouteData {
   ),
   TypedStatefulShellBranch(
     routes: [
-      TypedGoRoute<ProfilePageRoute>(
-        path: '/ProfilePage',
-      )
+      ProfileRoutes.profilePageRoute
     ],
   ),
 ])

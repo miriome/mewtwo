@@ -22,7 +22,6 @@ class HomePostTile extends StatelessWidget {
     return GestureDetector(
       onDoubleTap: () => onLikeToggle(post.id),
       onTap: () => PostDetailsRoute(postId: post.id).push(context),
-      // MainPlatform.goToPostDetails(post.id),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),

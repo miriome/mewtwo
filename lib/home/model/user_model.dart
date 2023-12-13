@@ -33,7 +33,7 @@ class UserModel {
   final List<PostModel>? posts;
 
   @JsonKey(fromJson: _parseMeasurementPrivacy, toJson: _getMeasurementPrivacy)
-  final MeasurementPrivacy measurement_privacy;
+  final MeasurementPrivacy measurementPrivacy;
 
   
   static MeasurementPrivacy _parseMeasurementPrivacy(String? privacyString) {
@@ -58,7 +58,7 @@ class UserModel {
       required this.bust,
       required this.waist,
       required this.hips,
-      required this.measurement_privacy,
+      required this.measurementPrivacy,
       this.posts,
       this.email,
       this.password,
