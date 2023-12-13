@@ -642,7 +642,7 @@ class _EditProfileApiProviderElement
 }
 
 String _$editMeasurementsApiHash() =>
-    r'69121e00f40afe3e9764b76e1b4dc6ece30ae21f';
+    r'5b60e8d5a0b91c8010eab1c39dabd1e50a577cbd';
 
 /// See also [editMeasurementsApi].
 @ProviderFor(editMeasurementsApi)
@@ -659,12 +659,14 @@ class EditMeasurementsApiFamily extends Family<AsyncValue<bool>> {
     int? bust,
     int? waist,
     int? hips,
+    required MeasurementPrivacy privacy,
   }) {
     return EditMeasurementsApiProvider(
       height: height,
       bust: bust,
       waist: waist,
       hips: hips,
+      privacy: privacy,
     );
   }
 
@@ -677,6 +679,7 @@ class EditMeasurementsApiFamily extends Family<AsyncValue<bool>> {
       bust: provider.bust,
       waist: provider.waist,
       hips: provider.hips,
+      privacy: provider.privacy,
     );
   }
 
@@ -703,6 +706,7 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
     int? bust,
     int? waist,
     int? hips,
+    required MeasurementPrivacy privacy,
   }) : this._internal(
           (ref) => editMeasurementsApi(
             ref as EditMeasurementsApiRef,
@@ -710,6 +714,7 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
             bust: bust,
             waist: waist,
             hips: hips,
+            privacy: privacy,
           ),
           from: editMeasurementsApiProvider,
           name: r'editMeasurementsApiProvider',
@@ -724,6 +729,7 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
           bust: bust,
           waist: waist,
           hips: hips,
+          privacy: privacy,
         );
 
   EditMeasurementsApiProvider._internal(
@@ -737,12 +743,14 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
     required this.bust,
     required this.waist,
     required this.hips,
+    required this.privacy,
   }) : super.internal();
 
   final int? height;
   final int? bust;
   final int? waist;
   final int? hips;
+  final MeasurementPrivacy privacy;
 
   @override
   Override overrideWith(
@@ -761,6 +769,7 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
         bust: bust,
         waist: waist,
         hips: hips,
+        privacy: privacy,
       ),
     );
   }
@@ -776,7 +785,8 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
         other.height == height &&
         other.bust == bust &&
         other.waist == waist &&
-        other.hips == hips;
+        other.hips == hips &&
+        other.privacy == privacy;
   }
 
   @override
@@ -786,6 +796,7 @@ class EditMeasurementsApiProvider extends AutoDisposeFutureProvider<bool> {
     hash = _SystemHash.combine(hash, bust.hashCode);
     hash = _SystemHash.combine(hash, waist.hashCode);
     hash = _SystemHash.combine(hash, hips.hashCode);
+    hash = _SystemHash.combine(hash, privacy.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -803,6 +814,9 @@ mixin EditMeasurementsApiRef on AutoDisposeFutureProviderRef<bool> {
 
   /// The parameter `hips` of this provider.
   int? get hips;
+
+  /// The parameter `privacy` of this provider.
+  MeasurementPrivacy get privacy;
 }
 
 class _EditMeasurementsApiProviderElement
@@ -817,6 +831,9 @@ class _EditMeasurementsApiProviderElement
   int? get waist => (origin as EditMeasurementsApiProvider).waist;
   @override
   int? get hips => (origin as EditMeasurementsApiProvider).hips;
+  @override
+  MeasurementPrivacy get privacy =>
+      (origin as EditMeasurementsApiProvider).privacy;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

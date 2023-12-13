@@ -19,8 +19,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       bust: json['bust'] as String?,
       waist: json['waist'] as String?,
       hips: json['hips'] as String?,
-      measurementPrivacy: UserModel._parseMeasurementPrivacy(
-          json['measurementPrivacy'] as String?),
+      measurement_privacy: UserModel._parseMeasurementPrivacy(
+          json['measurement_privacy'] as String?),
       posts: (json['posts'] as List<dynamic>?)
           ?.map((e) => PostModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -46,6 +46,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'waist': instance.waist,
       'hips': instance.hips,
       'posts': instance.posts?.map((e) => e.toJson()).toList(),
-      'measurementPrivacy':
-          UserModel._getMeasurementPrivacy(instance.measurementPrivacy),
+      'measurement_privacy':
+          UserModel._getMeasurementPrivacy(instance.measurement_privacy),
     };

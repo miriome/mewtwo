@@ -23,7 +23,7 @@ class PostMeasurements extends StatelessWidget {
   }
 
   List<Widget> get measurements {
-    if (user.measurementPrivacy == MeasurementPrivacy.following) {
+    if (user.measurement_privacy == MeasurementPrivacy.following) {
       return const [
         SizedBox(
           width: 268,

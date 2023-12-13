@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mewtwo/routes/routes.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:mewtwo/unauth/pages/onboarding/measurements_page/measurements_page_store.dart';
 
 class MeasurementsPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class MeasurementsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  child: Form(
+                  child: FormBuilder(
                     key: store.formKey,
                     child: Column(children: [
                       const SizedBox(
@@ -89,7 +90,7 @@ class MeasurementsPage extends StatelessWidget {
                           }
                         },
                         decoration: const InputDecoration(
-                          counterText: "",
+                            counterText: "",
                             labelText: "Bust",
                             suffixIcon: Padding(
                                 padding: EdgeInsets.all(15),
@@ -114,7 +115,7 @@ class MeasurementsPage extends StatelessWidget {
                           }
                         },
                         decoration: const InputDecoration(
-                          counterText: "",
+                            counterText: "",
                             labelText: "Waist",
                             suffixIcon: Padding(
                                 padding: EdgeInsets.all(15),
@@ -139,7 +140,7 @@ class MeasurementsPage extends StatelessWidget {
                           }
                         },
                         decoration: const InputDecoration(
-                          counterText: "",
+                            counterText: "",
                             labelText: "Hips",
                             suffixIcon: Padding(
                                 padding: EdgeInsets.all(15),
@@ -154,6 +155,25 @@ class MeasurementsPage extends StatelessWidget {
                       ),
                       const SizedBox(
                         height: 24,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: FormBuilderSwitch(
+                          name: "measurementPrivacy",
+                          title: const Text(
+                            "Hide my measurements from people who do not follow me",
+                            style: TextStyle(fontSize: 16, color: Color(0xFF787D7D)),
+                          ),
+                          onSaved: (hide) {
+                            store.hideFromNonFollowers = hide ?? false;
+                          },
+                          inactiveTrackColor: const Color(0xFF7D7878),
+                          decoration:
+                              const InputDecoration(enabledBorder: InputBorder.none, contentPadding: EdgeInsets.zero),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -176,7 +196,7 @@ class MeasurementsPage extends StatelessWidget {
                         EasyLoading.dismiss();
                       }
                       if (success && context.mounted) {
-                        HomePageRoute().go(context);
+                        // HomePageRoute().go(context);
                       }
                     },
                     child: const Text(

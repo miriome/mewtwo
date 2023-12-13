@@ -74,6 +74,23 @@ mixin _$MeasurementsPageStore on _MeasurementsPageStore, Store {
     });
   }
 
+  late final _$hideFromNonFollowersAtom = Atom(
+      name: '_MeasurementsPageStore.hideFromNonFollowers', context: context);
+
+  @override
+  bool get hideFromNonFollowers {
+    _$hideFromNonFollowersAtom.reportRead();
+    return super.hideFromNonFollowers;
+  }
+
+  @override
+  set hideFromNonFollowers(bool value) {
+    _$hideFromNonFollowersAtom.reportWrite(value, super.hideFromNonFollowers,
+        () {
+      super.hideFromNonFollowers = value;
+    });
+  }
+
   late final _$submitAsyncAction =
       AsyncAction('_MeasurementsPageStore.submit', context: context);
 
@@ -88,7 +105,8 @@ mixin _$MeasurementsPageStore on _MeasurementsPageStore, Store {
 height: ${height},
 bust: ${bust},
 waist: ${waist},
-hips: ${hips}
+hips: ${hips},
+hideFromNonFollowers: ${hideFromNonFollowers}
     ''';
   }
 }

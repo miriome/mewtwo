@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final user = store.user;
     if (!store.isOwnProfile && user != null) {
-      if (user.measurementPrivacy == MeasurementPrivacy.following) {
+      if (user.measurement_privacy == MeasurementPrivacy.following) {
         return const Text("This user has only allowed followers to view their measurements.", textAlign: TextAlign.center,);
       }
     }

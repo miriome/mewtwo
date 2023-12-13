@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
   final router = GoRouter(
       navigatorKey: rootNavigatorKey,
       routes: $appRoutes,
-      initialLocation: LoginRoute().location,
+      initialLocation: MeasurementsRoute().location,
       redirect: (context, state) async {
-        final sp = await SharedPreferences.getInstance();
-        if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
-          return HomePageRoute().location;
-        }
-        return null;
+        // final sp = await SharedPreferences.getInstance();
+        // if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
+        //   return HomePageRoute().location;
+        // }
+        // return null;
       });
 
   // This widget is the root of your application.
@@ -40,6 +40,18 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
+          switchTheme: SwitchThemeData(
+            trackColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                  return const Color(0xFF787D7D);
+              }
+              return null;
+            }),
+            thumbColor: const MaterialStatePropertyAll(Colors.white),
+            trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
+            
+            
+          ),
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
@@ -87,7 +99,7 @@ class MyApp extends StatelessWidget {
           // "hot reload" (press "r" in the console where you ran "flutter run",
           // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
           // counter didn't reset back to zero; the application is not restarted.
-          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
+          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA) ),
           textTheme: GoogleFonts.robotoTextTheme()),
       builder: EasyLoading.init(),
       routerConfig: router,
