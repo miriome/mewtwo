@@ -91,6 +91,7 @@ class LoginPage extends ConsumerWidget {
             maxLines: 1,
             style: const TextStyle(fontSize: 20),
             decoration: const InputDecoration(
+              isCollapsed: true,
               enabledBorder: InputBorder.none,
               border: InputBorder.none, isDense: true),
           )
@@ -120,6 +121,7 @@ class LoginPage extends ConsumerWidget {
                   style: const TextStyle(fontSize: 20),
                   decoration: const InputDecoration(
                     enabledBorder: InputBorder.none,
+                    isCollapsed: true,
                     border: InputBorder.none, isDense: true),
                 )
               ],
