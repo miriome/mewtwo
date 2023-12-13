@@ -27,10 +27,6 @@ part 'routes.g.dart';
 @TypedGoRoute<MainRoute>(
     path: '/', routes: [...SafetyRoutes.typedRoutes, ...HomeRoutes.typedRoutes, ...PostRoutes.typedRoutes])
 class MainRoute extends GoRouteData {
-  @override
-  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
-    return HomePageRoute().location;
-  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
