@@ -27,6 +27,14 @@ RouteBase get $mainRoute => GoRouteData.$route(
           factory: $OtherProfilePageRouteExtension._fromState,
         ),
         GoRouteData.$route(
+          path: 'create-profile',
+          factory: $CreateProfileRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'measurements',
+          factory: $CreateMeasurementsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: 'postDetails',
           parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
           factory: $PostDetailsRouteExtension._fromState,
@@ -94,6 +102,42 @@ extension $OtherProfilePageRouteExtension on OtherProfilePageRoute {
         queryParams: {
           'user-id': userId.toString(),
         },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateProfileRouteExtension on CreateProfileRoute {
+  static CreateProfileRoute _fromState(GoRouterState state) =>
+      CreateProfileRoute();
+
+  String get location => GoRouteData.$location(
+        '/create-profile',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CreateMeasurementsRouteExtension on CreateMeasurementsRoute {
+  static CreateMeasurementsRoute _fromState(GoRouterState state) =>
+      CreateMeasurementsRoute();
+
+  String get location => GoRouteData.$location(
+        '/measurements',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -178,14 +222,6 @@ RouteBase get $unauthorizedRoute => GoRouteData.$route(
           path: 'sign-up',
           factory: $SignUpRouteExtension._fromState,
         ),
-        GoRouteData.$route(
-          path: 'create-profile',
-          factory: $CreateProfileRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'measurements',
-          factory: $MeasurementsRouteExtension._fromState,
-        ),
       ],
     );
 
@@ -264,42 +300,6 @@ extension $SignUpRouteExtension on SignUpRoute {
 
   String get location => GoRouteData.$location(
         '/unauth/sign-up',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $CreateProfileRouteExtension on CreateProfileRoute {
-  static CreateProfileRoute _fromState(GoRouterState state) =>
-      CreateProfileRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/create-profile',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $MeasurementsRouteExtension on MeasurementsRoute {
-  static MeasurementsRoute _fromState(GoRouterState state) =>
-      MeasurementsRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/measurements',
       );
 
   void go(BuildContext context) => context.go(location);

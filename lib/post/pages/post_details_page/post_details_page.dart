@@ -9,11 +9,12 @@ import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
-import 'package:mewtwo/home/routes/routes.dart';
+
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/comments_section.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_measurements.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_options.dart';
+import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';

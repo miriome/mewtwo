@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mewtwo/home/pages/home_page/home_page.dart';
-import 'package:mewtwo/home/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/pages/login/login_page_store.dart';
 import 'package:mewtwo/base/pages/webview/webview.dart';

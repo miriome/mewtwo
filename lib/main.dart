@@ -3,12 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/constants.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
-import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/routes/route_utils.dart';
-
+import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,13 +22,13 @@ class MyApp extends StatelessWidget {
   final router = GoRouter(
       navigatorKey: rootNavigatorKey,
       routes: $appRoutes,
-      initialLocation: MeasurementsRoute().location,
+      initialLocation: LoginRoute().location,
       redirect: (context, state) async {
-        // final sp = await SharedPreferences.getInstance();
-        // if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
-        //   return HomePageRoute().location;
-        // }
-        // return null;
+        final sp = await SharedPreferences.getInstance();
+        if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
+          return HomePageRoute().location;
+        }
+        return null;
       });
 
   // This widget is the root of your application.
