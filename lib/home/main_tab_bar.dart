@@ -75,8 +75,7 @@ class _MainTabBarState extends State<MainTabBar> {
               unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
               onTap: (index) {
                 if (index == 2) {
-                  LoginRoute().go(context);
-                  // MainPlatform.goToScreen(Screens.newPost);
+                  MainPlatform.goToScreen(Screens.newPost);
                   return;
                 }
                 widget.child.goBranch(
