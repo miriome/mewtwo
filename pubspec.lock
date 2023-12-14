@@ -273,14 +273,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  detectable_text_field:
-    dependency: "direct main"
-    description:
-      name: detectable_text_field
-      sha256: "2ea64d44a33b965903ce080e7047cc63f936af7d46fc9c4fd98b813e2020ab1e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -289,6 +281,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
+  extended_text_field:
+    dependency: "direct main"
+    description:
+      name: extended_text_field
+      sha256: ed9655c70a47a54c7cc689cf7f89a2bde9ab7b530150b4d1808b7aa7eb8cdf90
+      url: "https://pub.dev"
+    source: hosted
+    version: "13.0.0"
+  extended_text_library:
+    dependency: transitive
+    description:
+      name: extended_text_library
+      sha256: "55d09098ec56fab0d9a8a68950ca0bbf2efa1327937f7cec6af6dfa066234829"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -390,14 +398,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.1"
-  flutter_hooks:
-    dependency: transitive
+  flutter_linkify:
+    dependency: "direct main"
     description:
-      name: flutter_hooks
-      sha256: "7c8db779c2d1010aa7f9ea3fbefe8f86524fcb87b69e8b0af31e1a4b55422dec"
+      name: flutter_linkify
+      sha256: "74669e06a8f358fee4512b4320c0b80e51cffc496607931de68d28f099254073"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.3"
+    version: "6.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -688,6 +696,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
+  linkify:
+    dependency: "direct main"
+    description:
+      name: linkify
+      sha256: "4139ea77f4651ab9c315b577da2dd108d9aa0bd84b5d03d33323f1970c645832"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   lints:
     dependency: transitive
     description:

@@ -1,6 +1,8 @@
+import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/base/linkify/user_mention_special_text.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 
@@ -44,7 +46,8 @@ class _CommentsSectionState extends State<CommentsSection> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
+            child: ExtendedTextField(
+              specialTextSpanBuilder: MentionTextSpanBuilder(showAtBackground: true),
               style: const TextStyle(fontSize: 14),
               enabled: !widget.store.isCommentSending,
               controller: commentController,
