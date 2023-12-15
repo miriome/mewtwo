@@ -11,9 +11,11 @@ import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search.dart';
 
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
-import 'package:mewtwo/post/pages/post_details_page/widgets/comments_section.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_measurements.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_options.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
@@ -37,15 +39,18 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderStateMixin {
-  late final store = PostDetailsPageStore(postId: widget.postId)
-    ..init()
-    ..load();
+  late final PostDetailsPageStore store;
+  late final CommentsSectionStore commentsStore = CommentsSectionStore(postId: widget.postId);
   final transformationController = TransformationController();
   late final smallHeartAnimationController = AnimationController(vsync: this);
   late final bigHeartAnimationController = AnimationController(vsync: this);
   @override
   void initState() {
+    store = PostDetailsPageStore(postId: widget.postId, commentsStore: commentsStore)..init();
+    commentsStore.reload = () => store.load();
+    store.load();
     MainPlatform.addMethodCallhandler(appearOnLoad);
+
     super.initState();
   }
 
@@ -58,6 +63,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
   @override
   void dispose() {
     MainPlatform.removeMethodCallHandler(appearOnLoad);
+    commentsStore.dispose();
     super.dispose();
   }
 
@@ -173,7 +179,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                     SliverToBoxAdapter(child: statsRow(post)),
                     postInfo(post),
                     CommentsSection(
-                      store: store,
+                      store: commentsStore,
                       postId: widget.postId,
                     )
                   ]),
@@ -287,11 +293,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
         return Linkify(
           text: TextUtils.replaceEmoji(post.caption),
           linkifiers: const [UrlLinkifier(), UserTagLinkifier(), HashtagLinkifier()],
-          linkStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).primaryColor,
-            decoration: TextDecoration.none
-          ),
+          linkStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
           style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
           options: const LinkifyOptions(defaultToHttps: true),
           onOpen: (element) {

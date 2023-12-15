@@ -1,23 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/api/api.dart';
-import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'post_details_page_store.g.dart';
 
 class PostDetailsPageStore extends _PostDetailsPageStore with _$PostDetailsPageStore {
-  PostDetailsPageStore({required super.postId});
+  PostDetailsPageStore({required super.postId, required super.commentsStore});
 }
 
 abstract class _PostDetailsPageStore with Store {
   final int postId;
-  final int _visibleCommentsLength = 3;
-  _PostDetailsPageStore({required this.postId});
+  final CommentsSectionStore commentsStore;
+  _PostDetailsPageStore({required this.postId, required this.commentsStore});
 
   @observable
   int? _selfUserId;
@@ -35,29 +35,6 @@ abstract class _PostDetailsPageStore with Store {
   @readonly
   PostModel? _post;
 
-  @observable
-  ObservableList<CommentModel> _comments = ObservableList.of([]);
-
-  @observable
-  bool showAllComments = true;
-
-  @readonly
-  bool _isCommentSending = false;
-
-
-  @computed
-  int get commentsLength => _comments.length;
-
-  @computed
-  List<CommentModel> get visibleComments {
-    if (showAllComments) {
-      return _comments;
-    }
-    if (_comments.length <= _visibleCommentsLength) {
-      return _comments;
-    }
-    return _comments.sublist(_comments.length - _visibleCommentsLength);
-  }
 
   @computed
   bool get isMyPost => _post?.added_by == _selfUserId;
@@ -68,14 +45,10 @@ abstract class _PostDetailsPageStore with Store {
   @observable
   bool isShopableDescriptionVisible = false;
 
-  @observable
-  String currentEditingComment = "";
 
   @observable
   Matrix4 interactiveViewState = Matrix4.zero();
 
-  @computed
-  bool get canAddComment => currentEditingComment.isNotEmpty;
   
   Future<void> load() async {
     final getPostsProvider = GetPostDetailsApiProvider(postId: postId);
@@ -86,33 +59,12 @@ abstract class _PostDetailsPageStore with Store {
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
       _post = res;
-      _comments = ObservableList.of(res.comments ?? []);
-      showAllComments = _comments.length <= _visibleCommentsLength;
+      commentsStore.updateCommments(res.comments ?? []);
+      
       
     }
     listener.close();
     
-  }
-
-  Future<void> deleteComment(int commentId) async {
-    final deleteCommentProvider = DeleteCommentApiProvider(commentId: commentId);
-    final res = await Mew.pc.read(deleteCommentProvider.future);
-    if (res) {
-      _comments.removeWhere((element) => element.id == commentId);
-    }
-  }
-
-  Future<bool> addComment({required int postId}) async {
-    _isCommentSending = true;
-    final addCommentProvider = AddCommentApiProvider(comment: currentEditingComment, postId: postId);
-    final res = await Mew.pc.read(addCommentProvider.future);
-    if (res) {
-      _isCommentSending = false;
-      currentEditingComment = "";
-      load();
-      
-    }
-    return res;
   }
 
   @action
