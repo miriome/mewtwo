@@ -16,13 +16,6 @@ mixin _$CommentsSectionStore on _CommentsSectionStore, Store {
       (_$commentsLengthComputed ??= Computed<int>(() => super.commentsLength,
               name: '_CommentsSectionStore.commentsLength'))
           .value;
-  Computed<bool>? _$canAddCommentComputed;
-
-  @override
-  bool get canAddComment =>
-      (_$canAddCommentComputed ??= Computed<bool>(() => super.canAddComment,
-              name: '_CommentsSectionStore.canAddComment'))
-          .value;
   Computed<List<CommentModel>>? _$visibleCommentsComputed;
 
   @override
@@ -81,20 +74,19 @@ mixin _$CommentsSectionStore on _CommentsSectionStore, Store {
     });
   }
 
-  late final _$currentEditingCommentAtom = Atom(
-      name: '_CommentsSectionStore.currentEditingComment', context: context);
+  late final _$canAddCommentAtom =
+      Atom(name: '_CommentsSectionStore.canAddComment', context: context);
 
   @override
-  String get currentEditingComment {
-    _$currentEditingCommentAtom.reportRead();
-    return super.currentEditingComment;
+  bool get canAddComment {
+    _$canAddCommentAtom.reportRead();
+    return super.canAddComment;
   }
 
   @override
-  set currentEditingComment(String value) {
-    _$currentEditingCommentAtom.reportWrite(value, super.currentEditingComment,
-        () {
-      super.currentEditingComment = value;
+  set canAddComment(bool value) {
+    _$canAddCommentAtom.reportWrite(value, super.canAddComment, () {
+      super.canAddComment = value;
     });
   }
 
@@ -116,9 +108,8 @@ mixin _$CommentsSectionStore on _CommentsSectionStore, Store {
   String toString() {
     return '''
 showAllComments: ${showAllComments},
-currentEditingComment: ${currentEditingComment},
-commentsLength: ${commentsLength},
 canAddComment: ${canAddComment},
+commentsLength: ${commentsLength},
 visibleComments: ${visibleComments}
     ''';
   }

@@ -4,6 +4,7 @@
 //     var commented_by: UserModel
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mewtwo/home/model/mention_data_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/utils.dart';
 
@@ -30,6 +31,8 @@ class CommentModel {
    
   final String comment, created_at;
   final UserModel commented_by;
+  
+  final List<MentionDataModel> mentions;
 
   /// Connect the generated [_$PersonFromJson] function to the `fromJson`
   /// factory.
@@ -42,7 +45,9 @@ class CommentModel {
       required this.created_timestamp,
       required this.comment,
       required this.created_at,
-      required this.commented_by});
+      required this.commented_by,
+      required this.mentions
+      });
 
   /// Connect the generated [_$CommentModelToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$CommentModelToJson(this);

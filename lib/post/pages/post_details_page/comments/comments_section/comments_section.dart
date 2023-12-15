@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/widgets/comment_text.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 
@@ -69,9 +70,6 @@ class CommentsSection extends StatelessWidget {
               style: const TextStyle(fontSize: 14),
               enabled: !store.isCommentSending,
               controller: store.commentController,
-              onChanged: (text) {
-                store.currentEditingComment = text;
-              },
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   hintText: "Write a comment...",
@@ -150,11 +148,7 @@ class CommentsSection extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        TextUtils.replaceEmoji(comment.comment),
-                        style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-                        maxLines: 10,
-                      ),
+                      child: CommentText(comment: comment)
                     ),
                     GestureDetector(
                         onTap: () {

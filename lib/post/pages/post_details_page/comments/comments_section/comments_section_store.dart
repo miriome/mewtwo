@@ -39,6 +39,11 @@ abstract class _CommentsSectionStore with Store {
       }
     }));
     commentController.addListener(() async {
+      if (commentController.text.isNotEmpty) {
+        canAddComment = true;
+      } else {
+        canAddComment = false;
+      }
       if (userMentionStore.userResults.isEmpty) {
         portalController.hide();
       }
@@ -99,11 +104,9 @@ abstract class _CommentsSectionStore with Store {
   @computed
   int get commentsLength => _comments.length;
 
-  @observable
-  String currentEditingComment = "";
 
-  @computed
-  bool get canAddComment => currentEditingComment.isNotEmpty;
+  @observable
+  bool canAddComment = false;
 
   @computed
   List<CommentModel> get visibleComments {
@@ -135,12 +138,13 @@ abstract class _CommentsSectionStore with Store {
   }
 
   Future<bool> addComment({required int postId}) async {
+    
     _isCommentSending = true;
-    final addCommentProvider = AddCommentApiProvider(comment: currentEditingComment, postId: postId);
+    final addCommentProvider = AddCommentApiProvider(comment: commentController.text, postId: postId);
     final res = await Mew.pc.read(addCommentProvider.future);
     if (res) {
       _isCommentSending = false;
-      currentEditingComment = "";
+      commentController.text = "";
       _reloadPostData?.call();
     }
     return res;
