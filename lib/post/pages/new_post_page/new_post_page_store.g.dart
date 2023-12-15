@@ -47,10 +47,27 @@ mixin _$NewPostPageStore on _NewPostPageStore, Store {
     });
   }
 
+  late final _$shopMyLookAtom =
+      Atom(name: '_NewPostPageStore.shopMyLook', context: context);
+
+  @override
+  bool get shopMyLook {
+    _$shopMyLookAtom.reportRead();
+    return super.shopMyLook;
+  }
+
+  @override
+  set shopMyLook(bool value) {
+    _$shopMyLookAtom.reportWrite(value, super.shopMyLook, () {
+      super.shopMyLook = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-displayImagePath: ${displayImagePath}
+displayImagePath: ${displayImagePath},
+shopMyLook: ${shopMyLook}
     ''';
   }
 }

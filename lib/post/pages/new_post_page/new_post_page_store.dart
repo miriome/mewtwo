@@ -1,3 +1,4 @@
+import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,7 +20,10 @@ abstract class _NewPostPageStore with Store {
   @observable
   String displayImagePath = "";
 
-  final controller = TextEditingController();
+  @observable
+  bool shopMyLook = false;
+
+  final controller = DetectableTextEditingController();
 
   void dispose() {
     controller.dispose();
