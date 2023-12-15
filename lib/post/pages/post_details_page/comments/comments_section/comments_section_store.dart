@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mewtwo/base/linkify/user_mention_special_text.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -59,7 +58,7 @@ abstract class _CommentsSectionStore with Store {
       }
       String currentlyEditingText = splitString.last;
       // Only @, need user to give filter, so dont show.
-      if (!currentlyEditingText.startsWith(MentionText.flag) || (currentlyEditingText.length < 2)) {
+      if (!currentlyEditingText.startsWith("@") || (currentlyEditingText.length < 2)) {
         portalController.hide();
         return;
       }
