@@ -3,9 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class MentionText extends SpecialText {
-  MentionText(TextStyle? textStyle, SpecialTextGestureTapCallback? onTap,
-      {this.showAtBackground = false, this.start})
-      : super(flag, ' ', textStyle, onTap: onTap);
+  MentionText(TextStyle? textStyle, SpecialTextGestureTapCallback? onTap, {this.showAtBackground = false, this.start})
+      : super(flag, '| ', textStyle, onTap: onTap);
   static const String flag = '@';
   final int? start;
 
@@ -14,11 +13,10 @@ class MentionText extends SpecialText {
 
   @override
   InlineSpan finishText() {
-    final TextStyle? textStyle =
-        this.textStyle?.copyWith(color: Colors.blue, fontSize: 16.0);
+    final TextStyle? textStyle = this.textStyle?.copyWith(color: Colors.blue, fontSize: 16.0);
 
     final String mentionText = toString();
-
+    
     return showAtBackground
         ? BackgroundTextSpan(
             background: Paint()..color = Colors.blue.withOpacity(0.15),
@@ -57,23 +55,21 @@ class MentionTextSpanBuilder extends SpecialTextSpanBuilder {
 
   @override
   SpecialText? createSpecialText(String flag,
-      {TextStyle? textStyle,
-      SpecialTextGestureTapCallback? onTap,
-      int? index}) {
+      {TextStyle? textStyle, SpecialTextGestureTapCallback? onTap, int? index}) {
     if (flag == '') {
       return null;
     }
 
-    // Can add hashtag here too.
-     if (isStart(flag, MentionText.flag)) {
+    if (isStart(flag, MentionText.flag)) {
       return MentionText(
         textStyle,
         onTap,
         start: index! - (MentionText.flag.length - 1),
         showAtBackground: showAtBackground,
       );
-     }
-    
+    }
+
+
     return null;
   }
 }

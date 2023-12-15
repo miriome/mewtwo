@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/linkify/user_mention_special_text.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
+import 'package:mewtwo/home/model/user_model.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search_store.dart';
@@ -17,7 +20,9 @@ abstract class _CommentsSectionStore with Store {
   final int postId;
   static const int _visibleCommentsLength = 3;
 
-  final TextEditingController commentController = TextEditingController();
+  final DetectableTextEditingController commentController = DetectableTextEditingController(
+    regExp: atSignRegExp
+  );
   final portalController = OverlayPortalController();
   final List<ReactionDisposer> _disposer = [];
   void dispose() {
@@ -39,17 +44,20 @@ abstract class _CommentsSectionStore with Store {
         portalController.hide();
       }
       final cursorBasePosition = commentController.selection.baseOffset;
+      if (cursorBasePosition == -1) {
+        // base position becomes -1 when changing text.
+        return;
+      }
 
       if (cursorBasePosition != commentController.selection.extentOffset) {
         // Is cursor selection, ignore
         return;
       }
-
-      final splitString = commentController.text.split(" ");
+        final splitString = commentController.selection.textBefore(commentController.text).split(" ");
       if (splitString.isEmpty) {
         return;
       }
-      final currentlyEditingText = splitString.last;
+      String currentlyEditingText = splitString.last;
       // Only @, need user to give filter, so dont show.
       if (!currentlyEditingText.startsWith(MentionText.flag) || (currentlyEditingText.length < 2)) {
         portalController.hide();
@@ -57,9 +65,27 @@ abstract class _CommentsSectionStore with Store {
       }
       userMentionStore.search(currentlyEditingText.substring(1));
       if (userMentionStore.userResults.isNotEmpty) {
-          portalController.show();
-        }
+        portalController.show();
+      }
     });
+  }
+
+
+  void onMentionUserSearchTap(UserModel user) {
+    final cursorBasePosition = commentController.selection.baseOffset;
+
+      if (cursorBasePosition != commentController.selection.extentOffset) {
+        // Is cursor selection, ignore
+        return;
+      }
+    final splitString = commentController.selection.textBefore(commentController.text).split(" ");
+    if (splitString.isEmpty) {
+        return;
+      }
+    splitString[splitString.length - 1] = "@${user.username} ";
+    final mentionedString = splitString.join(" ");
+    commentController.text = mentionedString + commentController.text.substring(commentController.selection.baseOffset);
+
   }
 
   @observable
