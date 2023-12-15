@@ -16,7 +16,7 @@ class CommentText extends StatelessWidget {
     final splitText = text.split(RegExp(r'(?<= )|(?= )'));
     final textSpans = splitText.map((text) {
       if (text.startsWith("@")) {
-        final mentionedUser = comment.mentions  firstOrNullWhere((mention) => mention.username == text.substring(1));
+        final mentionedUser = comment.mentions.firstOrNullWhere((mention) => mention.username == text.substring(1));
         if (mentionedUser != null) {
           return TextSpan(
               text: text,
