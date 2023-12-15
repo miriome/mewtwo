@@ -51,6 +51,11 @@ RouteBase get $mainRoute => GoRouteData.$route(
           parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
           factory: $PostDetailsRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'new-post',
+          parentNavigatorKey: NewPostRoute.$parentNavigatorKey,
+          factory: $NewPostRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -240,6 +245,23 @@ extension $PostDetailsRouteExtension on PostDetailsRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $NewPostRouteExtension on NewPostRoute {
+  static NewPostRoute _fromState(GoRouterState state) => NewPostRoute();
+
+  String get location => GoRouteData.$location(
+        '/new-post',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 extension<T extends Enum> on Map<T, String> {
   T _$fromName(String value) =>
       entries.singleWhere((element) => element.value == value).key;
@@ -399,7 +421,7 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
           routes: [
             GoRouteData.$route(
               path: '/NewPost',
-              factory: $NewPostRouteExtension._fromState,
+              factory: $FakeNewPostRouteExtension._fromState,
             ),
           ],
         ),
@@ -467,8 +489,8 @@ extension $SearchPageRouteExtension on SearchPageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $NewPostRouteExtension on NewPostRoute {
-  static NewPostRoute _fromState(GoRouterState state) => NewPostRoute();
+extension $FakeNewPostRouteExtension on FakeNewPostRoute {
+  static FakeNewPostRoute _fromState(GoRouterState state) => FakeNewPostRoute();
 
   String get location => GoRouteData.$location(
         '/NewPost',

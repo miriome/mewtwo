@@ -11,3 +11,13 @@ class PostDetailsRoute extends GoRouteData {
     return PostDetailsPage(postId: postId, isFromApp: isFromApp);
   }
 }
+
+class NewPostRoute extends GoRouteData {
+  
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
+  
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return NewPostPage();
+  }
+}

@@ -4,7 +4,7 @@ import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/seach_post_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/search_page_search_bar.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';

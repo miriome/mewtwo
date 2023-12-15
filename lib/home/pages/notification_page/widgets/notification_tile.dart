@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/home/model/notification_model.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';

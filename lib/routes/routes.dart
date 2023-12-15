@@ -7,9 +7,8 @@ import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/home/main_tab_bar.dart';
 import 'package:mewtwo/home/pages/home_page/home_page.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page.dart';
-import 'package:mewtwo/profile/profile_page/profile_page.dart';
 import 'package:mewtwo/home/pages/search_page/search_page.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
 part 'routes_data.dart';
@@ -65,7 +64,7 @@ class UnauthorizedRoute extends GoRouteData {
   ),
   TypedStatefulShellBranch(
     routes: [
-      TypedGoRoute<NewPostRoute>(
+      TypedGoRoute<FakeNewPostRoute>(
         path: '/NewPost',
       )
     ],
