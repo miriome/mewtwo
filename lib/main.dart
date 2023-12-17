@@ -47,8 +47,10 @@ class MyApp extends StatelessWidget {
             }),
             thumbColor: const MaterialStatePropertyAll(Colors.white),
             trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
-            
-            
+          ),
+          checkboxTheme: const CheckboxThemeData(
+            checkColor: MaterialStatePropertyAll(Colors.white),
+            side: BorderSide(color: Color(0xFF8474A1))
           ),
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {

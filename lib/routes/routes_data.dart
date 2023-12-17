@@ -7,11 +7,11 @@ class HomePageRoute extends GoRouteData {
   }
 }
 
-class NewPostRoute extends GoRouteData {
+class FakeNewPostRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    // Currently routes to native new post screen.
+    // Used to route to another screen.
     return Container();
   }
 }

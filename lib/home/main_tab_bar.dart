@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mewtwo/post/pages/routes/routes.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/routes/routes.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,7 +75,7 @@ class _MainTabBarState extends State<MainTabBar> {
               unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
               onTap: (index) {
                 if (index == 2) {
-                  MainPlatform.goToScreen(Screens.newPost);
+                  CreatePostRoute().push(context);
                   return;
                 }
                 widget.child.goBranch(

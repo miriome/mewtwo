@@ -15,6 +15,9 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       created_at: json['created_at'] as String,
       commented_by:
           UserModel.fromJson(json['commented_by'] as Map<String, dynamic>),
+      mentions: (json['mentions'] as List<dynamic>)
+          .map((e) => MentionDataModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
@@ -26,4 +29,5 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'comment': instance.comment,
       'created_at': instance.created_at,
       'commented_by': instance.commented_by.toJson(),
+      'mentions': instance.mentions.map((e) => e.toJson()).toList(),
     };

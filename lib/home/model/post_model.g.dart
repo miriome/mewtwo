@@ -24,6 +24,10 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       comments: (json['comments'] as List<dynamic>?)
           ?.map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      mentions: (json['mentions'] as List<dynamic>?)
+              ?.map((e) => MentionDataModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
@@ -40,6 +44,7 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'hashtag': instance.hashtag,
       'posted_by': instance.posted_by?.toJson(),
       'comments': instance.comments?.map((e) => e.toJson()).toList(),
+      'mentions': instance.mentions.map((e) => e.toJson()).toList(),
     };
 
 // **************************************************************************

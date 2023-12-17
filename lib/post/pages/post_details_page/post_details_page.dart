@@ -2,21 +2,23 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:linkify/linkify.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mewtwo/base/pages/webview/webview.dart';
+import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
+import 'package:mewtwo/base/linkify/mention_linkifier.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
 
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
-import 'package:mewtwo/post/pages/post_details_page/widgets/comments_section.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_measurements.dart';
 import 'package:mewtwo/post/pages/post_details_page/widgets/post_options.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
-import 'package:mewtwo/safety/api/api.dart';
-import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mewtwo/post/utils.dart';
 import 'package:mewtwo/routes/routes.dart';
@@ -24,7 +26,6 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:mewtwo/utils.dart';
-import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -38,15 +39,18 @@ class PostDetailsPage extends StatefulWidget {
 }
 
 class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderStateMixin {
-  late final store = PostDetailsPageStore(postId: widget.postId)
-    ..init()
-    ..load();
+  late final PostDetailsPageStore store;
+  late final CommentsSectionStore commentsStore = CommentsSectionStore(postId: widget.postId);
   final transformationController = TransformationController();
   late final smallHeartAnimationController = AnimationController(vsync: this);
   late final bigHeartAnimationController = AnimationController(vsync: this);
   @override
   void initState() {
+    store = PostDetailsPageStore(postId: widget.postId, commentsStore: commentsStore)..init();
+    commentsStore.reload = () => store.load();
+    store.load();
     MainPlatform.addMethodCallhandler(appearOnLoad);
+
     super.initState();
   }
 
@@ -59,6 +63,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
   @override
   void dispose() {
     MainPlatform.removeMethodCallHandler(appearOnLoad);
+    commentsStore.dispose();
     super.dispose();
   }
 
@@ -86,7 +91,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
               actions: [
                 IconButton(
                     onPressed: () {
-                      PostOptions.show(context, store: store);
+                      PostOptions.show(context, store: store, onPostEdit: () {
+                        store.load();
+                      });
                     },
                     icon: const Icon(Icons.more_vert))
               ],
@@ -174,7 +181,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                     SliverToBoxAdapter(child: statsRow(post)),
                     postInfo(post),
                     CommentsSection(
-                      store: store,
+                      store: commentsStore,
                       postId: widget.postId,
                     )
                   ]),
@@ -285,25 +292,26 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
         child: SizedBox(height: 4),
       ),
       Builder(builder: (context) {
-        return DetectableText(
+        return Linkify(
           text: TextUtils.replaceEmoji(post.caption),
-          detectionRegExp: detectionRegExp()!,
-          trimLength: 999999999999,
-          detectedStyle: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).primaryColor,
-          ),
-          basicStyle: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-          onTap: (tappedText) {
-            if (tappedText.startsWith("#")) {
-              SearchPageRoute(initialSearchTerm: tappedText.removePrefix("#")).go(context);
+          linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: post.mentions), const HashtagLinkifier()],
+          linkStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
+          style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+          options: const LinkifyOptions(defaultToHttps: true),
+          onOpen: (element) {
+            if (element is MentionElement) {
+              OtherProfilePageRoute(userId: element.user.user_id).push(context);
               return;
             }
-            final url = !tappedText.startsWith("https://") ? "https://$tappedText" : tappedText;
-            launchUrl(Uri.parse(url));
+            if (element is HashtagElement) {
+              SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
+              return;
+            }
+            if (element is UrlElement) {
+              launchUrl(Uri.parse(element.url));
+              return;
+            }
           },
-          lessStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
-          moreStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
         );
       })
     ]);

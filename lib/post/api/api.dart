@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/utils.dart';
@@ -109,3 +110,29 @@ Future<bool> markPostSoldApi(MarkPostSoldApiRef ref, {required int postId}) asyn
   }
   return false;
 }
+
+@riverpod
+Future<bool> editPostApi(EditPostApiRef ref, {required int postId, required String caption, required bool chatEnabled, List<int>? photoFileBytes}) async {
+  final data = FormData.fromMap({
+    "caption": caption,
+    'chat_enabled': chatEnabled ? 1 : 0,
+    if (photoFileBytes != null)
+      "file": MultipartFile.fromBytes(photoFileBytes, filename: "image.jpg", contentType: MediaType('image', 'jpg'))
+  });
+  try {
+    final res = await (await Networking.instance).postForm(path: "post/editPost/$postId", data: data);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
+}
+

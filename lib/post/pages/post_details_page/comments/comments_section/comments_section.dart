@@ -1,10 +1,17 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/base/linkify/mention_linkifier.dart';
+import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
+import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
 
-import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
+import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
+import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+
 import 'package:mewtwo/post/utils.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
@@ -13,27 +20,47 @@ import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
-class CommentsSection extends StatefulWidget {
-  final PostDetailsPageStore store;
+class CommentsSection extends StatelessWidget {
+  final CommentsSectionStore store;
   final int postId;
-  const CommentsSection({Key? key, required this.store, required this.postId}) : super(key: key);
+  final LayerLink link = LayerLink();
 
-  @override
-  State<CommentsSection> createState() => _CommentsSectionState();
-}
+  CommentsSection({Key? key, required this.store, required this.postId}) : super(key: key);
 
-class _CommentsSectionState extends State<CommentsSection> {
-  final TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return MultiSliver(children: [
         commentsList(),
-        const SliverToBoxAdapter(
-            child: SizedBox(
-          height: 8,
-        )),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 12,
+            child: CompositedTransformTarget(
+              link: link,
+              child: OverlayPortal(
+                controller: store.portalController,
+                overlayChildBuilder: (context) => PositionedDirectional(
+                  height: 200,
+                  start: 0,
+                  end: 0,
+                  child: CompositedTransformFollower(
+                    link: link,
+                    targetAnchor: Alignment.topLeft,
+                    followerAnchor: Alignment.bottomLeft,
+                    child: UserMentionSearch(
+                        onUserResultsTap: (user) {
+                          store.onMentionUserSearchTap(user);
+                          store.portalController.hide();
+                        },
+                        store: store.userMentionStore),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         writeComment
       ]);
     });
@@ -44,13 +71,10 @@ class _CommentsSectionState extends State<CommentsSection> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
+            child: DetectableTextField(
               style: const TextStyle(fontSize: 14),
-              enabled: !widget.store.isCommentSending,
-              controller: commentController,
-              onChanged: (text) {
-                widget.store.currentEditingComment = text;
-              },
+              enabled: !store.isCommentSending,
+              controller: store.commentController,
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   hintText: "Write a comment...",
@@ -60,27 +84,25 @@ class _CommentsSectionState extends State<CommentsSection> {
             ),
           ),
           IconButton.filled(
-              onPressed: widget.store.isCommentSending
+              onPressed: store.isCommentSending
                   ? null
-                  : widget.store.canAddComment
+                  : store.canAddComment
                       ? () {
-                          widget.store.addComment(postId: widget.postId).then((success) {
+                          store.addComment(postId: postId).then((success) {
                             if (success) {
-                              commentController.clear();
+                              store.commentController.clear();
                             }
                           });
                         }
-                      : null,                      
+                      : null,
               constraints: const BoxConstraints(),
-              
               iconSize: 28,
               padding: EdgeInsets.zero,
-              icon: widget.store.isCommentSending
+              icon: store.isCommentSending
                   ? Container(
-                    color: Colors.white,
-                    child: const CircularProgressIndicator(
-                    ),
-                  )
+                      color: Colors.white,
+                      child: const CircularProgressIndicator(),
+                    )
                   : const Icon(
                       Icons.arrow_upward,
                       color: Colors.white,
@@ -94,18 +116,18 @@ class _CommentsSectionState extends State<CommentsSection> {
   Widget commentsList() {
     return MultiSliver(
       children: [
-        if (!widget.store.showAllComments)
+        if (!store.showAllComments)
           GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () => widget.store.showAllComments = true,
+              onTap: () => store.showAllComments = true,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text("View all ${widget.store.commentsLength} comments"),
+                child: Text("View all ${store.commentsLength} comments"),
               )),
         SliverList.separated(
           separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
-            final comment = widget.store.visibleComments[index];
+            final comment = store.visibleComments[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -131,12 +153,29 @@ class _CommentsSectionState extends State<CommentsSection> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        TextUtils.replaceEmoji(comment.comment),
-                        style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-                        maxLines: 10,
-                      ),
-                    ),
+                        child: Linkify(
+                      text: TextUtils.replaceEmoji(comment.comment),
+                      linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: comment.mentions), const HashtagLinkifier()],
+                      linkStyle: TextStyle(
+                          fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
+                      style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+                      options: const LinkifyOptions(defaultToHttps: true),
+                      onOpen: (element) {
+                        if (element is MentionElement) {
+                          OtherProfilePageRoute(userId: element.user.user_id).push(context);
+                        }
+                        if (element is HashtagElement) {
+                          SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
+                          return;
+                        }
+                        if (element is UrlElement) {
+                          launchUrl(Uri.parse(element.url));
+                          return;
+                        }
+                      },
+                    )
+                        // CommentText(comment: comment)
+                        ),
                     GestureDetector(
                         onTap: () {
                           showCommentOptions(context, comment: comment);
@@ -151,7 +190,7 @@ class _CommentsSectionState extends State<CommentsSection> {
               ],
             );
           },
-          itemCount: widget.store.visibleComments.length,
+          itemCount: store.visibleComments.length,
         ),
       ],
     );
@@ -183,7 +222,7 @@ class _CommentsSectionState extends State<CommentsSection> {
               onPressed: () {
                 Navigator.pop(modalContext);
                 if (isMyComment) {
-                  widget.store.deleteComment(comment.id);
+                  store.deleteComment(comment.id);
                   return;
                 }
                 ReportContentRoute(reportType: ReportType.comment, typeId: comment.id.toString()).push(context);

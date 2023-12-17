@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PostImage extends StatelessWidget {
+  static const aspectRatio = 184 / 242;
+  static const fit = BoxFit.cover;
   final String imageUrl;
   const PostImage({Key? key, required this.imageUrl}) : super(key: key);
 
@@ -11,7 +13,7 @@ class PostImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return AspectRatio(
-          aspectRatio: 184 / 242,
+          aspectRatio: aspectRatio,
           child: CachedNetworkImage(
               // memCacheHeight: constraints.maxHeight.isInfinite ? 242 * 4 : constraints.maxHeight.ceil(),
               memCacheWidth: constraints.maxWidth.isInfinite ? 242 * 4 : constraints.maxWidth.ceil() * 2,
@@ -23,7 +25,7 @@ class PostImage extends StatelessWidget {
                   ),
                 );
               },
-              fit: BoxFit.cover,
+              fit: fit,
               alignment: Alignment.topCenter,
             ));
     });

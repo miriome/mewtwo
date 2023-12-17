@@ -684,5 +684,183 @@ class _MarkPostSoldApiProviderElement
   @override
   int get postId => (origin as MarkPostSoldApiProvider).postId;
 }
+
+String _$editPostApiHash() => r'b1a9f5fa8f3c9f0f21b490e8b334e3fc29a89f23';
+
+/// See also [editPostApi].
+@ProviderFor(editPostApi)
+const editPostApiProvider = EditPostApiFamily();
+
+/// See also [editPostApi].
+class EditPostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [editPostApi].
+  const EditPostApiFamily();
+
+  /// See also [editPostApi].
+  EditPostApiProvider call({
+    required int postId,
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) {
+    return EditPostApiProvider(
+      postId: postId,
+      caption: caption,
+      chatEnabled: chatEnabled,
+      photoFileBytes: photoFileBytes,
+    );
+  }
+
+  @override
+  EditPostApiProvider getProviderOverride(
+    covariant EditPostApiProvider provider,
+  ) {
+    return call(
+      postId: provider.postId,
+      caption: provider.caption,
+      chatEnabled: provider.chatEnabled,
+      photoFileBytes: provider.photoFileBytes,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editPostApiProvider';
+}
+
+/// See also [editPostApi].
+class EditPostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [editPostApi].
+  EditPostApiProvider({
+    required int postId,
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) : this._internal(
+          (ref) => editPostApi(
+            ref as EditPostApiRef,
+            postId: postId,
+            caption: caption,
+            chatEnabled: chatEnabled,
+            photoFileBytes: photoFileBytes,
+          ),
+          from: editPostApiProvider,
+          name: r'editPostApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editPostApiHash,
+          dependencies: EditPostApiFamily._dependencies,
+          allTransitiveDependencies:
+              EditPostApiFamily._allTransitiveDependencies,
+          postId: postId,
+          caption: caption,
+          chatEnabled: chatEnabled,
+          photoFileBytes: photoFileBytes,
+        );
+
+  EditPostApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.postId,
+    required this.caption,
+    required this.chatEnabled,
+    required this.photoFileBytes,
+  }) : super.internal();
+
+  final int postId;
+  final String caption;
+  final bool chatEnabled;
+  final List<int>? photoFileBytes;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(EditPostApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditPostApiProvider._internal(
+        (ref) => create(ref as EditPostApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        postId: postId,
+        caption: caption,
+        chatEnabled: chatEnabled,
+        photoFileBytes: photoFileBytes,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _EditPostApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditPostApiProvider &&
+        other.postId == postId &&
+        other.caption == caption &&
+        other.chatEnabled == chatEnabled &&
+        other.photoFileBytes == photoFileBytes;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, postId.hashCode);
+    hash = _SystemHash.combine(hash, caption.hashCode);
+    hash = _SystemHash.combine(hash, chatEnabled.hashCode);
+    hash = _SystemHash.combine(hash, photoFileBytes.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditPostApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `postId` of this provider.
+  int get postId;
+
+  /// The parameter `caption` of this provider.
+  String get caption;
+
+  /// The parameter `chatEnabled` of this provider.
+  bool get chatEnabled;
+
+  /// The parameter `photoFileBytes` of this provider.
+  List<int>? get photoFileBytes;
+}
+
+class _EditPostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with EditPostApiRef {
+  _EditPostApiProviderElement(super.provider);
+
+  @override
+  int get postId => (origin as EditPostApiProvider).postId;
+  @override
+  String get caption => (origin as EditPostApiProvider).caption;
+  @override
+  bool get chatEnabled => (origin as EditPostApiProvider).chatEnabled;
+  @override
+  List<int>? get photoFileBytes =>
+      (origin as EditPostApiProvider).photoFileBytes;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

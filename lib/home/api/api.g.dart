@@ -866,5 +866,167 @@ class _ToggleUserFollowApiProviderElement
   @override
   bool get followToggle => (origin as ToggleUserFollowApiProvider).followToggle;
 }
+
+String _$addPostApiHash() => r'57591bc70235fea93108746123f132d20b3e3e4b';
+
+/// See also [addPostApi].
+@ProviderFor(addPostApi)
+const addPostApiProvider = AddPostApiFamily();
+
+/// See also [addPostApi].
+class AddPostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [addPostApi].
+  const AddPostApiFamily();
+
+  /// See also [addPostApi].
+  AddPostApiProvider call({
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) {
+    return AddPostApiProvider(
+      caption: caption,
+      chatEnabled: chatEnabled,
+      photoFileBytes: photoFileBytes,
+    );
+  }
+
+  @override
+  AddPostApiProvider getProviderOverride(
+    covariant AddPostApiProvider provider,
+  ) {
+    return call(
+      caption: provider.caption,
+      chatEnabled: provider.chatEnabled,
+      photoFileBytes: provider.photoFileBytes,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'addPostApiProvider';
+}
+
+/// See also [addPostApi].
+class AddPostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [addPostApi].
+  AddPostApiProvider({
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) : this._internal(
+          (ref) => addPostApi(
+            ref as AddPostApiRef,
+            caption: caption,
+            chatEnabled: chatEnabled,
+            photoFileBytes: photoFileBytes,
+          ),
+          from: addPostApiProvider,
+          name: r'addPostApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$addPostApiHash,
+          dependencies: AddPostApiFamily._dependencies,
+          allTransitiveDependencies:
+              AddPostApiFamily._allTransitiveDependencies,
+          caption: caption,
+          chatEnabled: chatEnabled,
+          photoFileBytes: photoFileBytes,
+        );
+
+  AddPostApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.caption,
+    required this.chatEnabled,
+    required this.photoFileBytes,
+  }) : super.internal();
+
+  final String caption;
+  final bool chatEnabled;
+  final List<int>? photoFileBytes;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(AddPostApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddPostApiProvider._internal(
+        (ref) => create(ref as AddPostApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        caption: caption,
+        chatEnabled: chatEnabled,
+        photoFileBytes: photoFileBytes,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _AddPostApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddPostApiProvider &&
+        other.caption == caption &&
+        other.chatEnabled == chatEnabled &&
+        other.photoFileBytes == photoFileBytes;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, caption.hashCode);
+    hash = _SystemHash.combine(hash, chatEnabled.hashCode);
+    hash = _SystemHash.combine(hash, photoFileBytes.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin AddPostApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `caption` of this provider.
+  String get caption;
+
+  /// The parameter `chatEnabled` of this provider.
+  bool get chatEnabled;
+
+  /// The parameter `photoFileBytes` of this provider.
+  List<int>? get photoFileBytes;
+}
+
+class _AddPostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with AddPostApiRef {
+  _AddPostApiProviderElement(super.provider);
+
+  @override
+  String get caption => (origin as AddPostApiProvider).caption;
+  @override
+  bool get chatEnabled => (origin as AddPostApiProvider).chatEnabled;
+  @override
+  List<int>? get photoFileBytes =>
+      (origin as AddPostApiProvider).photoFileBytes;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
