@@ -53,7 +53,7 @@ abstract class _SignUpPageStore with Store {
     if (username == null || username.isEmpty) {
       return "Username cannot be empty";
     }
-    final usernameRegex = RegExp(r'''[A-Z0-9a-z._]{1,15}''');
+    final usernameRegex = RegExp(r'''^[a-zA-Z0-9]*$''');
     if (!usernameRegex.hasMatch(username)) {
       return "This username is invalid.";
     }

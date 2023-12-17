@@ -46,6 +46,9 @@ class SelectPronounsPage extends StatelessWidget {
           ..._pronouns.map((pronoun) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(const Color(0xFF8474A1).withOpacity(0.1))
+                    ),
                     onPressed: () async {
                       final sp = await SharedPreferences.getInstance();
                       sp.setString(Constants.kKeyPronouns, pronoun);
@@ -53,9 +56,12 @@ class SelectPronounsPage extends StatelessWidget {
                         SelectStyleRoute().push(context);
                       }
                     },
-                    child: Text(
-                      pronoun,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        pronoun,
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black),
+                      ),
                     )),
               ))
         ]),

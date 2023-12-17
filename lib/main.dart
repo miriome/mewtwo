@@ -18,7 +18,7 @@ void main() => runApp(ProviderScope(
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
+  
   final router = GoRouter(
       navigatorKey: rootNavigatorKey,
       routes: $appRoutes,
@@ -45,6 +45,9 @@ class MyApp extends StatelessWidget {
               }
               return null;
             }),
+            thumbIcon: const MaterialStatePropertyAll(Icon(Icons.circle_rounded, color: Colors.white, fill: 1,)),
+            overlayColor: const MaterialStatePropertyAll(Colors.white),
+            
             thumbColor: const MaterialStatePropertyAll(Colors.white),
             trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
           ),
