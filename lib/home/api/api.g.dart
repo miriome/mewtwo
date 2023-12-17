@@ -866,5 +866,167 @@ class _ToggleUserFollowApiProviderElement
   @override
   bool get followToggle => (origin as ToggleUserFollowApiProvider).followToggle;
 }
+
+String _$upsertPostApiHash() => r'3c465c743bfebf5992500aa6a87ec0cdae058dd0';
+
+/// See also [upsertPostApi].
+@ProviderFor(upsertPostApi)
+const upsertPostApiProvider = UpsertPostApiFamily();
+
+/// See also [upsertPostApi].
+class UpsertPostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [upsertPostApi].
+  const UpsertPostApiFamily();
+
+  /// See also [upsertPostApi].
+  UpsertPostApiProvider call({
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) {
+    return UpsertPostApiProvider(
+      caption: caption,
+      chatEnabled: chatEnabled,
+      photoFileBytes: photoFileBytes,
+    );
+  }
+
+  @override
+  UpsertPostApiProvider getProviderOverride(
+    covariant UpsertPostApiProvider provider,
+  ) {
+    return call(
+      caption: provider.caption,
+      chatEnabled: provider.chatEnabled,
+      photoFileBytes: provider.photoFileBytes,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'upsertPostApiProvider';
+}
+
+/// See also [upsertPostApi].
+class UpsertPostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [upsertPostApi].
+  UpsertPostApiProvider({
+    required String caption,
+    required bool chatEnabled,
+    List<int>? photoFileBytes,
+  }) : this._internal(
+          (ref) => upsertPostApi(
+            ref as UpsertPostApiRef,
+            caption: caption,
+            chatEnabled: chatEnabled,
+            photoFileBytes: photoFileBytes,
+          ),
+          from: upsertPostApiProvider,
+          name: r'upsertPostApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$upsertPostApiHash,
+          dependencies: UpsertPostApiFamily._dependencies,
+          allTransitiveDependencies:
+              UpsertPostApiFamily._allTransitiveDependencies,
+          caption: caption,
+          chatEnabled: chatEnabled,
+          photoFileBytes: photoFileBytes,
+        );
+
+  UpsertPostApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.caption,
+    required this.chatEnabled,
+    required this.photoFileBytes,
+  }) : super.internal();
+
+  final String caption;
+  final bool chatEnabled;
+  final List<int>? photoFileBytes;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(UpsertPostApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UpsertPostApiProvider._internal(
+        (ref) => create(ref as UpsertPostApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        caption: caption,
+        chatEnabled: chatEnabled,
+        photoFileBytes: photoFileBytes,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _UpsertPostApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpsertPostApiProvider &&
+        other.caption == caption &&
+        other.chatEnabled == chatEnabled &&
+        other.photoFileBytes == photoFileBytes;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, caption.hashCode);
+    hash = _SystemHash.combine(hash, chatEnabled.hashCode);
+    hash = _SystemHash.combine(hash, photoFileBytes.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UpsertPostApiRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `caption` of this provider.
+  String get caption;
+
+  /// The parameter `chatEnabled` of this provider.
+  bool get chatEnabled;
+
+  /// The parameter `photoFileBytes` of this provider.
+  List<int>? get photoFileBytes;
+}
+
+class _UpsertPostApiProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with UpsertPostApiRef {
+  _UpsertPostApiProviderElement(super.provider);
+
+  @override
+  String get caption => (origin as UpsertPostApiProvider).caption;
+  @override
+  bool get chatEnabled => (origin as UpsertPostApiProvider).chatEnabled;
+  @override
+  List<int>? get photoFileBytes =>
+      (origin as UpsertPostApiProvider).photoFileBytes;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

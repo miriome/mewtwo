@@ -5,7 +5,7 @@ import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
-import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search_store.dart';
+import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'comments_section_store.g.dart';
@@ -31,7 +31,7 @@ abstract class _CommentsSectionStore with Store {
     }
   }
 
-  final CommentsUserMentionSearchStore userMentionStore = CommentsUserMentionSearchStore();
+  final UserMentionSearchStore userMentionStore = UserMentionSearchStore();
   _CommentsSectionStore({required this.postId}) {
     _disposer.add(reaction((p0) => userMentionStore.userResults, (results) {
       if (results.isNotEmpty) {
@@ -67,7 +67,7 @@ abstract class _CommentsSectionStore with Store {
         portalController.hide();
         return;
       }
-      userMentionStore.search(currentlyEditingText.substring(1));
+      await userMentionStore.search(currentlyEditingText.substring(1));
       if (userMentionStore.userResults.isNotEmpty) {
         portalController.show();
       }

@@ -4,11 +4,11 @@ import 'package:mewtwo/mew.dart';
 import 'package:mobx/mobx.dart';
 import 'package:async/async.dart';
 
-part 'comments_user_mention_search_store.g.dart';
+part 'user_mention_search_store.g.dart';
 
-class CommentsUserMentionSearchStore extends _CommentsUserMentionSearchStore with _$CommentsUserMentionSearchStore {}
+class UserMentionSearchStore extends _UserMentionSearchStore with _$UserMentionSearchStore {}
 
-abstract class _CommentsUserMentionSearchStore with Store {
+abstract class _UserMentionSearchStore with Store {
   CancelableOperation? _currentSearchOp;
   @readonly
   bool _isLoading = false;
@@ -37,6 +37,7 @@ abstract class _CommentsUserMentionSearchStore with Store {
       }
       _isLoading = false;
     });
+    
     
   }
 }

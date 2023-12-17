@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/model/user_model.dart';
-import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search_store.dart';
+import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_store.dart';
 
-class CommentsUserMentionSearch extends StatelessWidget {
+class UserMentionSearch extends StatelessWidget {
 
 
-  final CommentsUserMentionSearchStore store;
+  final UserMentionSearchStore store;
   final void Function(UserModel) onUserResultsTap;
-  const CommentsUserMentionSearch({Key? key, required this.onUserResultsTap, required this.store}) : super(key: key);
+  const UserMentionSearch({Key? key, required this.onUserResultsTap, required this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        
         return Container(
           color: Colors.white,
           child: 

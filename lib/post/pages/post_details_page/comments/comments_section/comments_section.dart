@@ -5,7 +5,7 @@ import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/widgets/comment_text.dart';
-import 'package:mewtwo/post/pages/post_details_page/comments/comments_user_mention_search/comments_user_mention_search.dart';
+import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 
 import 'package:mewtwo/post/utils.dart';
@@ -44,7 +44,7 @@ class CommentsSection extends StatelessWidget {
                     link: link,
                     targetAnchor: Alignment.topLeft,
                     followerAnchor: Alignment.bottomLeft,
-                    child: CommentsUserMentionSearch(
+                    child: UserMentionSearch(
                         onUserResultsTap: (user) {
                           store.onMentionUserSearchTap(user);
                           store.portalController.hide();

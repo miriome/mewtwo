@@ -63,6 +63,14 @@ mixin _$NewPostPageStore on _NewPostPageStore, Store {
     });
   }
 
+  late final _$postAsyncAction =
+      AsyncAction('_NewPostPageStore.post', context: context);
+
+  @override
+  Future<bool> post() {
+    return _$postAsyncAction.run(() => super.post());
+  }
+
   @override
   String toString() {
     return '''
