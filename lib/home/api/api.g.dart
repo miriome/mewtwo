@@ -867,24 +867,24 @@ class _ToggleUserFollowApiProviderElement
   bool get followToggle => (origin as ToggleUserFollowApiProvider).followToggle;
 }
 
-String _$upsertPostApiHash() => r'3c465c743bfebf5992500aa6a87ec0cdae058dd0';
+String _$addPostApiHash() => r'57591bc70235fea93108746123f132d20b3e3e4b';
 
-/// See also [upsertPostApi].
-@ProviderFor(upsertPostApi)
-const upsertPostApiProvider = UpsertPostApiFamily();
+/// See also [addPostApi].
+@ProviderFor(addPostApi)
+const addPostApiProvider = AddPostApiFamily();
 
-/// See also [upsertPostApi].
-class UpsertPostApiFamily extends Family<AsyncValue<bool>> {
-  /// See also [upsertPostApi].
-  const UpsertPostApiFamily();
+/// See also [addPostApi].
+class AddPostApiFamily extends Family<AsyncValue<bool>> {
+  /// See also [addPostApi].
+  const AddPostApiFamily();
 
-  /// See also [upsertPostApi].
-  UpsertPostApiProvider call({
+  /// See also [addPostApi].
+  AddPostApiProvider call({
     required String caption,
     required bool chatEnabled,
     List<int>? photoFileBytes,
   }) {
-    return UpsertPostApiProvider(
+    return AddPostApiProvider(
       caption: caption,
       chatEnabled: chatEnabled,
       photoFileBytes: photoFileBytes,
@@ -892,8 +892,8 @@ class UpsertPostApiFamily extends Family<AsyncValue<bool>> {
   }
 
   @override
-  UpsertPostApiProvider getProviderOverride(
-    covariant UpsertPostApiProvider provider,
+  AddPostApiProvider getProviderOverride(
+    covariant AddPostApiProvider provider,
   ) {
     return call(
       caption: provider.caption,
@@ -914,38 +914,38 @@ class UpsertPostApiFamily extends Family<AsyncValue<bool>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'upsertPostApiProvider';
+  String? get name => r'addPostApiProvider';
 }
 
-/// See also [upsertPostApi].
-class UpsertPostApiProvider extends AutoDisposeFutureProvider<bool> {
-  /// See also [upsertPostApi].
-  UpsertPostApiProvider({
+/// See also [addPostApi].
+class AddPostApiProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [addPostApi].
+  AddPostApiProvider({
     required String caption,
     required bool chatEnabled,
     List<int>? photoFileBytes,
   }) : this._internal(
-          (ref) => upsertPostApi(
-            ref as UpsertPostApiRef,
+          (ref) => addPostApi(
+            ref as AddPostApiRef,
             caption: caption,
             chatEnabled: chatEnabled,
             photoFileBytes: photoFileBytes,
           ),
-          from: upsertPostApiProvider,
-          name: r'upsertPostApiProvider',
+          from: addPostApiProvider,
+          name: r'addPostApiProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$upsertPostApiHash,
-          dependencies: UpsertPostApiFamily._dependencies,
+                  : _$addPostApiHash,
+          dependencies: AddPostApiFamily._dependencies,
           allTransitiveDependencies:
-              UpsertPostApiFamily._allTransitiveDependencies,
+              AddPostApiFamily._allTransitiveDependencies,
           caption: caption,
           chatEnabled: chatEnabled,
           photoFileBytes: photoFileBytes,
         );
 
-  UpsertPostApiProvider._internal(
+  AddPostApiProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -963,12 +963,12 @@ class UpsertPostApiProvider extends AutoDisposeFutureProvider<bool> {
 
   @override
   Override overrideWith(
-    FutureOr<bool> Function(UpsertPostApiRef provider) create,
+    FutureOr<bool> Function(AddPostApiRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: UpsertPostApiProvider._internal(
-        (ref) => create(ref as UpsertPostApiRef),
+      override: AddPostApiProvider._internal(
+        (ref) => create(ref as AddPostApiRef),
         from: from,
         name: null,
         dependencies: null,
@@ -983,12 +983,12 @@ class UpsertPostApiProvider extends AutoDisposeFutureProvider<bool> {
 
   @override
   AutoDisposeFutureProviderElement<bool> createElement() {
-    return _UpsertPostApiProviderElement(this);
+    return _AddPostApiProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UpsertPostApiProvider &&
+    return other is AddPostApiProvider &&
         other.caption == caption &&
         other.chatEnabled == chatEnabled &&
         other.photoFileBytes == photoFileBytes;
@@ -1005,7 +1005,7 @@ class UpsertPostApiProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
-mixin UpsertPostApiRef on AutoDisposeFutureProviderRef<bool> {
+mixin AddPostApiRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `caption` of this provider.
   String get caption;
 
@@ -1016,17 +1016,17 @@ mixin UpsertPostApiRef on AutoDisposeFutureProviderRef<bool> {
   List<int>? get photoFileBytes;
 }
 
-class _UpsertPostApiProviderElement
-    extends AutoDisposeFutureProviderElement<bool> with UpsertPostApiRef {
-  _UpsertPostApiProviderElement(super.provider);
+class _AddPostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with AddPostApiRef {
+  _AddPostApiProviderElement(super.provider);
 
   @override
-  String get caption => (origin as UpsertPostApiProvider).caption;
+  String get caption => (origin as AddPostApiProvider).caption;
   @override
-  bool get chatEnabled => (origin as UpsertPostApiProvider).chatEnabled;
+  bool get chatEnabled => (origin as AddPostApiProvider).chatEnabled;
   @override
   List<int>? get photoFileBytes =>
-      (origin as UpsertPostApiProvider).photoFileBytes;
+      (origin as AddPostApiProvider).photoFileBytes;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

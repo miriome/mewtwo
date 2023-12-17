@@ -1,10 +1,14 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mewtwo/base/linkify/mention_linkifier.dart';
+import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
-import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/widgets/comment_text.dart';
+
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 
@@ -16,6 +20,7 @@ import 'package:mewtwo/safety/routes/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 class CommentsSection extends StatelessWidget {
   final CommentsSectionStore store;
@@ -148,8 +153,29 @@ class CommentsSection extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: CommentText(comment: comment)
-                    ),
+                        child: Linkify(
+                      text: TextUtils.replaceEmoji(comment.comment),
+                      linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: comment.mentions), const HashtagLinkifier()],
+                      linkStyle: TextStyle(
+                          fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
+                      style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+                      options: const LinkifyOptions(defaultToHttps: true),
+                      onOpen: (element) {
+                        if (element is MentionElement) {
+                          OtherProfilePageRoute(userId: element.user.user_id).push(context);
+                        }
+                        if (element is HashtagElement) {
+                          SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
+                          return;
+                        }
+                        if (element is UrlElement) {
+                          launchUrl(Uri.parse(element.url));
+                          return;
+                        }
+                      },
+                    )
+                        // CommentText(comment: comment)
+                        ),
                     GestureDetector(
                         onTap: () {
                           showCommentOptions(context, comment: comment);

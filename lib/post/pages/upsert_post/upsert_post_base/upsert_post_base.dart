@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,28 +10,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
-import 'package:mewtwo/post/pages/new_post_page/new_post_page_store.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
 
-class NewPostPage extends ConsumerWidget {
+class UpsertPostBase extends ConsumerWidget {
   final ImagePicker picker = ImagePicker();
   final link = LayerLink();
-  NewPostPage({Key? key}) : super(key: key);
+  final UpsertPostBaseStore store;
+  final String titleText;
+  UpsertPostBase({Key? key, required this.store, required this.titleText}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final store = ref.watch(newPostPageStoreProvider);
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: const Text("New Post"),
+            title: Text(titleText),
             actions: [
               if (store.displayImagePath.isNotEmpty)
                 TextButton(
                     onPressed: () {
-                      selectPhoto(context: context, store: store);
+                      selectPhoto(context: context);
                     },
                     child: const Text("Choose another"))
             ],
@@ -44,10 +46,11 @@ class NewPostPage extends ConsumerWidget {
                   children: [
                     AspectRatio(
                         aspectRatio: PostImage.aspectRatio,
+                        
                         child: (store.displayImagePath.isEmpty)
                             ? GestureDetector(
                                 onTap: () async {
-                                  selectPhoto(context: context, store: store);
+                                  selectPhoto(context: context);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -62,7 +65,7 @@ class NewPostPage extends ConsumerWidget {
                                   ),
                                 ),
                               )
-                            : Image.file(File(store.displayImagePath))),
+                            : postImage),
                     const SizedBox(height: 18),
                     CompositedTransformTarget(
                       link: link,
@@ -86,7 +89,7 @@ class NewPostPage extends ConsumerWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: shopMyLook(store),
+                          child: shopMyLook(),
                         ),
                       ),
                     ),
@@ -115,8 +118,10 @@ class NewPostPage extends ConsumerWidget {
                       EasyLoading.show();
                       final res = await store.post();
                       EasyLoading.dismiss();
+                      if (res && context.mounted) {
+                        Navigator.of(context).pop();
+                      }
                     },
-                    
                     child: const Text(
                       "Post",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -129,7 +134,14 @@ class NewPostPage extends ConsumerWidget {
     });
   }
 
-  Widget shopMyLook(NewPostPageStore store) {
+  Widget get postImage {
+    final image = store.displayImagePath.startsWith("http")
+        ? CachedNetworkImage(imageUrl: store.displayImagePath, fit: PostImage.fit,)
+        : Image.file(File(store.displayImagePath), fit: PostImage.fit,);
+    return image;
+  }
+
+  Widget shopMyLook() {
     return Row(
       children: [
         Checkbox(
@@ -158,7 +170,7 @@ class NewPostPage extends ConsumerWidget {
     );
   }
 
-  void selectPhoto({required BuildContext context, required NewPostPageStore store}) async {
+  void selectPhoto({required BuildContext context}) async {
     final imageFile = await showOtherProfileOptions(context);
     if (imageFile != null) {
       final croppedFile = await ImageCropper().cropImage(

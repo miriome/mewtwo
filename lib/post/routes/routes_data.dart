@@ -12,12 +12,23 @@ class PostDetailsRoute extends GoRouteData {
   }
 }
 
-class NewPostRoute extends GoRouteData {
+class CreatePostRoute extends GoRouteData {
   
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
   
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return NewPostPage();
+    return const CreatePostPage();
+  }
+}
+
+class EditPostRoute extends GoRouteData {
+  final int postId;
+  EditPostRoute({required this.postId});
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
+  
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return EditPostPage(postId: postId);
   }
 }

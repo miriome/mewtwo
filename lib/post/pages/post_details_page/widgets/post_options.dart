@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/safety/api/api.dart';
 import 'package:mewtwo/safety/routes/routes.dart';
-import 'package:mewtwo/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostOptions {
-  static Future<void> show(BuildContext context, {required PostDetailsPageStore store}) async {
+  static Future<void> show(BuildContext context, {required PostDetailsPageStore store, required void Function() onPostEdit}) async {
     final sp = await SharedPreferences.getInstance();
     int? myUserId;
     if (sp.containsKey(Constants.kKeyId)) {
@@ -45,7 +45,9 @@ class PostOptions {
             actions.add(CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(modalContext);
-                MainPlatform.goToEditPost(post);
+                EditPostRoute(postId: post.id).push(context).then((_) {
+                  onPostEdit();
+                });
               },
               child: const Text(
                 'Edit post',

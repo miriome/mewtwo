@@ -7,12 +7,12 @@ import 'package:linkify/linkify.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
+import 'package:mewtwo/base/linkify/mention_linkifier.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
-
 
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section.dart';
@@ -91,7 +91,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
               actions: [
                 IconButton(
                     onPressed: () {
-                      PostOptions.show(context, store: store);
+                      PostOptions.show(context, store: store, onPostEdit: () {
+                        store.load();
+                      });
                     },
                     icon: const Icon(Icons.more_vert))
               ],
@@ -292,11 +294,15 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
       Builder(builder: (context) {
         return Linkify(
           text: TextUtils.replaceEmoji(post.caption),
-          linkifiers: const [UrlLinkifier(), UserTagLinkifier(), HashtagLinkifier()],
+          linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: post.mentions), const HashtagLinkifier()],
           linkStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
           style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
           options: const LinkifyOptions(defaultToHttps: true),
           onOpen: (element) {
+            if (element is MentionElement) {
+              OtherProfilePageRoute(userId: element.user.user_id).push(context);
+              return;
+            }
             if (element is HashtagElement) {
               SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
               return;

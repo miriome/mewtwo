@@ -53,8 +53,13 @@ RouteBase get $mainRoute => GoRouteData.$route(
         ),
         GoRouteData.$route(
           path: 'new-post',
-          parentNavigatorKey: NewPostRoute.$parentNavigatorKey,
-          factory: $NewPostRouteExtension._fromState,
+          parentNavigatorKey: CreatePostRoute.$parentNavigatorKey,
+          factory: $CreatePostRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'edit-post',
+          parentNavigatorKey: EditPostRoute.$parentNavigatorKey,
+          factory: $EditPostRouteExtension._fromState,
         ),
       ],
     );
@@ -245,11 +250,33 @@ extension $PostDetailsRouteExtension on PostDetailsRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $NewPostRouteExtension on NewPostRoute {
-  static NewPostRoute _fromState(GoRouterState state) => NewPostRoute();
+extension $CreatePostRouteExtension on CreatePostRoute {
+  static CreatePostRoute _fromState(GoRouterState state) => CreatePostRoute();
 
   String get location => GoRouteData.$location(
         '/new-post',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $EditPostRouteExtension on EditPostRoute {
+  static EditPostRoute _fromState(GoRouterState state) => EditPostRoute(
+        postId: int.parse(state.uri.queryParameters['post-id']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/edit-post',
+        queryParams: {
+          'post-id': postId.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);

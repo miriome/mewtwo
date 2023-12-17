@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
+import 'package:mewtwo/home/model/mention_data_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
@@ -22,7 +23,8 @@ class PostModel extends _PostModel with _$PostModel {
     required super.my_like,
     super.hashtag,
     super.posted_by,
-    super.comments
+    super.comments,
+    super.mentions
   });
   /// Connect the generated [_$PersonFromJson] function to the `fromJson`
   /// factory.
@@ -74,6 +76,8 @@ abstract class _PostModel with Store {
 
   final List<CommentModel>? comments;
 
+  final List<MentionDataModel> mentions;
+
   _PostModel({
     required this.image,
     required this.caption,
@@ -87,7 +91,8 @@ abstract class _PostModel with Store {
     required this.my_like,
     this.hashtag,
     this.posted_by,
-    required this.comments
+    required this.comments,
+    this.mentions = const []
   });
 
 }

@@ -75,7 +75,7 @@ class _MainTabBarState extends State<MainTabBar> {
               unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
               onTap: (index) {
                 if (index == 2) {
-                  NewPostRoute().push(context);
+                  CreatePostRoute().push(context);
                   return;
                 }
                 widget.child.goBranch(

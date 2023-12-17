@@ -9,26 +9,26 @@ import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_stor
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'new_post_page_store.g.dart';
+part 'upsert_post_base_store.g.dart';
 
 @riverpod
-NewPostPageStore newPostPageStore(NewPostPageStoreRef ref) {
-  final store = NewPostPageStore();
+UpsertPostBaseStore upsertPostBaseStore(UpsertPostBaseStoreRef ref) {
+  final store = UpsertPostBaseStore();
   ref.onDispose(() {
     store.dispose();
   });
   return store;
 }
 
-class NewPostPageStore extends _NewPostPageStore with _$NewPostPageStore {}
+class UpsertPostBaseStore extends _UpsertPostBaseStore with _$UpsertPostBaseStore {}
 
-abstract class _NewPostPageStore with Store {
+abstract class _UpsertPostBaseStore with Store {
   final controller = DetectableTextEditingController();
 
   final portalController = OverlayPortalController();
 
   final userMentionStore = UserMentionSearchStore();
-  _NewPostPageStore() {
+  _UpsertPostBaseStore() {
     controller.addListener(() async {
       if (userMentionStore.userResults.isEmpty) {
         portalController.hide();
@@ -89,10 +89,10 @@ abstract class _NewPostPageStore with Store {
   @action
   Future<bool> post() async {
    List<int>? fileBytes;
-    if (displayImagePath.isNotEmpty) {
+    if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
       fileBytes = File(displayImagePath).readAsBytesSync();
     }
-    final upsertPostProvider = UpsertPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
+    final upsertPostProvider = AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
     final res = await Mew.pc.read(upsertPostProvider.future);
     return res;
   }

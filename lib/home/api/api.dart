@@ -159,7 +159,7 @@ Future<bool> toggleUserFollowApi(ToggleUserFollowApiRef ref, {required int userI
 }
 
 @riverpod
-Future<bool> upsertPostApi(UpsertPostApiRef ref, {required String caption, required bool chatEnabled, List<int>? photoFileBytes}) async {
+Future<bool> addPostApi(AddPostApiRef ref, {required String caption, required bool chatEnabled, List<int>? photoFileBytes}) async {
   final data = FormData.fromMap({
     "caption": caption,
     'chat_enabled': chatEnabled ? 1 : 0,
@@ -183,11 +183,3 @@ Future<bool> upsertPostApi(UpsertPostApiRef ref, {required String caption, requi
   return false;
 }
 
-
-//  let params = [
-//             "caption"       : caption.encodeEmoji,
-//             "hashtag"       : hashtags.joined(separator: ", "),
-//             "chat_enabled"  : isShopable ? "1" : "0",
-//             "hypertext"     : tfHyperText.text!.trim(),
-//             "hyperlink"     : tfHyperLink.text!.trim()
-//         ]
