@@ -105,6 +105,8 @@ class SelectStylePage extends StatelessWidget {
                         child: Image.asset(
                           'assets/images/styles/$style.jpg',
                           fit: BoxFit.cover,
+                          cacheHeight: 200,
+                          cacheWidth: 186,
                           color: store.selectedStyles.contains(style)
                               ? Theme.of(context).primaryColor.withOpacity(0.5)
                               : null,

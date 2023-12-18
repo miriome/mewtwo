@@ -16,11 +16,11 @@ class SignUpPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(signUpPageStoreProvider);
     return Observer(builder: (context) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SingleChildScrollView(
+      return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Form(
               key: store.formKey,
               child: Column(
