@@ -49,13 +49,12 @@ class UpsertPostBase extends ConsumerWidget {
                         
                         child: (store.displayImagePath.isEmpty)
                             ? GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                                 onTap: () async {
                                   selectPhoto(context: context);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
-                                  decoration:
-                                      const BoxDecoration(border: Border(bottom: BorderSide(style: BorderStyle.solid))),
                                   child: const Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -67,7 +66,8 @@ class UpsertPostBase extends ConsumerWidget {
                               )
                             : postImage),
                     const SizedBox(height: 18),
-                    CompositedTransformTarget(
+                    if (store.displayImagePath.isNotEmpty) ...[
+                      CompositedTransformTarget(
                       link: link,
                       child: OverlayPortal(
                         controller: store.portalController,
@@ -108,11 +108,12 @@ class UpsertPostBase extends ConsumerWidget {
                             enabledBorder: InputBorder.none),
                       ),
                     ),
+                    ],
                   ],
                 ),
               )),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 child: FilledButton(
                     onPressed: () async {
                       EasyLoading.show();
