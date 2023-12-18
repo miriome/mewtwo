@@ -75,6 +75,7 @@ class CommentsSection extends StatelessWidget {
               style: const TextStyle(fontSize: 14),
               enabled: !store.isCommentSending,
               controller: store.commentController,
+              maxLines: null,
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   hintText: "Write a comment...",

@@ -23,14 +23,17 @@ class NotificationPage extends StatelessWidget {
               )
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ListView.separated(
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 16,
-                        ),
-                    itemCount: store.notifications.length,
-                    itemBuilder: (context, index) {
-                      return NotificationTile(notification: store.notifications[index]);
-                    }),
+                child: RefreshIndicator(
+                  onRefresh: () => store.load(),
+                  child: ListView.separated(
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 16,
+                          ),
+                      itemCount: store.notifications.length,
+                      itemBuilder: (context, index) {
+                        return NotificationTile(notification: store.notifications[index]);
+                      }),
+                ),
               ),
       );
     });

@@ -54,6 +54,7 @@ class NotificationTile extends StatelessWidget {
 
   void onNotificationTap(BuildContext context) {
     switch (notification.notification_type) {
+      case NotificationType.mention:
       case NotificationType.comment:
         final postId = Utility.parseInt(notification.post_id, -1);
         if (postId == -1) {
@@ -81,6 +82,19 @@ class NotificationTile extends StatelessWidget {
     
     return Builder(builder: (context) {
       switch (notification.notification_type) {
+        case NotificationType.mention:
+        return Text.rich(
+            TextSpan(children: [
+              TextSpan(
+                  text: notification.userData.username,
+                  style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w700),
+                  recognizer: TapGestureRecognizer()..onTap = () => OtherProfilePageRoute(userId: notification.userData.id).push(context)
+                  ),
+              const TextSpan(text: " mentioned you in a comment")
+            ]),
+            style: const TextStyle(fontSize: 16),
+            maxLines: 3,
+          );
         case NotificationType.comment:
           return Text.rich(
             TextSpan(children: [

@@ -3,7 +3,7 @@ import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 part 'notification_model.g.dart';
 
-enum NotificationType { comment, like, follow, unknown }
+enum NotificationType { comment, like, follow, mention, unknown }
 
 @JsonSerializable(explicitToJson: true)
 class NotificationModel {
