@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:dartx/dartx.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
@@ -53,14 +54,18 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   @override
   @action
   Future<bool> post() async {
-   List<int>? fileBytes;
-   final displayImagePath = displayImagePaths.first;
-    if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
-      fileBytes = File(displayImagePath).readAsBytesSync();
-    }
+   final photosToPost = displayImagePaths
+        .mapIndexed<PostPhoto?>((index, path) {
+          if (!path.startsWith("http")) {
+            PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync());
+          }
+          return null;
+        })
+        .whereNotNull()
+        .toList();
     final editPostApiProvider = EditPostApiProvider(
       postId: postId,
-      caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
+      caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost);
     final res = await Mew.pc.read(editPostApiProvider.future);
     return res;
   }
