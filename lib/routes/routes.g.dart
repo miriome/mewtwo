@@ -7,65 +7,221 @@ part of 'routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $mainRoute,
       $unauthorizedRoute,
       $mainTabShellRoute,
     ];
 
-RouteBase get $mainRoute => GoRouteData.$route(
-      path: '/',
-      factory: $MainRouteExtension._fromState,
+RouteBase get $unauthorizedRoute => GoRouteData.$route(
+      path: '/unauth',
+      factory: $UnauthorizedRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'reportContent',
-          parentNavigatorKey: ReportContentRoute.$parentNavigatorKey,
-          factory: $ReportContentRouteExtension._fromState,
+          path: 'login',
+          parentNavigatorKey: LoginRoute.$parentNavigatorKey,
+          factory: $LoginRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'OtherProfilePage',
-          parentNavigatorKey: OtherProfilePageRoute.$parentNavigatorKey,
-          factory: $OtherProfilePageRouteExtension._fromState,
+          path: 'select-pronouns',
+          factory: $SelectPronounsRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'create-profile',
-          factory: $CreateProfileRouteExtension._fromState,
+          path: 'select-style',
+          factory: $SelectStyleRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'edit-profile',
-          factory: $EditProfileRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'create-measurements',
-          factory: $CreateMeasurementsRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'edit-measurements',
-          factory: $EditMeasurementsRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'edit-styles',
-          factory: $EditStylesRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'postDetails',
-          parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
-          factory: $PostDetailsRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'new-post',
-          parentNavigatorKey: CreatePostRoute.$parentNavigatorKey,
-          factory: $CreatePostRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'edit-post',
-          parentNavigatorKey: EditPostRoute.$parentNavigatorKey,
-          factory: $EditPostRouteExtension._fromState,
+          path: 'sign-up',
+          factory: $SignUpRouteExtension._fromState,
         ),
       ],
     );
 
-extension $MainRouteExtension on MainRoute {
-  static MainRoute _fromState(GoRouterState state) => MainRoute();
+extension $UnauthorizedRouteExtension on UnauthorizedRoute {
+  static UnauthorizedRoute _fromState(GoRouterState state) =>
+      UnauthorizedRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $LoginRouteExtension on LoginRoute {
+  static LoginRoute _fromState(GoRouterState state) => LoginRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/login',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectPronounsRouteExtension on SelectPronounsRoute {
+  static SelectPronounsRoute _fromState(GoRouterState state) =>
+      SelectPronounsRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-pronouns',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SelectStyleRouteExtension on SelectStyleRoute {
+  static SelectStyleRoute _fromState(GoRouterState state) => SelectStyleRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/select-style',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SignUpRouteExtension on SignUpRoute {
+  static SignUpRoute _fromState(GoRouterState state) => SignUpRoute();
+
+  String get location => GoRouteData.$location(
+        '/unauth/sign-up',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
+      factory: $MainTabShellRouteExtension._fromState,
+      branches: [
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/',
+              factory: $HomePageRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'reportContent',
+                  parentNavigatorKey: ReportContentRoute.$parentNavigatorKey,
+                  factory: $ReportContentRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'OtherProfilePage',
+                  parentNavigatorKey: OtherProfilePageRoute.$parentNavigatorKey,
+                  factory: $OtherProfilePageRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'create-profile',
+                  factory: $CreateProfileRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'edit-profile',
+                  factory: $EditProfileRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'create-measurements',
+                  factory: $CreateMeasurementsRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'edit-measurements',
+                  factory: $EditMeasurementsRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'edit-styles',
+                  factory: $EditStylesRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'postDetails',
+                  parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
+                  factory: $PostDetailsRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'new-post',
+                  parentNavigatorKey: CreatePostRoute.$parentNavigatorKey,
+                  factory: $CreatePostRouteExtension._fromState,
+                ),
+                GoRouteData.$route(
+                  path: 'edit-post',
+                  parentNavigatorKey: EditPostRoute.$parentNavigatorKey,
+                  factory: $EditPostRouteExtension._fromState,
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/SearchPage',
+              factory: $SearchPageRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/NewPost',
+              factory: $FakeNewPostRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/NotificationPage',
+              factory: $NotificationPageRouteExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/ProfilePage',
+              factory: $ProfilePageRouteExtension._fromState,
+            ),
+          ],
+        ),
+      ],
+    );
+
+extension $MainTabShellRouteExtension on MainTabShellRoute {
+  static MainTabShellRoute _fromState(GoRouterState state) =>
+      const MainTabShellRoute();
+}
+
+extension $HomePageRouteExtension on HomePageRoute {
+  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
 
   String get location => GoRouteData.$location(
         '/',
@@ -289,210 +445,6 @@ extension $EditPostRouteExtension on EditPostRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension<T extends Enum> on Map<T, String> {
-  T _$fromName(String value) =>
-      entries.singleWhere((element) => element.value == value).key;
-}
-
-T? _$convertMapValue<T>(
-  String key,
-  Map<String, String> map,
-  T Function(String) converter,
-) {
-  final value = map[key];
-  return value == null ? null : converter(value);
-}
-
-bool _$boolConverter(String value) {
-  switch (value) {
-    case 'true':
-      return true;
-    case 'false':
-      return false;
-    default:
-      throw UnsupportedError('Cannot convert "$value" into a bool.');
-  }
-}
-
-RouteBase get $unauthorizedRoute => GoRouteData.$route(
-      path: '/unauth',
-      factory: $UnauthorizedRouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'login',
-          parentNavigatorKey: LoginRoute.$parentNavigatorKey,
-          factory: $LoginRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'select-pronouns',
-          factory: $SelectPronounsRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'select-style',
-          factory: $SelectStyleRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'sign-up',
-          factory: $SignUpRouteExtension._fromState,
-        ),
-      ],
-    );
-
-extension $UnauthorizedRouteExtension on UnauthorizedRoute {
-  static UnauthorizedRoute _fromState(GoRouterState state) =>
-      UnauthorizedRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $LoginRouteExtension on LoginRoute {
-  static LoginRoute _fromState(GoRouterState state) => LoginRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/login',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $SelectPronounsRouteExtension on SelectPronounsRoute {
-  static SelectPronounsRoute _fromState(GoRouterState state) =>
-      SelectPronounsRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/select-pronouns',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $SelectStyleRouteExtension on SelectStyleRoute {
-  static SelectStyleRoute _fromState(GoRouterState state) => SelectStyleRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/select-style',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $SignUpRouteExtension on SignUpRoute {
-  static SignUpRoute _fromState(GoRouterState state) => SignUpRoute();
-
-  String get location => GoRouteData.$location(
-        '/unauth/sign-up',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
-      factory: $MainTabShellRouteExtension._fromState,
-      branches: [
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/HomePage',
-              factory: $HomePageRouteExtension._fromState,
-            ),
-          ],
-        ),
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/SearchPage',
-              factory: $SearchPageRouteExtension._fromState,
-            ),
-          ],
-        ),
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/NewPost',
-              factory: $FakeNewPostRouteExtension._fromState,
-            ),
-          ],
-        ),
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/NotificationPage',
-              factory: $NotificationPageRouteExtension._fromState,
-            ),
-          ],
-        ),
-        StatefulShellBranchData.$branch(
-          routes: [
-            GoRouteData.$route(
-              path: '/ProfilePage',
-              factory: $ProfilePageRouteExtension._fromState,
-            ),
-          ],
-        ),
-      ],
-    );
-
-extension $MainTabShellRouteExtension on MainTabShellRoute {
-  static MainTabShellRoute _fromState(GoRouterState state) =>
-      const MainTabShellRoute();
-}
-
-extension $HomePageRouteExtension on HomePageRoute {
-  static HomePageRoute _fromState(GoRouterState state) => HomePageRoute();
-
-  String get location => GoRouteData.$location(
-        '/HomePage',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 extension $SearchPageRouteExtension on SearchPageRoute {
   static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute(
         initialSearchTerm: state.uri.queryParameters['initial-search-term'],
@@ -572,4 +524,29 @@ extension $ProfilePageRouteExtension on ProfilePageRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+extension<T extends Enum> on Map<T, String> {
+  T _$fromName(String value) =>
+      entries.singleWhere((element) => element.value == value).key;
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
@@ -53,6 +54,12 @@ class _MainTabBarState extends State<MainTabBar> {
   @override
   void initState() {
     MainPlatform.addMethodCallhandler(_methodCall);
+    // Try to deeplink after logging in.
+    FlutterBranchSdk.getLatestReferringParams().then((data) {
+      if (data.containsKey("\$canonical_identifier")) {
+        context.go(data["\$canonical_identifier"]);
+      }
+    });
     super.initState();
   }
 

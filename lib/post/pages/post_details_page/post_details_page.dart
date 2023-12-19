@@ -185,6 +185,9 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                       postId: widget.postId,
                     )
                   ]),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 16),
                 )
               ],
             ),

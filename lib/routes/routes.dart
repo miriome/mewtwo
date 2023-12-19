@@ -14,23 +14,8 @@ import 'package:mewtwo/safety/routes/routes.dart';
 part 'routes_data.dart';
 part 'routes.g.dart';
 
-// final GlobalKey<NavigatorState> _rootNavigatorKey =
-//     GlobalKey<NavigatorState>(debugLabel: 'root');
-// final GlobalKey<NavigatorState> _shellNavigatorKey =
-//     GlobalKey<NavigatorState>(debugLabel: 'shell');
 
-// Root Routes start ------------------------------------
 
-@TypedGoRoute<MainRoute>(
-    path: '/', routes: [...SafetyRoutes.typedRoutes, ...ProfileRoutes.typedRoutes, ...PostRoutes.typedRoutes])
-class MainRoute extends GoRouteData {
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return Container();
-  }
-  
-}
 
 @TypedGoRoute<UnauthorizedRoute>(path: '/unauth', routes: [...UnauthRoutes.typedRoutes])
 class UnauthorizedRoute extends GoRouteData {
@@ -42,16 +27,15 @@ class UnauthorizedRoute extends GoRouteData {
   
 }
 
-// Root routes end ------------------------------------
 
-// TODO move these routes back to home.
 // Main tab routes start ------------------------------------
 
 @TypedStatefulShellRoute<MainTabShellRoute>(branches: [
   TypedStatefulShellBranch(
     routes: [
       TypedGoRoute<HomePageRoute>(
-        path: '/HomePage',
+        path: '/',
+        routes: [...SafetyRoutes.typedRoutes, ...ProfileRoutes.typedRoutes, ...PostRoutes.typedRoutes]
       )
     ],
   ),

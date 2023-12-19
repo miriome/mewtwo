@@ -183,7 +183,7 @@ class UpsertPostBase extends ConsumerWidget {
   }
 
   void selectPhoto({required BuildContext context}) async {
-    final imageFile = await showOtherProfileOptions(context);
+    final imageFile = await showOtherProfilePostOptions(context);
     if (imageFile != null) {
       final croppedFile = await ImageCropper().cropImage(
           sourcePath: imageFile.path,
@@ -195,7 +195,7 @@ class UpsertPostBase extends ConsumerWidget {
     }
   }
 
-  Future<XFile?> showOtherProfileOptions(BuildContext context) {
+  Future<XFile?> showOtherProfilePostOptions(BuildContext context) {
     return showCupertinoModalPopup<XFile?>(
       context: context,
       builder: (BuildContext modalContext) => CupertinoActionSheet(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,20 +14,51 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(ProviderScope(
       parent: Mew.pc,
-      child: MyApp(),
+      child: const MyApp(),
     ));
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    FlutterBranchSdk.init(useTestKey: false, enableLogging: false, disableTracking: false).then((value) {
+      FlutterBranchSdk.listSession().listen((data) {
+        if (data.containsKey("+clicked_branch_link") &&
+            data["+clicked_branch_link"] == true &&
+            data.containsKey("\$canonical_identifier")) {
+          //Link clicked. Add logic to get link data
+          final identifier = data["\$canonical_identifier"];
+          router.go(identifier);
+          // print('Url: ${identifier}');
+        }
+      }, onError: (error) {
+        print('listSession error: ${error.toString()}');
+      });
+    });
+    super.initState();
+  }
+
   final router = GoRouter(
       navigatorKey: rootNavigatorKey,
       routes: $appRoutes,
       initialLocation: LoginRoute().location,
       redirect: (context, state) async {
         final sp = await SharedPreferences.getInstance();
-        if (sp.containsKey(Constants.kKeyToken) && (state.fullPath?.contains("unauth") ?? false)) {
-          return HomePageRoute().location;
+        final isLoggedIn = sp.containsKey(Constants.kKeyToken);
+        if (isLoggedIn) {
+          if ((state.fullPath?.contains("unauth") ?? false)) {
+            return HomePageRoute().location;
+          }
+        } else {
+          if ((!(state.fullPath?.contains("unauth") ?? false))) {
+            return LoginRoute().location;
+          }
         }
         return null;
       });
@@ -44,20 +76,21 @@ class MyApp extends StatelessWidget {
           switchTheme: SwitchThemeData(
             trackColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.disabled)) {
-                  return const Color(0xFF787D7D);
+                return const Color(0xFF787D7D);
               }
               return null;
             }),
-            thumbIcon: const MaterialStatePropertyAll(Icon(Icons.circle_rounded, color: Colors.white, fill: 1,)),
+            thumbIcon: const MaterialStatePropertyAll(Icon(
+              Icons.circle_rounded,
+              color: Colors.white,
+              fill: 1,
+            )),
             overlayColor: const MaterialStatePropertyAll(Colors.white),
-            
             thumbColor: const MaterialStatePropertyAll(Colors.white),
             trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
           ),
           checkboxTheme: const CheckboxThemeData(
-            checkColor: MaterialStatePropertyAll(Colors.white),
-            side: BorderSide(color: Color(0xFF8474A1))
-          ),
+              checkColor: MaterialStatePropertyAll(Colors.white), side: BorderSide(color: Color(0xFF8474A1))),
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
@@ -105,7 +138,7 @@ class MyApp extends StatelessWidget {
           // "hot reload" (press "r" in the console where you ran "flutter run",
           // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
           // counter didn't reset back to zero; the application is not restarted.
-          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA) ),
+          primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
           textTheme: GoogleFonts.robotoTextTheme()),
       builder: EasyLoading.init(),
       routerConfig: router,
