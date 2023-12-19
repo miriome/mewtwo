@@ -138,7 +138,6 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'OtherProfilePage',
-                  parentNavigatorKey: OtherProfilePageRoute.$parentNavigatorKey,
                   factory: $OtherProfilePageRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
@@ -163,7 +162,6 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'postDetails',
-                  parentNavigatorKey: PostDetailsRoute.$parentNavigatorKey,
                   factory: $PostDetailsRouteExtension._fromState,
                 ),
                 GoRouteData.$route(

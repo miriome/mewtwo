@@ -40,5 +40,6 @@ const _$NotificationTypeEnumMap = {
   NotificationType.comment: 'comment',
   NotificationType.like: 'like',
   NotificationType.follow: 'follow',
+  NotificationType.mention: 'mention',
   NotificationType.unknown: 'unknown',
 };
