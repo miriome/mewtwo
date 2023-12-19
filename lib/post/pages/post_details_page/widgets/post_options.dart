@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
@@ -176,9 +176,10 @@ class PostOptions {
     if (post == null) {
       return;
     }
+    
     BranchUniversalObject buo = BranchUniversalObject(
-      canonicalIdentifier: PostDetailsRoute(postId: store.postId).location,
-      title: 'Share profile',
+      canonicalIdentifier: PostDetailsRoute(postId: post.id).location,
+      title: 'Share post',
       imageUrl: post.image,
       contentDescription: 'Share the post with others',
       keywords: ['Share', 'Post', 'Miromie'],
@@ -186,16 +187,15 @@ class PostOptions {
       locallyIndex: true,
     );
     BranchLinkProperties lp = BranchLinkProperties(
-      alias: 'post',
       channel: 'app',
       feature: 'sharing',
       stage: 'new share',
     );
-    await FlutterBranchSdk.showShareSheet(
-        buo: buo,
-        linkProperties: lp,
-        messageText: 'My Share text',
-        androidMessageTitle: 'My Message Title',
-        androidSharingTitle: 'My Share with');
+    
+    BranchResponse response =
+        await FlutterBranchSdk.showShareSheet(buo: buo, linkProperties: lp, messageText: "View this awesome fit on miromie!");
+    if (response.success) {
+      Fluttertoast.showToast(msg: "Post link copied", gravity: ToastGravity.CENTER);
+    } 
   }
 }

@@ -29,7 +29,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     FlutterBranchSdk.init(
-      useTestKey: false, enableLogging: false, disableTracking: false);
+      useTestKey: false, enableLogging: false, disableTracking: false).then((value) {
+        FlutterBranchSdk.validateSDKIntegration();
+      });
     super.initState();
   }
 
