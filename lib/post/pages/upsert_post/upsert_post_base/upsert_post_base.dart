@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
+import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
 
@@ -46,10 +47,9 @@ class UpsertPostBase extends ConsumerWidget {
                   children: [
                     AspectRatio(
                         aspectRatio: PostImage.aspectRatio,
-                        
                         child: (store.displayImagePath.isEmpty)
                             ? GestureDetector(
-                              behavior: HitTestBehavior.opaque,
+                                behavior: HitTestBehavior.opaque,
                                 onTap: () async {
                                   selectPhoto(context: context);
                                 },
@@ -68,46 +68,46 @@ class UpsertPostBase extends ConsumerWidget {
                     const SizedBox(height: 18),
                     if (store.displayImagePath.isNotEmpty) ...[
                       CompositedTransformTarget(
-                      link: link,
-                      child: OverlayPortal(
-                        controller: store.portalController,
-                        overlayChildBuilder: (context) => PositionedDirectional(
-                          height: 200,
-                          start: 0,
-                          end: 0,
-                          child: CompositedTransformFollower(
-                            link: link,
-                            targetAnchor: Alignment.bottomLeft,
-                            followerAnchor: Alignment.bottomLeft,
-                            child: UserMentionSearch(
-                                onUserResultsTap: (user) {
-                                  store.onMentionUserSearchTap(user);
-                                  store.portalController.hide();
-                                },
-                                store: store.userMentionStore),
+                        link: link,
+                        child: OverlayPortal(
+                          controller: store.portalController,
+                          overlayChildBuilder: (context) => PositionedDirectional(
+                            height: 200,
+                            start: 0,
+                            end: 0,
+                            child: CompositedTransformFollower(
+                              link: link,
+                              targetAnchor: Alignment.bottomLeft,
+                              followerAnchor: Alignment.bottomLeft,
+                              child: UserMentionSearch(
+                                  onUserResultsTap: (user) {
+                                    store.onMentionUserSearchTap(user);
+                                    store.portalController.hide();
+                                  },
+                                  store: store.userMentionStore),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: shopMyLook(),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: shopMyLook(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: DetectableTextField(
+                          maxLines: 5,
+                          style: const TextStyle(fontSize: 16),
+                          controller: store.controller,
+                          decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                              hintText:
+                                  "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                              hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: DetectableTextField(
-                        maxLines: 5,
-                        style: const TextStyle(fontSize: 16),
-                        controller: store.controller,
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                            hintText:
-                                "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                            hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none),
-                      ),
-                    ),
                     ],
                   ],
                 ),
@@ -115,14 +115,16 @@ class UpsertPostBase extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 child: FilledButton(
-                    onPressed: () async {
-                      EasyLoading.show();
-                      final res = await store.post();
-                      EasyLoading.dismiss();
-                      if (res && context.mounted) {
-                        Navigator.of(context).pop();
-                      }
-                    },
+                    onPressed: store.displayImagePath.isEmpty
+                        ? null
+                        : () async {
+                            EasyLoading.show();
+                            final res = await store.post();
+                            EasyLoading.dismiss();
+                            if (res && context.mounted) {
+                              Navigator.of(context).pop();
+                            }
+                          },
                     child: const Text(
                       "Post",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -136,10 +138,19 @@ class UpsertPostBase extends ConsumerWidget {
   }
 
   Widget get postImage {
-    final image = store.displayImagePath.startsWith("http")
-        ? CachedNetworkImage(imageUrl: store.displayImagePath, fit: PostImage.fit,)
-        : Image.file(File(store.displayImagePath), fit: PostImage.fit,);
-    return image;
+    return Stack(
+      children: [
+        PostImage(imageUrl: store.displayImagePath),
+        if (store.shopMyLook)
+          const PositionedDirectional(
+            bottom: 8,
+            start: 8,
+            child: ShoppableIcon(
+              size: 24,
+            ),
+          ),
+      ],
+    );
   }
 
   Widget shopMyLook() {
@@ -161,11 +172,11 @@ class UpsertPostBase extends ConsumerWidget {
         const SizedBox(
           width: 12,
         ),
-        const Flexible(
+         Flexible(
             child: Text(
-          "Enable this if you are selling any items",
+          store.shopMyLook ? "Others can chat with you to purchase your item(s)" : "Enable this if you are selling any items",
           maxLines: 2,
-          style: TextStyle(color: Color(0xFF7D7878)),
+          style: const TextStyle(color: Color(0xFF7D7878)),
         ))
       ],
     );

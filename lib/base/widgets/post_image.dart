@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class PostImage extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return AspectRatio(
           aspectRatio: aspectRatio,
-          child: CachedNetworkImage(
+          child: 
+          imageUrl.startsWith("http") ? CachedNetworkImage(
               // memCacheHeight: constraints.maxHeight.isInfinite ? 242 * 4 : constraints.maxHeight.ceil(),
               memCacheWidth: constraints.maxWidth.isInfinite ? 242 * 4 : constraints.maxWidth.ceil() * 2,
               imageUrl: imageUrl,
@@ -27,7 +29,7 @@ class PostImage extends StatelessWidget {
               },
               fit: fit,
               alignment: Alignment.topCenter,
-            ));
+            ) : Image.file(File(imageUrl), fit: PostImage.fit,));
     });
   }
 
