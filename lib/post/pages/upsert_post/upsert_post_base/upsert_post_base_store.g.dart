@@ -33,19 +33,19 @@ typedef UpsertPostBaseStoreRef = AutoDisposeProviderRef<UpsertPostBaseStore>;
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
-  late final _$displayImagePathAtom =
-      Atom(name: '_UpsertPostBaseStore.displayImagePath', context: context);
+  late final _$displayImagePathsAtom =
+      Atom(name: '_UpsertPostBaseStore.displayImagePaths', context: context);
 
   @override
-  String get displayImagePath {
-    _$displayImagePathAtom.reportRead();
-    return super.displayImagePath;
+  ObservableList<String> get displayImagePaths {
+    _$displayImagePathsAtom.reportRead();
+    return super.displayImagePaths;
   }
 
   @override
-  set displayImagePath(String value) {
-    _$displayImagePathAtom.reportWrite(value, super.displayImagePath, () {
-      super.displayImagePath = value;
+  set displayImagePaths(ObservableList<String> value) {
+    _$displayImagePathsAtom.reportWrite(value, super.displayImagePaths, () {
+      super.displayImagePaths = value;
     });
   }
 
@@ -65,6 +65,22 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     });
   }
 
+  late final _$imagePagePositionAtom =
+      Atom(name: '_UpsertPostBaseStore.imagePagePosition', context: context);
+
+  @override
+  double get imagePagePosition {
+    _$imagePagePositionAtom.reportRead();
+    return super.imagePagePosition;
+  }
+
+  @override
+  set imagePagePosition(double value) {
+    _$imagePagePositionAtom.reportWrite(value, super.imagePagePosition, () {
+      super.imagePagePosition = value;
+    });
+  }
+
   late final _$postAsyncAction =
       AsyncAction('_UpsertPostBaseStore.post', context: context);
 
@@ -73,11 +89,27 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     return _$postAsyncAction.run(() => super.post());
   }
 
+  late final _$_UpsertPostBaseStoreActionController =
+      ActionController(name: '_UpsertPostBaseStore', context: context);
+
+  @override
+  void updateDisplayImagePathAtIndex(
+      {required String path, required int index}) {
+    final _$actionInfo = _$_UpsertPostBaseStoreActionController.startAction(
+        name: '_UpsertPostBaseStore.updateDisplayImagePathAtIndex');
+    try {
+      return super.updateDisplayImagePathAtIndex(path: path, index: index);
+    } finally {
+      _$_UpsertPostBaseStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-displayImagePath: ${displayImagePath},
-shopMyLook: ${shopMyLook}
+displayImagePaths: ${displayImagePaths},
+shopMyLook: ${shopMyLook},
+imagePagePosition: ${imagePagePosition}
     ''';
   }
 }

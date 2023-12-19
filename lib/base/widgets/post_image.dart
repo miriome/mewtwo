@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PostImage extends StatelessWidget {
+  static const double maxWidth = 242 * 2;
   static const aspectRatio = 184 / 242;
   static const fit = BoxFit.cover;
   final String imageUrl;
@@ -17,7 +18,6 @@ class PostImage extends StatelessWidget {
           aspectRatio: aspectRatio,
           child: 
           imageUrl.startsWith("http") ? CachedNetworkImage(
-              // memCacheHeight: constraints.maxHeight.isInfinite ? 242 * 4 : constraints.maxHeight.ceil(),
               memCacheWidth: constraints.maxWidth.isInfinite ? 242 * 4 : constraints.maxWidth.ceil() * 2,
               imageUrl: imageUrl,
               placeholder: (context, url) {

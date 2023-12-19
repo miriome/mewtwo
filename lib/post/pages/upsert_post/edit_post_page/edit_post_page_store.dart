@@ -42,7 +42,7 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      displayImagePath = res.image;
+      displayImagePaths = ObservableList.of([res.image]) ;
       controller.text = res.caption;
       
     }
@@ -54,6 +54,7 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   @action
   Future<bool> post() async {
    List<int>? fileBytes;
+   final displayImagePath = displayImagePaths.first;
     if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
       fileBytes = File(displayImagePath).readAsBytesSync();
     }

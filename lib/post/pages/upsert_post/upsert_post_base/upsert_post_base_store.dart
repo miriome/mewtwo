@@ -28,6 +28,10 @@ abstract class _UpsertPostBaseStore with Store {
   final portalController = OverlayPortalController();
 
   final userMentionStore = UserMentionSearchStore();
+
+  final imagePageController = PageController();
+
+  
   _UpsertPostBaseStore() {
     controller.addListener(() async {
       if (userMentionStore.userResults.isEmpty) {
@@ -58,16 +62,30 @@ abstract class _UpsertPostBaseStore with Store {
         portalController.show();
       }
     });
+    imagePageController.addListener(() { 
+      imagePagePosition = imagePageController.page ?? 0;
+    });
   }
 
   @observable
-  String displayImagePath = "";
+  ObservableList<String> displayImagePaths = ObservableList.of([]);
 
   @observable
   bool shopMyLook = false;
 
+  @observable
+  double imagePagePosition = 0;
+
+  @action
+  void updateDisplayImagePathAtIndex({required String path, required int index}) {
+    displayImagePaths.removeAt(index);
+    displayImagePaths.insert(index, path);
+  }
+
+
   void dispose() {
     controller.dispose();
+    imagePageController.dispose();
   }
 
   void onMentionUserSearchTap(UserModel user) {
@@ -89,6 +107,7 @@ abstract class _UpsertPostBaseStore with Store {
   @action
   Future<bool> post() async {
    List<int>? fileBytes;
+   final displayImagePath = displayImagePaths.first;
     if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
       fileBytes = File(displayImagePath).readAsBytesSync();
     }

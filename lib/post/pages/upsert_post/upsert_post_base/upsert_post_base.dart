@@ -1,20 +1,20 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
+import 'package:mobx/mobx.dart';
 
-class UpsertPostBase extends ConsumerWidget {
+class UpsertPostBase extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
   final link = LayerLink();
   final UpsertPostBaseStore store;
@@ -22,19 +22,19 @@ class UpsertPostBase extends ConsumerWidget {
   UpsertPostBase({Key? key, required this.store, required this.titleText}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
             title: Text(titleText),
             actions: [
-              if (store.displayImagePath.isNotEmpty)
-                TextButton(
+              if (store.displayImagePaths.isNotEmpty)
+                IconButton(
                     onPressed: () {
                       selectPhoto(context: context);
                     },
-                    child: const Text("Choose another"))
+                    icon: const Icon(Icons.restart_alt))
             ],
           ),
           body: Column(
@@ -45,28 +45,28 @@ class UpsertPostBase extends ConsumerWidget {
                 physics: const ClampingScrollPhysics(),
                 child: Column(
                   children: [
-                    AspectRatio(
-                        aspectRatio: PostImage.aspectRatio,
-                        child: (store.displayImagePath.isEmpty)
-                            ? GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () async {
-                                  selectPhoto(context: context);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: const Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.add_a_photo),
-                                      Text("Tap here to upload a new photo for your post")
-                                    ],
-                                  ),
+                    (store.displayImagePaths.isEmpty)
+                        ? AspectRatio(
+                            aspectRatio: PostImage.aspectRatio,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () async {
+                                selectPhoto(context: context);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: const Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.add_a_photo),
+                                    Text("Tap here to upload a new photo for your post")
+                                  ],
                                 ),
-                              )
-                            : postImage),
-                    const SizedBox(height: 18),
-                    if (store.displayImagePath.isNotEmpty) ...[
+                              ),
+                            ))
+                        : postImage,
+                    // const SizedBox(height: 18),
+                    if (store.displayImagePaths.isNotEmpty) ...[
                       CompositedTransformTarget(
                         link: link,
                         child: OverlayPortal(
@@ -115,7 +115,7 @@ class UpsertPostBase extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 child: FilledButton(
-                    onPressed: store.displayImagePath.isEmpty
+                    onPressed: store.displayImagePaths.isEmpty
                         ? null
                         : () async {
                             EasyLoading.show();
@@ -138,17 +138,37 @@ class UpsertPostBase extends ConsumerWidget {
   }
 
   Widget get postImage {
-    return Stack(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        PostImage(imageUrl: store.displayImagePath),
-        if (store.shopMyLook)
-          const PositionedDirectional(
-            bottom: 8,
-            start: 8,
-            child: ShoppableIcon(
-              size: 24,
-            ),
+        AspectRatio(
+          aspectRatio: PostImage.aspectRatio,
+          child: PageView.builder(
+            controller: store.imagePageController,
+            itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  PostImage(imageUrl: store.displayImagePaths[index]),
+                  if (store.shopMyLook)
+                    const PositionedDirectional(
+                      bottom: 8,
+                      start: 8,
+                      child: ShoppableIcon(
+                        size: 24,
+                      ),
+                    ),
+                ],
+              );
+            },
+            itemCount: store.displayImagePaths.length,
           ),
+        ),
+        const SizedBox(height: 8,),
+        if (store.displayImagePaths.length > 1)
+          DotsIndicator(
+            dotsCount: store.displayImagePaths.length,
+            position: store.imagePagePosition,
+          )
       ],
     );
   }
@@ -172,9 +192,11 @@ class UpsertPostBase extends ConsumerWidget {
         const SizedBox(
           width: 12,
         ),
-         Flexible(
+        Flexible(
             child: Text(
-          store.shopMyLook ? "Others can chat with you to purchase your item(s)" : "Enable this if you are selling any items",
+          store.shopMyLook
+              ? "Others can chat with you to purchase your item(s)"
+              : "Enable this if you are selling any items",
           maxLines: 2,
           style: const TextStyle(color: Color(0xFF7D7878)),
         ))
@@ -183,52 +205,56 @@ class UpsertPostBase extends ConsumerWidget {
   }
 
   void selectPhoto({required BuildContext context}) async {
-    final imageFile = await showOtherProfilePostOptions(context);
-    if (imageFile != null) {
-      final croppedFile = await ImageCropper().cropImage(
-          sourcePath: imageFile.path,
-          cropStyle: CropStyle.rectangle,
-          aspectRatio: const CropAspectRatio(ratioX: 184, ratioY: 242));
-      if (croppedFile != null) {
-        store.displayImagePath = croppedFile.path;
-      }
-    }
+    final imageFiles = await showOtherProfilePostOptions(context);
+    store.displayImagePaths = ObservableList.of(imageFiles.map((e) => e.path));
   }
 
-  Future<XFile?> showOtherProfilePostOptions(BuildContext context) {
-    return showCupertinoModalPopup<XFile?>(
-      context: context,
-      builder: (BuildContext modalContext) => CupertinoActionSheet(
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(modalContext);
-          },
-          child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
-        ),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              final image = await picker.pickImage(source: ImageSource.camera);
-              if (modalContext.mounted) {
-                Navigator.pop(modalContext, image);
-              }
-            },
-            child: const Text(
-              'Select from camera',
-              style: TextStyle(color: Color(0xFF7D7878)),
+  Future<List<XFile>> showOtherProfilePostOptions(BuildContext context) async {
+    return await showCupertinoModalPopup<List<XFile>>(
+          context: context,
+          builder: (BuildContext modalContext) => CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(modalContext, []);
+              },
+              child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
             ),
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
+                  if (modalContext.mounted) {
+                    Navigator.pop(modalContext, [image]);
+                  }
+                },
+                child: const Text(
+                  'Select from camera',
+                  style: TextStyle(color: Color(0xFF7D7878)),
+                ),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  final image = await picker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (modalContext.mounted) {
+                    Navigator.pop(modalContext, [image]);
+                  }
+                },
+                child: const Text('Select a single photo library', style: TextStyle(color: Color(0xFF7D7878))),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  final images = await picker.pickMultiImage();
+                  if (modalContext.mounted) {
+                    Navigator.pop(modalContext, images);
+                  }
+                },
+                child: const Text('Select multiple photos library', style: TextStyle(color: Color(0xFF7D7878))),
+              ),
+            ],
           ),
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              final image = await picker.pickImage(source: ImageSource.gallery);
-              if (modalContext.mounted) {
-                Navigator.pop(modalContext, image);
-              }
-            },
-            child: const Text('Select from library', style: TextStyle(color: Color(0xFF7D7878))),
-          ),
-        ],
-      ),
-    );
+        ) ??
+        [];
   }
 }
