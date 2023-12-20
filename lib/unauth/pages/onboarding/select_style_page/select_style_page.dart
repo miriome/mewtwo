@@ -88,39 +88,41 @@ class SelectStylePage extends StatelessWidget {
             }
             store.selectedStyles.add(style);
           },
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(6),
-            child: ClipRRect(
-              borderRadius: const BorderRadiusDirectional.all(Radius.circular(6)),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Observer(builder: (context) {
-                      return AspectRatio(
-                        aspectRatio: 100 / 143,
-                        child: Image.asset(
-                          'assets/images/styles/$style.jpg',
-                          fit: BoxFit.cover,
-                          cacheWidth: 143,
-                          color: store.selectedStyles.contains(style)
-                              ? Theme.of(context).primaryColor.withOpacity(0.5)
-                              : null,
-                          colorBlendMode: BlendMode.srcOver,
-                        ),
-                      );
-                    }),
-                    Text(
-                      style,
-                      style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-                    )
-                  ],
+          child: Column(
+            children: [
+              Expanded(
+                child: Material(
+                  elevation: 5,
+                  borderRadius: BorderRadius.circular(6),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadiusDirectional.all(Radius.circular(6)),
+                    child: Column(
+                      children: [
+                        Observer(builder: (context) {
+                          return AspectRatio(
+                            aspectRatio: 100 / 135,
+                            child: Image.asset(
+                              'assets/images/styles/$style.jpg',
+                              fit: BoxFit.cover,
+                              cacheWidth: 135,
+                              color: store.selectedStyles.contains(style)
+                                  ? Theme.of(context).primaryColor.withOpacity(0.5)
+                                  : null,
+                              colorBlendMode: BlendMode.srcOver,
+                            ),
+                          );
+                        }),
+                        Text(
+                          style,
+                          style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(height: 8,) // Required because gridview does not properly show elevation
+            ],
           ),
         );
       },

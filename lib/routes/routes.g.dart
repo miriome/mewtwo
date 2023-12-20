@@ -146,6 +146,7 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'edit-profile',
+                  parentNavigatorKey: EditProfileRoute.$parentNavigatorKey,
                   factory: $EditProfileRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
@@ -154,10 +155,12 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'edit-measurements',
+                  parentNavigatorKey: EditMeasurementsRoute.$parentNavigatorKey,
                   factory: $EditMeasurementsRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
                   path: 'edit-styles',
+                  parentNavigatorKey: EditStylesRoute.$parentNavigatorKey,
                   factory: $EditStylesRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
