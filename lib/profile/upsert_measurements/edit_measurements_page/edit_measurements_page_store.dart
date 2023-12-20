@@ -27,8 +27,8 @@ abstract class AbsEditMeasurementsPageStore extends UpsertMeasurementsBaseStore 
     if (res != null) {
       bust = res.bust != null ? Utility.parseInt(res.bust) : null;
       height = res.height != null ? Utility.parseInt(res.height) : null;
-      hips = res.waist != null ? Utility.parseInt(res.waist) : null;
-      waist = res.hips != null ? Utility.parseInt(res.hips) : null;
+      hips = res.hips != null ? Utility.parseInt(res.hips) : null;
+      waist = res.waist != null ? Utility.parseInt(res.waist) : null;
       hideFromNonFollowers = res.measurementPrivacy == MeasurementPrivacy.following;
       formKey.currentState!.patchValue({
         if (bust != null && bust != 0)

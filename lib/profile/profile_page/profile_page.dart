@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/networking/networking.dart';
@@ -13,31 +12,22 @@ import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mewtwo/profile/profile_page/widgets/profile_options.dart';
 import 'package:mewtwo/profile/profile_page/widgets/profile_post_tile.dart';
 import 'package:mewtwo/routes/routes.dart';
-import 'package:mewtwo/safety/api/api.dart';
-import 'package:mewtwo/safety/routes/routes.dart';
+
 import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   final int? userId;
   const ProfilePage({Key? key, this.userId}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  late final ProfilePageStore store = ProfilePageStore(widget.userId);
-  @override
-  void initState() {
-    MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear") {
-        store.load();
-      }
-    });
-    store.init().then((_) => store.load());
+class _ProfilePageState extends ConsumerState<ProfilePage> {
 
-    super.initState();
+  ProfilePageStore get store {
+    return widget.userId != null ? ref.watch(OtherUserProfilePageStoreProvider(userId: widget.userId!)) : ref.watch(currentUserProfilePageStoreProvider);
   }
 
   @override
@@ -84,8 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     : Column(
                         children: [
                           TextButton(
-                            onPressed: () {
-                              CreatePostRoute().push(context);
+                            onPressed: () async {
+                              await CreatePostRoute().push(context);
+                              store.load();
                             },
                             child: const Text.rich(
                                 TextSpan(style: TextStyle(fontSize: 16, color: Color(0xFF7D7878)), children: [
@@ -186,11 +177,11 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Height: ${(store.user?.height == null || int.tryParse(store.user!.height!) != null) ?  "-" : int.tryParse(store.user!.height!)} $heightUnits",
+          "Height: ${(store.user?.height == null || int.tryParse(store.user!.height!) == null) ?  "-" : int.tryParse(store.user!.height!)} $heightUnits",
           style: GoogleFonts.roboto(color: const Color(0xFF7D7878), fontSize: 14),
         ),
         Text(
-          "Bust: ${(store.user?.bust == null || int.tryParse(store.user!.bust!) != null) ? "-" : int.tryParse(store.user!.bust!)} $otherUnits | Waist: ${(store.user?.waist == null || int.tryParse(store.user!.waist!) != null) ? "-" : int.tryParse(store.user!.waist!)} | Hips: ${(store.user?.hips == null || int.tryParse(store.user!.hips!) != null) ? "-" : int.tryParse(store.user!.hips!)} $otherUnits",
+          "Bust: ${(store.user?.bust == null || int.tryParse(store.user!.bust!) == null) ? "-" : int.tryParse(store.user!.bust!)} $otherUnits | Waist: ${(store.user?.waist == null || int.tryParse(store.user!.waist!) == null) ? "-" : int.tryParse(store.user!.waist!)} $otherUnits | Hips: ${(store.user?.hips == null || int.tryParse(store.user!.hips!) == null) ? "-" : int.tryParse(store.user!.hips!)} $otherUnits",
           style: GoogleFonts.roboto(color: const Color(0xFF7D7878), fontSize: 14),
         )
       ],

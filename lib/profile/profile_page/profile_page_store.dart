@@ -6,9 +6,24 @@ import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mobx/mobx.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'profile_page_store.g.dart';
+
+@riverpod
+ProfilePageStore otherUserProfilePageStore(OtherUserProfilePageStoreRef ref, {required int userId}) {
+  final store = ProfilePageStore(userId);
+  store.init().then((value) => store.load());
+  return store;
+}
+
+@Riverpod(keepAlive: true)
+ProfilePageStore currentUserProfilePageStore(CurrentUserProfilePageStoreRef ref) {
+  final store = ProfilePageStore(null);
+  store.init().then((value) => store.load());
+  return store;
+}
 
 class ProfilePageStore extends _ProfilePageStore with _$ProfilePageStore {
   ProfilePageStore(int? userId) : super(userId);

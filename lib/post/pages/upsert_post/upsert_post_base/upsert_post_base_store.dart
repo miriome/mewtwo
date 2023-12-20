@@ -6,6 +6,7 @@ import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_store.dart';
+import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -94,6 +95,9 @@ abstract class _UpsertPostBaseStore with Store {
     }
     final upsertPostProvider = AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
     final res = await Mew.pc.read(upsertPostProvider.future);
+    if (res) {
+      Mew.pc.read(currentUserProfilePageStoreProvider).load();
+    }
     return res;
   }
 }
