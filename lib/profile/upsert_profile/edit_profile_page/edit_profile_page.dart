@@ -12,6 +12,7 @@ class EditProfilePage extends ConsumerWidget {
     final store = ref.watch(editProfilePageStoreProvider);
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text(
               "Edit Profile",

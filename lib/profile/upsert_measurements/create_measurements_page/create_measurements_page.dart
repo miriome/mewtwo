@@ -9,25 +9,24 @@ class CreateMeasurementsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Your Measurements",
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  HomePageRoute().go(context);
-                },
-                child: const Text(
-                  "Skip",
-                  style: TextStyle(color: Color(0xFF7D7878)),
-                ))
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Your Measurements",
         ),
-        body: UpsertMeasurementsBase(store: UpsertMeasurementsBaseStore(), ctaText: "Enter miromie!", onCtaSuccess: (context) =>  HomePageRoute().go(context),)
+        actions: [
+          TextButton(
+              onPressed: () {
+                HomePageRoute().go(context);
+              },
+              child: const Text(
+                "Skip",
+                style: TextStyle(color: Color(0xFF7D7878)),
+              ))
+        ],
       ),
+      resizeToAvoidBottomInset: false,
+      body: UpsertMeasurementsBase(store: UpsertMeasurementsBaseStore(), ctaText: "Enter miromie!", onCtaSuccess: (context) =>  HomePageRoute().go(context),)
     );
   }
 

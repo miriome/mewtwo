@@ -25,7 +25,7 @@ class NotificationPage extends StatelessWidget {
                 ? Center(
                   child: TextButton(
                     onPressed: () => store.load(),
-                      child: const Text("No notifications yet, Tap here to refresh.", style: TextStyle(fontSize: 16)),
+                      child: const Text("No notifications yet, tap here to refresh.", style: TextStyle(fontSize: 16)),
                     ),
                 )
                 : ListView.separated(

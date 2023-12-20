@@ -61,7 +61,7 @@ class ProfileOptions {
               Mew.pc.read(currentUserStoreProvider).load();
               store.load();
             },
-            child: const Text('Edit style peferences', style: TextStyle(color: Color(0xFF7D7878))),
+            child: const Text('Edit style preferences', style: TextStyle(color: Color(0xFF7D7878))),
           ));
 
           actions.add(CupertinoActionSheetAction(

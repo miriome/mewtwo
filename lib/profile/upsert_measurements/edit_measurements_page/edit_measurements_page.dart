@@ -9,15 +9,14 @@ class EditMeasurementsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Edit Measurements",
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Edit Measurements",
         ),
-        body: UpsertMeasurementsBase(store: store, ctaText: "Confirm", onCtaSuccess: (context) => Navigator.of(context).pop(),)
       ),
+      resizeToAvoidBottomInset: false,
+      body: UpsertMeasurementsBase(store: store, ctaText: "Confirm", onCtaSuccess: (context) => Navigator.of(context).pop(),)
     );
   }
 

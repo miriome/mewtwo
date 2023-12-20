@@ -24,9 +24,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
               child: SingleChildScrollView(
                 child: FormBuilder(
                   key: store.formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                     const SizedBox(
                       height: 16,
                     ),
@@ -49,7 +47,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
                       onTapOutside: (_) {
                         store.formKey.currentState?.fields.values.forEach((element) {
                           element.effectiveFocusNode.unfocus();
-                         });
+                        });
                       },
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       keyboardType: TextInputType.number,
@@ -81,7 +79,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
                       onTapOutside: (_) {
                         store.formKey.currentState?.fields.values.forEach((element) {
                           element.effectiveFocusNode.unfocus();
-                         });
+                        });
                       },
                       keyboardType: TextInputType.number,
                       maxLength: 3,
@@ -112,7 +110,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
                       onTapOutside: (_) {
                         store.formKey.currentState?.fields.values.forEach((element) {
                           element.effectiveFocusNode.unfocus();
-                         });
+                        });
                       },
                       maxLength: 3,
                       keyboardType: TextInputType.number,
@@ -143,7 +141,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
                       onTapOutside: (_) {
                         store.formKey.currentState?.fields.values.forEach((element) {
                           element.effectiveFocusNode.unfocus();
-                         });
+                        });
                       },
                       maxLength: 3,
                       keyboardType: TextInputType.number,
@@ -172,8 +170,7 @@ class UpsertMeasurementsBase extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: 
-                      FormBuilderSwitch(
+                      child: FormBuilderSwitch(
                         name: "measurementPrivacy",
                         initialValue: store.hideFromNonFollowers,
                         title: const Text(
@@ -183,7 +180,6 @@ class UpsertMeasurementsBase extends StatelessWidget {
                         onSaved: (hide) {
                           store.hideFromNonFollowers = hide ?? false;
                         },
-                        
                         inactiveTrackColor: const Color(0xFF7D7878),
                         decoration:
                             const InputDecoration(enabledBorder: InputBorder.none, contentPadding: EdgeInsets.zero),
@@ -199,30 +195,28 @@ class UpsertMeasurementsBase extends StatelessWidget {
                     const SizedBox(
                       height: 24,
                     ),
-                    
                   ]),
                 ),
               ),
-              
             ),
             Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: FilledButton(
-                          onPressed: () async {
-                            EasyLoading.show();
-                            final success = await store.submit();
-                            if (EasyLoading.isShow) {
-                              EasyLoading.dismiss();
-                            }
-                            if (success && context.mounted) {
-                              onCtaSuccess(context);
-                            }
-                          },
-                          child: Text(
-                            ctaText,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                          )),
-                    )
+              padding: const EdgeInsetsDirectional.only(start: 40, end: 40, bottom: 24, top: 12),
+              child: FilledButton(
+                  onPressed: () async {
+                    EasyLoading.show();
+                    final success = await store.submit();
+                    if (EasyLoading.isShow) {
+                      EasyLoading.dismiss();
+                    }
+                    if (success && context.mounted) {
+                      onCtaSuccess(context);
+                    }
+                  },
+                  child: Text(
+                    ctaText,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  )),
+            )
           ],
         ),
       );
