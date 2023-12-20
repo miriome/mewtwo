@@ -30,9 +30,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear") {
-        store.loadSelfUserData();
-      }
       if (call.method == "modifyInitialSearchTerm" && call.arguments is String) {
         store.searchTerm = call.arguments;
       }

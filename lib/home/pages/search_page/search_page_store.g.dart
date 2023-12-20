@@ -9,6 +9,13 @@ part of 'search_page_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SearchPageStore on _SearchPageStore, Store {
+  Computed<UserModel?>? _$currentUserModelComputed;
+
+  @override
+  UserModel? get currentUserModel => (_$currentUserModelComputed ??=
+          Computed<UserModel?>(() => super.currentUserModel,
+              name: '_SearchPageStore.currentUserModel'))
+      .value;
   Computed<List<String>>? _$selfStylesComputed;
 
   @override
@@ -66,24 +73,6 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
   set _isLoading(bool value) {
     _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
       super._isLoading = value;
-    });
-  }
-
-  late final _$_selfUserModelAtom =
-      Atom(name: '_SearchPageStore._selfUserModel', context: context);
-
-  UserModel? get selfUserModel {
-    _$_selfUserModelAtom.reportRead();
-    return super._selfUserModel;
-  }
-
-  @override
-  UserModel? get _selfUserModel => selfUserModel;
-
-  @override
-  set _selfUserModel(UserModel? value) {
-    _$_selfUserModelAtom.reportWrite(value, super._selfUserModel, () {
-      super._selfUserModel = value;
     });
   }
 
@@ -160,14 +149,6 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
     });
   }
 
-  late final _$loadSelfUserDataAsyncAction =
-      AsyncAction('_SearchPageStore.loadSelfUserData', context: context);
-
-  @override
-  Future<void> loadSelfUserData() {
-    return _$loadSelfUserDataAsyncAction.run(() => super.loadSelfUserData());
-  }
-
   late final _$searchAsyncAction =
       AsyncAction('_SearchPageStore.search', context: context);
 
@@ -180,6 +161,7 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
   String toString() {
     return '''
 searchTerm: ${searchTerm},
+currentUserModel: ${currentUserModel},
 selfStyles: ${selfStyles}
     ''';
   }

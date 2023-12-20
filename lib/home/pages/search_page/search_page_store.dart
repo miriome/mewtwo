@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:mewtwo/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mewtwo/base/stores/current_user_store.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
@@ -17,7 +16,6 @@ class SearchPageStore extends _SearchPageStore with _$SearchPageStore {}
 abstract class _SearchPageStore with Store {
   _SearchPageStore() {
     search();
-    loadSelfUserData();
   }
   @observable
   String searchTerm = "";
@@ -28,8 +26,10 @@ abstract class _SearchPageStore with Store {
   @readonly
   bool _isLoading = false;
 
-  @readonly
-  UserModel? _selfUserModel;
+  @computed
+  UserModel? get currentUserModel {
+    return Mew.pc.read(currentUserStoreProvider).user;
+  }
 
   @readonly
   ObservableList<PostModel> _postResults = ObservableList.of([]);
@@ -48,7 +48,7 @@ abstract class _SearchPageStore with Store {
 
   @computed
   List<String> get selfStyles {
-    final styles = _selfUserModel?.styles.split(",") ?? [];
+    final styles = currentUserModel?.styles.split(",") ?? [];
     styles.insert(0, "All");
     return styles;
   }
@@ -79,23 +79,6 @@ abstract class _SearchPageStore with Store {
     }
   }
 
-
-  @action
-  Future<void> loadSelfUserData() async {
-    final sp = await SharedPreferences.getInstance();
-    int? selfUserId;
-    if (sp.containsKey(Constants.kKeyId)) {
-      selfUserId = sp.getInt(Constants.kKeyId);
-    }
-    if (selfUserId == null) {
-      return;
-    }
-    final userInfoApiProvider = GetUserInfoApiProvider(userId: selfUserId);
-    final res = await Mew.pc.read(userInfoApiProvider.future);
-    if (res != null) {
-      _selfUserModel = res;
-    }
-  }
 
   @action
   Future<void> search() async {
