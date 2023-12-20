@@ -9,6 +9,7 @@ import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_stor
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 part 'upsert_post_base_store.g.dart';
 
@@ -96,7 +97,9 @@ abstract class _UpsertPostBaseStore with Store {
     final upsertPostProvider = AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
     final res = await Mew.pc.read(upsertPostProvider.future);
     if (res) {
-      Mew.pc.read(currentUserProfilePageStoreProvider).load();
+      Future.delayed(const Duration(milliseconds: 250), () {
+        Mew.pc.read(currentUserProfilePageStoreProvider).load();
+      });
     }
     return res;
   }

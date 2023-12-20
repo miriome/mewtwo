@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
@@ -93,6 +94,7 @@ class UpsertPostBase extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: DetectableTextField(
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
                       maxLines: 5,
                       style: const TextStyle(fontSize: 16),
                       controller: store.controller,
@@ -115,6 +117,7 @@ class UpsertPostBase extends ConsumerWidget {
                               EasyLoading.show();
                               final res = await store.post();
                               EasyLoading.dismiss();
+                              Fluttertoast.showToast(msg: "Post uploaded");
                               if (res && context.mounted) {
                                 Navigator.of(context).pop();
                               }
