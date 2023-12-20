@@ -37,7 +37,7 @@ class _MainTabBarState extends State<MainTabBar> {
         // LoginRoute().go(context);
         case 'goToSearch':
           if (call.arguments is String) {
-            SearchPageRoute(initialSearchTerm: call.arguments).go(context);
+            SearchPageRoute().goWithInitialSearchTerm(context, call.arguments.removePrefix("#"));
           } else {
             SearchPageRoute().go(context);
           }

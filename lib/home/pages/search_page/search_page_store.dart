@@ -8,8 +8,20 @@ import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mobx/mobx.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_page_store.g.dart';
+
+@Riverpod(keepAlive: true)
+SearchPageStore searchPageStore(SearchPageStoreRef ref) {
+  final store = SearchPageStore();
+  store.initReactions();
+  store.search();
+  ref.onDispose(() {
+    store.dispose();
+  });
+  return store;
+}
 
 class SearchPageStore extends _SearchPageStore with _$SearchPageStore {}
 
@@ -17,8 +29,6 @@ abstract class _SearchPageStore with Store {
   _SearchPageStore() {
     search();
   }
-  @observable
-  String searchTerm = "";
 
   @readonly
   int _currentPage = 0;
@@ -45,7 +55,6 @@ abstract class _SearchPageStore with Store {
 
   CancelableOperation? _currentSearchOp;
 
-
   @computed
   List<String> get selfStyles {
     final styles = currentUserModel?.styles.split(",") ?? [];
@@ -58,8 +67,7 @@ abstract class _SearchPageStore with Store {
   Timer? _searchTimer;
 
   void initReactions() {
-    d.add(reaction((_) => searchTerm, (_) {
-      _textEditingController.text = searchTerm;
+    _textEditingController.addListener(() {
       if (!_searchBarFocusNode.hasFocus) {
         search();
         return;
@@ -68,7 +76,7 @@ abstract class _SearchPageStore with Store {
       _searchTimer = Timer(const Duration(seconds: 1, milliseconds: 2), () {
         search();
       });
-    }));
+    });
   }
 
   void dispose() {
@@ -79,24 +87,23 @@ abstract class _SearchPageStore with Store {
     }
   }
 
-
   @action
   Future<void> search() async {
     _currentSearchOp?.cancel();
-    final searchApiProvider = SearchApiProvider(pageIndex: _currentPage, keyword: searchTerm);
+    final searchApiProvider = SearchApiProvider(pageIndex: _currentPage, keyword: _textEditingController.text);
 
     final listener = Mew.pc.listen(searchApiProvider, (previous, next) {
       _isLoading = next.isLoading;
     });
     final cancelableFut = CancelableOperation.fromFuture(Mew.pc.read(searchApiProvider.future));
-    
+
     _currentSearchOp = cancelableFut.then((res) {
       if (res != null) {
-      _postResults = ObservableList.of(res.postData ?? []);
-      _userResults = ObservableList.of(res.userData ?? []);
-    }
+        _postResults = ObservableList.of(res.postData ?? []);
+        _userResults = ObservableList.of(res.userData ?? []);
+      }
     });
-    
+
     listener.close();
   }
 }

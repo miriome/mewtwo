@@ -3,6 +3,28 @@
 part of 'search_page_store.dart';
 
 // **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$searchPageStoreHash() => r'69aa05d7888d2355a20f16a710ce4152c4658858';
+
+/// See also [searchPageStore].
+@ProviderFor(searchPageStore)
+final searchPageStoreProvider = Provider<SearchPageStore>.internal(
+  searchPageStore,
+  name: r'searchPageStoreProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$searchPageStoreHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SearchPageStoreRef = ProviderRef<SearchPageStore>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+
+// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
@@ -23,22 +45,6 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
       (_$selfStylesComputed ??= Computed<List<String>>(() => super.selfStyles,
               name: '_SearchPageStore.selfStyles'))
           .value;
-
-  late final _$searchTermAtom =
-      Atom(name: '_SearchPageStore.searchTerm', context: context);
-
-  @override
-  String get searchTerm {
-    _$searchTermAtom.reportRead();
-    return super.searchTerm;
-  }
-
-  @override
-  set searchTerm(String value) {
-    _$searchTermAtom.reportWrite(value, super.searchTerm, () {
-      super.searchTerm = value;
-    });
-  }
 
   late final _$_currentPageAtom =
       Atom(name: '_SearchPageStore._currentPage', context: context);
@@ -160,7 +166,6 @@ mixin _$SearchPageStore on _SearchPageStore, Store {
   @override
   String toString() {
     return '''
-searchTerm: ${searchTerm},
 currentUserModel: ${currentUserModel},
 selfStyles: ${selfStyles}
     ''';

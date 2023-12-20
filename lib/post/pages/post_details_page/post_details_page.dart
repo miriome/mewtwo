@@ -307,7 +307,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
               return;
             }
             if (element is HashtagElement) {
-              SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
+              SearchPageRoute().goWithInitialSearchTerm(context, element.text.removePrefix("#"));
               return;
             }
             if (element is UrlElement) {

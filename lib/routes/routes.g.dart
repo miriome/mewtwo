@@ -447,16 +447,10 @@ extension $EditPostRouteExtension on EditPostRoute {
 }
 
 extension $SearchPageRouteExtension on SearchPageRoute {
-  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute(
-        initialSearchTerm: state.uri.queryParameters['initial-search-term'],
-      );
+  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
 
   String get location => GoRouteData.$location(
         '/SearchPage',
-        queryParams: {
-          if (initialSearchTerm != null)
-            'initial-search-term': initialSearchTerm,
-        },
       );
 
   void go(BuildContext context) => context.go(location);
