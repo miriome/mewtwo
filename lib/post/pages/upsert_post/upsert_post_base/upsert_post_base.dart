@@ -26,6 +26,7 @@ class UpsertPostBase extends ConsumerWidget {
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(titleText),
             actions: [

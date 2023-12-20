@@ -557,7 +557,7 @@ class _DeletePostApiProviderElement
   int get postId => (origin as DeletePostApiProvider).postId;
 }
 
-String _$markPostSoldApiHash() => r'58be5a1729b060662b9783c94641f231e1214331';
+String _$markPostSoldApiHash() => r'4a29a1095d094e13ef1e5d37bf7d977027a26e27';
 
 /// See also [markPostSoldApi].
 @ProviderFor(markPostSoldApi)

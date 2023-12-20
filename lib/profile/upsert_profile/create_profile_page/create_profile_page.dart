@@ -24,6 +24,7 @@ class CreateProfilePage extends ConsumerWidget {
       canPop: false,
       child: SafeArea(
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               actions: [
                 TextButton(

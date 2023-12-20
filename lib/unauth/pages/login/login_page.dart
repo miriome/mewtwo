@@ -20,6 +20,7 @@ class LoginPage extends ConsumerWidget {
         return PopScope(
           canPop: false,
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Container(
                 padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
                 child: Form(

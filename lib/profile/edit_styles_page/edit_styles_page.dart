@@ -12,6 +12,7 @@ class EditStylesPage extends SelectStylePage {
   Widget build(BuildContext context){
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar( 
         ),
         body: buildBody()

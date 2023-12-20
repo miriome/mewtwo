@@ -44,6 +44,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       },
       child: Observer(builder: (context) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: appBar,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),

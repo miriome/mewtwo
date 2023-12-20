@@ -18,6 +18,7 @@ class SignUpPage extends ConsumerWidget {
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

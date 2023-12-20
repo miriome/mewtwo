@@ -179,9 +179,9 @@ class PostOptions {
     
     BranchUniversalObject buo = BranchUniversalObject(
       canonicalIdentifier: PostDetailsRoute(postId: post.id).location,
-      title: 'Share post',
+      title: "Check out ${post.posted_by?.username ?? "this user"}'s OOTD on miromie!",
       imageUrl: post.image,
-      contentDescription: 'Share the post with others',
+      contentDescription: post.caption,
       keywords: ['Share', 'Post', 'Miromie'],
       publiclyIndex: true,
       locallyIndex: true,
@@ -193,7 +193,7 @@ class PostOptions {
     );
     
     BranchResponse response =
-        await FlutterBranchSdk.showShareSheet(buo: buo, linkProperties: lp, messageText: "View this awesome fit on miromie!");
+        await FlutterBranchSdk.showShareSheet(buo: buo, linkProperties: lp, messageText: "Share post:");
     if (response.success) {
       Fluttertoast.showToast(msg: "Post link copied", gravity: ToastGravity.CENTER);
     } 

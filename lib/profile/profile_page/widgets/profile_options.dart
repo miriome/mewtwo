@@ -190,9 +190,9 @@ class ProfileOptions {
 
     BranchUniversalObject buo = BranchUniversalObject(
       canonicalIdentifier: OtherProfilePageRoute(userId: user.id).location,
-      title: 'Share profile',
+      title: "Check out ${user.username}'s profile on miromie!",
       imageUrl: user.photo_url == "https://miromie.com/uploads/" ? '' : user.photo_url,
-      contentDescription: "Share ${user.username}'s profile with others",
+      contentDescription: "@${user.username}",
       keywords: ['Share', 'Profile', 'Miromie'],
       publiclyIndex: true,
       locallyIndex: true,
@@ -202,9 +202,9 @@ class ProfileOptions {
       feature: 'sharing',
       stage: 'new share',
     );
-
+  
     BranchResponse response = await FlutterBranchSdk.showShareSheet(
-        buo: buo, linkProperties: lp, messageText: "View this person's lookbook on miromie!");
+        buo: buo, linkProperties: lp, messageText: "Share Profile:");
     if (response.success) {
       Fluttertoast.showToast(msg: "Profile link copied", gravity: ToastGravity.CENTER);
     }

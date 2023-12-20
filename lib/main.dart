@@ -73,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
+          
           switchTheme: SwitchThemeData(
             trackColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.disabled)) {
