@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_nude_detector/flutter_nude_detector.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/unauth/api/api.dart';
 import 'package:mobx/mobx.dart';
@@ -44,6 +46,12 @@ abstract class _UpsertProfileBaseStore with Store {
   Future<bool> editProfile() async {
     List<int>? fileBytes;
     if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
+      final hasNudity = await FlutterNudeDetector.detect(path: displayImagePath);
+      if (hasNudity) {
+        Fluttertoast.showToast(msg: "Post contains improper content", gravity: ToastGravity.CENTER);
+        return false;
+
+      }
       fileBytes = File(displayImagePath).readAsBytesSync();
     }
     final editProfileProvider = EditProfileApiProvider(displayName: nameController.text, fileBytes: fileBytes);

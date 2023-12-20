@@ -117,8 +117,8 @@ class UpsertPostBase extends ConsumerWidget {
                               EasyLoading.show();
                               final res = await store.post();
                               EasyLoading.dismiss();
-                              Fluttertoast.showToast(msg: "Post uploaded");
                               if (res && context.mounted) {
+                                Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
                                 Navigator.of(context).pop();
                               }
                             },

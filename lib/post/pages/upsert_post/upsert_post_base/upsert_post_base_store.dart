@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_nude_detector/flutter_nude_detector.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
@@ -9,7 +11,7 @@ import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_stor
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
+
 
 part 'upsert_post_base_store.g.dart';
 
@@ -92,8 +94,15 @@ abstract class _UpsertPostBaseStore with Store {
   Future<bool> post() async {
    List<int>? fileBytes;
     if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
+      final hasNudity = await FlutterNudeDetector.detect(path: displayImagePath);
+      if (hasNudity) {
+        Fluttertoast.showToast(msg: "Post contains improper content", gravity: ToastGravity.CENTER);
+        return false;
+
+      }
       fileBytes = File(displayImagePath).readAsBytesSync();
     }
+    
     final upsertPostProvider = AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photoFileBytes: fileBytes);
     final res = await Mew.pc.read(upsertPostProvider.future);
     if (res) {

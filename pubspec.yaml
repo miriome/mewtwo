@@ -64,7 +64,7 @@ dependencies:
   async: ^2.11.0
   http_parser: ^4.0.2
   flutter_branch_sdk: ^7.0.1
-  tflite_flutter: ^0.10.4
+  flutter_nude_detector: ^0.0.4+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,7 +89,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/tf_models/
+    - assets/ml_models/
     - assets/images/styles/
     - assets/images/measurements/
     
