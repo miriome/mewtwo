@@ -17,207 +17,200 @@ class UpsertMeasurementsBase extends StatelessWidget {
     return Observer(builder: (context) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: FormBuilder(
-                  key: store.formKey,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "Providing miromie with your measurements will allow us to recommend you people that match your body shape, enhancing your browsing and shopping experience. By default, your measurements are visible to everyone.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF7D7878),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    FormBuilderTextField(
-                      name: 'height',
-                      onTapOutside: (_) {
-                        store.formKey.currentState?.fields.values.forEach((element) {
-                          element.effectiveFocusNode.unfocus();
-                        });
-                      },
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.number,
-                      onSaved: (text) {
-                        if (text != null) {
-                          store.height = int.tryParse(text);
-                        }
-                      },
-                      maxLength: 3,
-                      decoration: const InputDecoration(
-                          labelText: "Height",
-                          counterText: "",
-                          suffixIcon: Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Text(
-                                'cm',
-                                style: TextStyle(
-                                    color: Color(
-                                      0xFF7D7878,
-                                    ),
-                                    fontSize: 16),
-                              ))),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderTextField(
-                      name: 'bust',
-                      onTapOutside: (_) {
-                        store.formKey.currentState?.fields.values.forEach((element) {
-                          element.effectiveFocusNode.unfocus();
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      maxLength: 3,
-                      onSaved: (text) {
-                        if (text != null) {
-                          store.bust = int.tryParse(text);
-                        }
-                      },
-                      decoration: const InputDecoration(
-                          counterText: "",
-                          labelText: "Bust",
-                          suffixIcon: Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Text(
-                                'in',
-                                style: TextStyle(
-                                    color: Color(
-                                      0xFF7D7878,
-                                    ),
-                                    fontSize: 16),
-                              ))),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderTextField(
-                      name: 'waist',
-                      onTapOutside: (_) {
-                        store.formKey.currentState?.fields.values.forEach((element) {
-                          element.effectiveFocusNode.unfocus();
-                        });
-                      },
-                      maxLength: 3,
-                      keyboardType: TextInputType.number,
-                      onSaved: (text) {
-                        if (text != null) {
-                          store.waist = int.tryParse(text);
-                        }
-                      },
-                      decoration: const InputDecoration(
-                          counterText: "",
-                          labelText: "Waist",
-                          suffixIcon: Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Text(
-                                'in',
-                                style: TextStyle(
-                                    color: Color(
-                                      0xFF7D7878,
-                                    ),
-                                    fontSize: 16),
-                              ))),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderTextField(
-                      name: 'hips',
-                      onTapOutside: (_) {
-                        store.formKey.currentState?.fields.values.forEach((element) {
-                          element.effectiveFocusNode.unfocus();
-                        });
-                      },
-                      maxLength: 3,
-                      keyboardType: TextInputType.number,
-                      initialValue: store.hips?.toString(),
-                      onSaved: (text) {
-                        if (text != null) {
-                          store.hips = int.tryParse(text);
-                        }
-                      },
-                      decoration: const InputDecoration(
-                          counterText: "",
-                          labelText: "Hips",
-                          suffixIcon: Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Text(
-                                'in',
-                                style: TextStyle(
-                                    color: Color(
-                                      0xFF7D7878,
-                                    ),
-                                    fontSize: 16),
-                              ))),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: FormBuilderSwitch(
-                        name: "measurementPrivacy",
-                        initialValue: store.hideFromNonFollowers,
-                        title: const Text(
-                          "Hide my measurements from people who do not follow me",
-                          style: TextStyle(fontSize: 16, color: Color(0xFF787D7D)),
-                        ),
-                        onSaved: (hide) {
-                          store.hideFromNonFollowers = hide ?? false;
-                        },
-                        inactiveTrackColor: const Color(0xFF7D7878),
-                        decoration:
-                            const InputDecoration(enabledBorder: InputBorder.none, contentPadding: EdgeInsets.zero),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: howToMeasureYourBody(),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                  ]),
+        child: SingleChildScrollView(
+          child: FormBuilder(
+            key: store.formKey,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              const SizedBox(
+                height: 16,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  "Providing miromie with your measurements will allow us to recommend you people that match your body shape, enhancing your browsing and shopping experience. By default, your measurements are visible to everyone.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF7D7878),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 40, end: 40, bottom: 24, top: 12),
-              child: FilledButton(
-                  onPressed: () async {
-                    EasyLoading.show();
-                    final success = await store.submit();
-                    if (EasyLoading.isShow) {
-                      EasyLoading.dismiss();
-                    }
-                    if (success && context.mounted) {
-                      onCtaSuccess(context);
-                    }
+              const SizedBox(
+                height: 24,
+              ),
+              FormBuilderTextField(
+                name: 'height',
+                onTapOutside: (_) {
+                  store.formKey.currentState?.fields.values.forEach((element) {
+                    element.effectiveFocusNode.unfocus();
+                  });
+                },
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+                onSaved: (text) {
+                  if (text != null) {
+                    store.height = int.tryParse(text);
+                  }
+                },
+                maxLength: 3,
+                decoration: const InputDecoration(
+                    labelText: "Height",
+                    counterText: "",
+                    suffixIcon: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          'cm',
+                          style: TextStyle(
+                              color: Color(
+                                0xFF7D7878,
+                              ),
+                              fontSize: 16),
+                        ))),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              FormBuilderTextField(
+                name: 'bust',
+                onTapOutside: (_) {
+                  store.formKey.currentState?.fields.values.forEach((element) {
+                    element.effectiveFocusNode.unfocus();
+                  });
+                },
+                keyboardType: TextInputType.number,
+                maxLength: 3,
+                onSaved: (text) {
+                  if (text != null) {
+                    store.bust = int.tryParse(text);
+                  }
+                },
+                decoration: const InputDecoration(
+                    counterText: "",
+                    labelText: "Bust",
+                    suffixIcon: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          'in',
+                          style: TextStyle(
+                              color: Color(
+                                0xFF7D7878,
+                              ),
+                              fontSize: 16),
+                        ))),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              FormBuilderTextField(
+                name: 'waist',
+                onTapOutside: (_) {
+                  store.formKey.currentState?.fields.values.forEach((element) {
+                    element.effectiveFocusNode.unfocus();
+                  });
+                },
+                maxLength: 3,
+                keyboardType: TextInputType.number,
+                onSaved: (text) {
+                  if (text != null) {
+                    store.waist = int.tryParse(text);
+                  }
+                },
+                decoration: const InputDecoration(
+                    counterText: "",
+                    labelText: "Waist",
+                    suffixIcon: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          'in',
+                          style: TextStyle(
+                              color: Color(
+                                0xFF7D7878,
+                              ),
+                              fontSize: 16),
+                        ))),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              FormBuilderTextField(
+                name: 'hips',
+                onTapOutside: (_) {
+                  store.formKey.currentState?.fields.values.forEach((element) {
+                    element.effectiveFocusNode.unfocus();
+                  });
+                },
+                maxLength: 3,
+                keyboardType: TextInputType.number,
+                initialValue: store.hips?.toString(),
+                onSaved: (text) {
+                  if (text != null) {
+                    store.hips = int.tryParse(text);
+                  }
+                },
+                decoration: const InputDecoration(
+                    counterText: "",
+                    labelText: "Hips",
+                    suffixIcon: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          'in',
+                          style: TextStyle(
+                              color: Color(
+                                0xFF7D7878,
+                              ),
+                              fontSize: 16),
+                        ))),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: FormBuilderSwitch(
+                  name: "measurementPrivacy",
+                  initialValue: store.hideFromNonFollowers,
+                  title: const Text(
+                    "Hide my measurements from people who do not follow me",
+                    style: TextStyle(fontSize: 16, color: Color(0xFF787D7D)),
+                  ),
+                  onSaved: (hide) {
+                    store.hideFromNonFollowers = hide ?? false;
                   },
-                  child: Text(
-                    ctaText,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  )),
-            )
-          ],
+                  inactiveTrackColor: const Color(0xFF7D7878),
+                  decoration:
+                      const InputDecoration(enabledBorder: InputBorder.none, contentPadding: EdgeInsets.zero),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: howToMeasureYourBody(),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 40, end: 40, bottom: 24, top: 12),
+                child: FilledButton(
+                    onPressed: () async {
+                      EasyLoading.show();
+                      final success = await store.submit();
+                      if (EasyLoading.isShow) {
+                        EasyLoading.dismiss();
+                      }
+                      if (success && context.mounted) {
+                        onCtaSuccess(context);
+                      }
+                    },
+                    child: Text(
+                      ctaText,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )),
+              )
+            ]),
+          ),
         ),
       );
     });

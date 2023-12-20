@@ -26,7 +26,6 @@ class UpsertPostBase extends ConsumerWidget {
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(titleText),
             actions: [
@@ -38,100 +37,95 @@ class UpsertPostBase extends ConsumerWidget {
                     child: const Text("Choose another"))
             ],
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                  child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                child: Column(
-                  children: [
-                    AspectRatio(
-                        aspectRatio: PostImage.aspectRatio,
-                        child: (store.displayImagePath.isEmpty)
-                            ? GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () async {
-                                  selectPhoto(context: context);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: const Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.add_a_photo),
-                                      Text("Tap here to upload a new photo for your post")
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : postImage),
-                    const SizedBox(height: 18),
-                    if (store.displayImagePath.isNotEmpty) ...[
-                      CompositedTransformTarget(
-                        link: link,
-                        child: OverlayPortal(
-                          controller: store.portalController,
-                          overlayChildBuilder: (context) => PositionedDirectional(
-                            height: 200,
-                            start: 0,
-                            end: 0,
-                            child: CompositedTransformFollower(
-                              link: link,
-                              targetAnchor: Alignment.bottomLeft,
-                              followerAnchor: Alignment.bottomLeft,
-                              child: UserMentionSearch(
-                                  onUserResultsTap: (user) {
-                                    store.onMentionUserSearchTap(user);
-                                    store.portalController.hide();
-                                  },
-                                  store: store.userMentionStore),
+          body: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AspectRatio(
+                    aspectRatio: PostImage.aspectRatio,
+                    child: (store.displayImagePath.isEmpty)
+                        ? GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () async {
+                              selectPhoto(context: context);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.add_a_photo),
+                                  Text("Tap here to upload a new photo for your post")
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: shopMyLook(),
-                          ),
+                          )
+                        : postImage),
+                const SizedBox(height: 18),
+                if (store.displayImagePath.isNotEmpty) ...[
+                  CompositedTransformTarget(
+                    link: link,
+                    child: OverlayPortal(
+                      controller: store.portalController,
+                      overlayChildBuilder: (context) => PositionedDirectional(
+                        height: 200,
+                        start: 0,
+                        end: 0,
+                        child: CompositedTransformFollower(
+                          link: link,
+                          targetAnchor: Alignment.bottomLeft,
+                          followerAnchor: Alignment.bottomLeft,
+                          child: UserMentionSearch(
+                              onUserResultsTap: (user) {
+                                store.onMentionUserSearchTap(user);
+                                store.portalController.hide();
+                              },
+                              store: store.userMentionStore),
                         ),
                       ),
-                      Padding(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: DetectableTextField(
-                          maxLines: 5,
-                          style: const TextStyle(fontSize: 16),
-                          controller: store.controller,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                              hintText:
-                                  "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                              hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none),
-                        ),
+                        child: shopMyLook(),
                       ),
-                    ],
-                  ],
-                ),
-              )),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                child: FilledButton(
-                    onPressed: store.displayImagePath.isEmpty
-                        ? null
-                        : () async {
-                            EasyLoading.show();
-                            final res = await store.post();
-                            EasyLoading.dismiss();
-                            if (res && context.mounted) {
-                              Navigator.of(context).pop();
-                            }
-                          },
-                    child: const Text(
-                      "Post",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    )),
-              )
-            ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: DetectableTextField(
+                      maxLines: 5,
+                      style: const TextStyle(fontSize: 16),
+                      controller: store.controller,
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                          hintText:
+                              "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                          hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none),
+                    ),
+                  ),
+                ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  child: FilledButton(
+                      onPressed: store.displayImagePath.isEmpty
+                          ? null
+                          : () async {
+                              EasyLoading.show();
+                              final res = await store.post();
+                              EasyLoading.dismiss();
+                              if (res && context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       );
@@ -173,9 +167,11 @@ class UpsertPostBase extends ConsumerWidget {
         const SizedBox(
           width: 12,
         ),
-         Flexible(
+        Flexible(
             child: Text(
-          store.shopMyLook ? "Others can chat with you to purchase your item(s)" : "Enable this if you are selling any items",
+          store.shopMyLook
+              ? "Others can chat with you to purchase your item(s)"
+              : "Enable this if you are selling any items",
           maxLines: 2,
           style: const TextStyle(color: Color(0xFF7D7878)),
         ))
