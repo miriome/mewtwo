@@ -15,7 +15,6 @@ class EditMeasurementsPage extends StatelessWidget {
           "Edit Measurements",
         ),
       ),
-      resizeToAvoidBottomInset: false,
       body: UpsertMeasurementsBase(store: store, ctaText: "Confirm", onCtaSuccess: (context) => Navigator.of(context).pop(),)
     );
   }

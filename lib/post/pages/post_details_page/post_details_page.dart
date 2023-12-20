@@ -83,7 +83,6 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
             return Container();
           }
           return Scaffold(
-            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text(
                 "${post.posted_by?.username ?? ""}'s post",
