@@ -58,7 +58,7 @@ abstract class _SignUpPageStore with Store {
       return "This username is invalid.";
     }
     if (isUsernameRegistered) {
-      return "This email is already registered.";
+      return "This username has been used.";
     }
     return null;
   }

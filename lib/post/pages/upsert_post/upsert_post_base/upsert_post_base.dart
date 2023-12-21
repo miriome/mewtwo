@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,100 +39,97 @@ class UpsertPostBase extends StatelessWidget {
                     icon: const Icon(Icons.restart_alt))
             ],
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                  child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                child: Column(
-                  children: [
-                    (store.displayImagePaths.isEmpty)
-                        ? AspectRatio(
-                            aspectRatio: PostImage.aspectRatio,
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () async {
-                                selectPhoto(context: context);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.add_a_photo),
-                                    Text("Tap here to upload a new photo for your post")
-                                  ],
-                                ),
+          body: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AspectRatio(
+                    aspectRatio: PostImage.aspectRatio,
+                    child: (store.displayImagePath.isEmpty)
+                        ? GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () async {
+                              selectPhoto(context: context);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.add_a_photo),
+                                  Text("Tap here to upload a new photo for your post")
+                                ],
                               ),
-                            ))
-                        : postImage,
-                    // const SizedBox(height: 18),
-                    if (store.displayImagePaths.isNotEmpty) ...[
-                      CompositedTransformTarget(
-                        link: link,
-                        child: OverlayPortal(
-                          controller: store.portalController,
-                          overlayChildBuilder: (context) => PositionedDirectional(
-                            height: 200,
-                            start: 0,
-                            end: 0,
-                            child: CompositedTransformFollower(
-                              link: link,
-                              targetAnchor: Alignment.bottomLeft,
-                              followerAnchor: Alignment.bottomLeft,
-                              child: UserMentionSearch(
-                                  onUserResultsTap: (user) {
-                                    store.onMentionUserSearchTap(user);
-                                    store.portalController.hide();
-                                  },
-                                  store: store.userMentionStore),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: shopMyLook(),
-                          ),
+                          )
+                        : postImage),
+                const SizedBox(height: 18),
+                if (store.displayImagePath.isNotEmpty) ...[
+                  CompositedTransformTarget(
+                    link: link,
+                    child: OverlayPortal(
+                      controller: store.portalController,
+                      overlayChildBuilder: (context) => PositionedDirectional(
+                        height: 200,
+                        start: 0,
+                        end: 0,
+                        child: CompositedTransformFollower(
+                          link: link,
+                          targetAnchor: Alignment.bottomLeft,
+                          followerAnchor: Alignment.bottomLeft,
+                          child: UserMentionSearch(
+                              onUserResultsTap: (user) {
+                                store.onMentionUserSearchTap(user);
+                                store.portalController.hide();
+                              },
+                              store: store.userMentionStore),
                         ),
                       ),
-                      Padding(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: DetectableTextField(
-                          maxLines: 5,
-                          style: const TextStyle(fontSize: 16),
-                          controller: store.controller,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                              hintText:
-                                  "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                              hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none),
-                        ),
+                        child: shopMyLook(),
                       ),
-                    ],
-                  ],
-                ),
-              )),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                child: FilledButton(
-                    onPressed: store.displayImagePaths.isEmpty
-                        ? null
-                        : () async {
-                            EasyLoading.show();
-                            final res = await store.post();
-                            EasyLoading.dismiss();
-                            if (res && context.mounted) {
-                              Navigator.of(context).pop();
-                            }
-                          },
-                    child: const Text(
-                      "Post",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    )),
-              )
-            ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: DetectableTextField(
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      maxLines: 5,
+                      style: const TextStyle(fontSize: 16),
+                      controller: store.controller,
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                          hintText:
+                              "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                          hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none),
+                    ),
+                  ),
+                ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  child: FilledButton(
+                      onPressed: store.displayImagePath.isEmpty
+                          ? null
+                          : () async {
+                              EasyLoading.show();
+                              final res = await store.post();
+                              EasyLoading.dismiss();
+                              if (res && context.mounted) {
+                                Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
+                                Navigator.of(context).pop();
+                              }
+                            },
+                      child: const Text(
+                        "Post",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       );

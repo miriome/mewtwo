@@ -300,14 +300,14 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
           linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: post.mentions), const HashtagLinkifier()],
           linkStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
           style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-          options: const LinkifyOptions(defaultToHttps: true),
+          options: const LinkifyOptions(defaultToHttps: true, looseUrl: true),
           onOpen: (element) async {
             if (element is MentionElement) {
               OtherProfilePageRoute(userId: element.user.user_id).push(context).then((value) => store.load());              
               return;
             }
             if (element is HashtagElement) {
-              SearchPageRoute(initialSearchTerm: element.text.removePrefix("#")).go(context);
+              SearchPageRoute().goWithInitialSearchTerm(context, element.text.removePrefix("#"));
               return;
             }
             if (element is UrlElement) {

@@ -93,9 +93,8 @@ Future<bool> deletePostApi(DeletePostApiRef ref, {required int postId}) async {
 @riverpod
 Future<bool> markPostSoldApi(MarkPostSoldApiRef ref, {required int postId}) async {
   
-  final body = {'chat_enabled': 0.toString()};
   try {
-    final res = await (await Networking.instance).post(path: "post/markSold/$postId", body: body);
+    final res = await (await Networking.instance).post(path: "post/markSold/$postId", body: {});
     Map response = res.data;
     if (response['status'] == false) {
       Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);

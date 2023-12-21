@@ -8,7 +8,6 @@ class HomePageRoute extends GoRouteData {
 }
 
 class FakeNewPostRoute extends GoRouteData {
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     // Used to route to another screen.
@@ -17,17 +16,21 @@ class FakeNewPostRoute extends GoRouteData {
 }
 
 class SearchPageRoute extends GoRouteData {
-  final String? initialSearchTerm;
+  void goWithInitialSearchTerm(BuildContext context, String initialSearchTerm) {
+    Mew.pc.read(searchPageStoreProvider).textEditingController.text = initialSearchTerm;
+    return go(context);
+  }
 
-  SearchPageRoute({this.initialSearchTerm});
+  void pushWithInitialSearchTerm(BuildContext context, String initialSearchTerm) {
+    Mew.pc.read(searchPageStoreProvider).textEditingController.text = initialSearchTerm;
+    return go(context);
+  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return SearchPage(
-      initialSearchTerm: initialSearchTerm ?? '',);
+    return const SearchPage();
   }
 }
-
 
 class NotificationPageRoute extends GoRouteData {
   @override

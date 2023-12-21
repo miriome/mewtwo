@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
+import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/unauth/routes/routes.dart';
 import 'package:mewtwo/home/main_tab_bar.dart';

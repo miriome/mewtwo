@@ -146,6 +146,7 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'edit-profile',
+                  parentNavigatorKey: EditProfileRoute.$parentNavigatorKey,
                   factory: $EditProfileRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
@@ -154,10 +155,12 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                 ),
                 GoRouteData.$route(
                   path: 'edit-measurements',
+                  parentNavigatorKey: EditMeasurementsRoute.$parentNavigatorKey,
                   factory: $EditMeasurementsRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
                   path: 'edit-styles',
+                  parentNavigatorKey: EditStylesRoute.$parentNavigatorKey,
                   factory: $EditStylesRouteExtension._fromState,
                 ),
                 GoRouteData.$route(
@@ -444,16 +447,10 @@ extension $EditPostRouteExtension on EditPostRoute {
 }
 
 extension $SearchPageRouteExtension on SearchPageRoute {
-  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute(
-        initialSearchTerm: state.uri.queryParameters['initial-search-term'],
-      );
+  static SearchPageRoute _fromState(GoRouterState state) => SearchPageRoute();
 
   String get location => GoRouteData.$location(
         '/SearchPage',
-        queryParams: {
-          if (initialSearchTerm != null)
-            'initial-search-term': initialSearchTerm,
-        },
       );
 
   void go(BuildContext context) => context.go(location);
