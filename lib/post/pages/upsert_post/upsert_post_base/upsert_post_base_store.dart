@@ -5,7 +5,7 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:flutter/material.dart';
 import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mewtwo/home/api/api.dart';
+import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
@@ -13,7 +13,7 @@ import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_stor
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
+import 'package:image/image.dart' as img;
 
 part 'upsert_post_base_store.g.dart';
 
@@ -110,30 +110,44 @@ abstract class _UpsertPostBaseStore with Store {
 
   @action
   Future<bool> post() async {
-    final photosToPost = displayImagePaths
-        .mapIndexed<PostPhoto?>((index, path) {
-          if (!path.startsWith("http")) {
-            PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync());
-          }
-          return null;
-        })
-        .whereNotNull()
-        .toList();
-    if (displayImagePath.isNotEmpty && !displayImagePath.startsWith("http")) {
-      final hasNudity = await FlutterNudeDetector.detect(path: displayImagePath);
-      if (hasNudity) {
-        Fluttertoast.showToast(msg: "Post contains improper content", gravity: ToastGravity.CENTER);
-        return false;
-
+    final imagesIndexThatHaveNudity = (await Future.wait(displayImagePaths.mapIndexed((index, path) async {
+      if (!path.startsWith("http")) {
+        final hasNudity = await FlutterNudeDetector.detect(path: path);
+        return hasNudity ? index : null;
       }
-      fileBytes = File(displayImagePath).readAsBytesSync();
+      return null;
+    }))).whereNotNull();
+
+    if (imagesIndexThatHaveNudity.isNotEmpty) {
+      Fluttertoast.showToast(msg: "Images ${imagesIndexThatHaveNudity.joinToString(separator: ", ")} are inappropriate");
+      return false;
     }
+    
+    
+    final photosToPostFutures = displayImagePaths.mapIndexed<Future<PostPhoto?>>((index, path) async {
+      if (!path.startsWith("http")) {
+        final cmd = img.Command()
+          // Decode the image file at the given path
+          ..decodeImageFile(path)
+          // Resize the image to a width of 64 pixels and a height that maintains the aspect ratio of the original.
+          ..copyResize(width: PostImage.maxWidth.toInt());
+
+        await cmd.executeThread();
+        return PostPhoto(index: index, photoFileBytes: cmd.outputImage?.getBytes() ?? []);
+      }
+      return null;
+    });
+
+    final photosToPost = (await Future.wait(photosToPostFutures)).whereNotNull().toList();
+    
+    final upsertPostProvider =
+        AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost);
     final res = await Mew.pc.read(upsertPostProvider.future);
     if (res) {
       Future.delayed(const Duration(milliseconds: 250), () {
         Mew.pc.read(currentUserProfilePageStoreProvider).load();
       });
     }
-    return res;
+    return false;
   }
 }

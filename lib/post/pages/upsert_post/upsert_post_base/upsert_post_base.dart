@@ -44,10 +44,10 @@ class UpsertPostBase extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AspectRatio(
+                (store.displayImagePaths.isEmpty)
+                        ? AspectRatio(
                     aspectRatio: PostImage.aspectRatio,
-                    child: (store.displayImagePath.isEmpty)
-                        ? GestureDetector(
+                    child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () async {
                               selectPhoto(context: context);
@@ -63,9 +63,9 @@ class UpsertPostBase extends StatelessWidget {
                               ),
                             ),
                           )
-                        : postImage),
+                       )  : postImage,
                 const SizedBox(height: 18),
-                if (store.displayImagePath.isNotEmpty) ...[
+                if (store.displayImagePaths.isNotEmpty) ...[
                   CompositedTransformTarget(
                     link: link,
                     child: OverlayPortal(
@@ -112,7 +112,7 @@ class UpsertPostBase extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                   child: FilledButton(
-                      onPressed: store.displayImagePath.isEmpty
+                      onPressed: store.displayImagePaths.isEmpty
                           ? null
                           : () async {
                               EasyLoading.show();
@@ -222,6 +222,7 @@ class UpsertPostBase extends StatelessWidget {
               CupertinoActionSheetAction(
                 onPressed: () async {
                   final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
+                  
                   if (modalContext.mounted) {
                     Navigator.pop(modalContext, [image]);
                   }
