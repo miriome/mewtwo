@@ -3,9 +3,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mewtwo/utils.dart';
 
 class PostImage extends StatelessWidget {
-  static const double maxWidth = 242 * 2;
+  static const double maxWidth = 184 * 3;
   static const aspectRatio = 184 / 242;
   static const fit = BoxFit.cover;
   final String imageUrl;
@@ -18,8 +19,8 @@ class PostImage extends StatelessWidget {
           aspectRatio: aspectRatio,
           child: 
           imageUrl.startsWith("http") ? CachedNetworkImage(
-              memCacheWidth: constraints.maxWidth.isInfinite ? 242 * 4 : constraints.maxWidth.ceil() * 2,
-              imageUrl: imageUrl,
+              memCacheWidth: constraints.maxWidth.isInfinite ? maxWidth.toInt() : constraints.maxWidth.ceil() * 2,
+              imageUrl: Utility.parseImageUrl(imageUrl),
               placeholder: (context, url) {
                 return const Center(
                   child: CircularProgressIndicator(

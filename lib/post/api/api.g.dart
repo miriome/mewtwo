@@ -685,7 +685,7 @@ class _MarkPostSoldApiProviderElement
   int get postId => (origin as MarkPostSoldApiProvider).postId;
 }
 
-String _$editPostApiHash() => r'3e09439aa067236c9d40b9bbbb1ae7851a439fac';
+String _$editPostApiHash() => r'8edb8dd3b3432f1776ba14b1a49c4a554b4185f3';
 
 /// See also [editPostApi].
 @ProviderFor(editPostApi)
@@ -862,7 +862,7 @@ class _EditPostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
   List<PostPhoto> get photos => (origin as EditPostApiProvider).photos;
 }
 
-String _$addPostApiHash() => r'fc1149d88ffeefc0848374fbc1e711cd8d10e704';
+String _$addPostApiHash() => r'4610830daefd313b9e5021e2bb47b93f2c532984';
 
 /// See also [addPostApi].
 @ProviderFor(addPostApi)

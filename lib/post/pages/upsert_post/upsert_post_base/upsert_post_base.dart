@@ -174,16 +174,20 @@ class UpsertPostBase extends StatelessWidget {
 
   Widget shopMyLook() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Checkbox(
-            value: store.shopMyLook,
-            onChanged: (toggle) => store.shopMyLook = toggle ?? false,
-            fillColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.selected)) {
-                return const Color(0xFF8474A1);
-              }
-              return null;
-            })),
+        SizedBox(
+          height: 24,
+          child: Checkbox(
+              value: store.shopMyLook,
+              onChanged: (toggle) => store.shopMyLook = toggle ?? false,
+              fillColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.selected)) {
+                  return const Color(0xFF8474A1);
+                }
+                return null;
+              })),
+        ),
         const Text(
           "Shop My Look",
           style: TextStyle(fontSize: 16, color: Color(0xFF8474A1), fontWeight: FontWeight.bold),

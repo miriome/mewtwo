@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
+import 'package:mewtwo/networking/networking.dart';
 
 class MaterialColorGenerator {
   static MaterialColor from(Color color) {
@@ -144,6 +145,9 @@ class Log {
 }
 
 class Utility {
+  static String parseImageUrl(String url) {
+    return url.replaceAll("https://miromie.com", Networking.domain);
+  }
   static String parseStr(dynamic val) {
     if (val is String) {
       return val;

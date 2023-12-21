@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dartx/dartx.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
@@ -13,8 +14,9 @@ part 'api.g.dart';
 @riverpod
 Future<PostModel?> getPostDetailsApi(GetPostDetailsApiRef ref, {required int postId}) async {
   try {
-    final res = await (await Networking.instance).get<List<int>>(path: "post/details/$postId", options: Options(responseType: ResponseType.bytes));
-    
+    final res = await (await Networking.instance)
+        .get<List<int>>(path: "post/details/$postId", options: Options(responseType: ResponseType.bytes));
+
     List<int> response = res.data;
     final jsonRes = jsonDecode(utf8.decode(response));
     if (jsonRes['status'] == false) {
@@ -92,7 +94,6 @@ Future<bool> deletePostApi(DeletePostApiRef ref, {required int postId}) async {
 
 @riverpod
 Future<bool> markPostSoldApi(MarkPostSoldApiRef ref, {required int postId}) async {
-  
   try {
     final res = await (await Networking.instance).post(path: "post/markSold/$postId", body: {});
     Map response = res.data;
@@ -109,6 +110,7 @@ Future<bool> markPostSoldApi(MarkPostSoldApiRef ref, {required int postId}) asyn
   }
   return false;
 }
+
 class PostPhoto {
   int index;
   List<int> photoFileBytes;
@@ -116,14 +118,16 @@ class PostPhoto {
 }
 
 @riverpod
-Future<bool> editPostApi(EditPostApiRef ref, {required int postId, required String caption, required bool chatEnabled, required List<PostPhoto> photos}) async {
+Future<bool> editPostApi(EditPostApiRef ref,
+    {required int postId, required String caption, required bool chatEnabled, required List<PostPhoto> photos}) async {
   final data = FormData.fromMap({
     "caption": caption,
     'chat_enabled': chatEnabled ? 1 : 0,
-    'photos': photos.map((photo) => {
-      'index' : photo.index,
-      'file' : MultipartFile.fromBytes(photo.photoFileBytes, filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg')) 
-    })
+  });
+
+  photos.forEachIndexed((photo, index) {
+    data.files.add(MapEntry('image_${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
+          filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg'))));
   });
   try {
     final res = await (await Networking.instance).postForm(path: "post/editPost/$postId", data: data);
@@ -142,16 +146,17 @@ Future<bool> editPostApi(EditPostApiRef ref, {required int postId, required Stri
   return false;
 }
 
-
 @riverpod
-Future<bool> addPostApi(AddPostApiRef ref, {required String caption, required bool chatEnabled, required List<PostPhoto> photos}) async {
+Future<bool> addPostApi(AddPostApiRef ref,
+    {required String caption, required bool chatEnabled, required List<PostPhoto> photos}) async {
   final data = FormData.fromMap({
     "caption": caption,
     'chat_enabled': chatEnabled ? 1 : 0,
-    'photos': photos.map((photo) => {
-      'index' : photo.index,
-      'file' : MultipartFile.fromBytes(photo.photoFileBytes, filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg')) 
-    })
+    'photos_last_index': photos.lastIndex
+  });
+   photos.forEachIndexed((photo, index) {
+    data.files.add(MapEntry('${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
+          filename: "photo.jpg", contentType: MediaType('image', 'jpeg'))));
   });
   try {
     final res = await (await Networking.instance).postForm(path: "post/addPost", data: data);
@@ -169,4 +174,3 @@ Future<bool> addPostApi(AddPostApiRef ref, {required String caption, required bo
   }
   return false;
 }
-

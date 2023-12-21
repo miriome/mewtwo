@@ -126,6 +126,9 @@ abstract class _UpsertPostBaseStore with Store {
     
     final photosToPostFutures = displayImagePaths.mapIndexed<Future<PostPhoto?>>((index, path) async {
       if (!path.startsWith("http")) {
+        //  final jpegImage = await img.decodeImageFile(path);
+        
+        //  final resizedImage = img.copyResize(jpegImage!, width: PostImage.maxWidth.toInt());
         final cmd = img.Command()
           // Decode the image file at the given path
           ..decodeImageFile(path)
@@ -133,21 +136,34 @@ abstract class _UpsertPostBaseStore with Store {
           ..copyResize(width: PostImage.maxWidth.toInt());
 
         await cmd.executeThread();
-        return PostPhoto(index: index, photoFileBytes: cmd.outputImage?.getBytes() ?? []);
+        
+        if (cmd.outputImage == null) {
+          return null;
+        }
+        final output = img.encodeNamedImage(path, cmd.outputImage!);
+        if (output == null) {
+          return null;
+        }
+        
+        
+        return PostPhoto(index: index, photoFileBytes: output);
       }
       return null;
     });
-
-    final photosToPost = (await Future.wait(photosToPostFutures)).whereNotNull().toList();
+    
+    final photosToPost = (await Future.wait(photosToPostFutures));
+    if (photosToPost.contains(null)) {
+      return false;
+    }
     
     final upsertPostProvider =
-        AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost);
+        AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
     final res = await Mew.pc.read(upsertPostProvider.future);
     if (res) {
       Future.delayed(const Duration(milliseconds: 250), () {
         Mew.pc.read(currentUserProfilePageStoreProvider).load();
       });
     }
-    return false;
+    return res;
   }
 }
