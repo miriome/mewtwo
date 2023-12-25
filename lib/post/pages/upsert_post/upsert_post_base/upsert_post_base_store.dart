@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
@@ -200,7 +201,7 @@ abstract class _UpsertPostBaseStore with Store {
             x: cropRect.left.toInt(),
             y: cropRect.top.toInt(),
             width: cropRect.width.toInt(),
-            height: cropRect.height.toInt());
+            height: cropRect.height.toInt())..copyResize(width: PostImage.maxWidth.toInt());
 
       await cmd.executeThread();
       // img.copyCrop(src, x: x, y: y, width: width, height: height)
@@ -220,8 +221,8 @@ abstract class _UpsertPostBaseStore with Store {
 
   @action
   Future<bool> post() async {
-    final photosToPost = (await preprocessPostImages()).whereNotNull();
-    if (photosToPost.isEmpty) {
+    final photosToPost = (await preprocessPostImages());
+    if (photosToPost.contains(null) || photosToPost.isEmpty) {
       Fluttertoast.showToast(msg: "Images failed to be processed. Please try again.");
       return false;
     }
