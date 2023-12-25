@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mewtwo/home/model/get_posts_api_model.dart';
+import 'package:mewtwo/home/model/api/get_posts_api_model.dart';
 import 'package:mewtwo/home/model/notification_model.dart';
-import 'package:mewtwo/home/model/search_api_model.dart';
+import 'package:mewtwo/home/model/api/search_api_model.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/networking/networking.dart';

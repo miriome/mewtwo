@@ -32,7 +32,39 @@ typedef UpsertPostBaseStoreRef = AutoDisposeProviderRef<UpsertPostBaseStore>;
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
+mixin _$_ImageEditModel on __ImageEditModel, Store {
+  late final _$hasBeenCroppedAtom =
+      Atom(name: '__ImageEditModel.hasBeenCropped', context: context);
+
+  @override
+  bool get hasBeenCropped {
+    _$hasBeenCroppedAtom.reportRead();
+    return super.hasBeenCropped;
+  }
+
+  @override
+  set hasBeenCropped(bool value) {
+    _$hasBeenCroppedAtom.reportWrite(value, super.hasBeenCropped, () {
+      super.hasBeenCropped = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+hasBeenCropped: ${hasBeenCropped}
+    ''';
+  }
+}
+
 mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
+  Computed<bool>? _$canPostComputed;
+
+  @override
+  bool get canPost => (_$canPostComputed ??= Computed<bool>(() => super.canPost,
+          name: '_UpsertPostBaseStore.canPost'))
+      .value;
+
   late final _$_editableImagesAtom =
       Atom(name: '_UpsertPostBaseStore._editableImages', context: context);
 
@@ -127,7 +159,8 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     return '''
 shopMyLook: ${shopMyLook},
 imagePagePosition: ${imagePagePosition},
-isImageEditing: ${isImageEditing}
+isImageEditing: ${isImageEditing},
+canPost: ${canPost}
     ''';
   }
 }

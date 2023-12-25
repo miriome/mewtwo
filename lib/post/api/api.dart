@@ -156,7 +156,7 @@ Future<bool> addPostApi(AddPostApiRef ref,
   });
    photos.forEachIndexed((photo, index) {
     data.files.add(MapEntry('${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
-          filename: "photo.jpg", contentType: MediaType('image', 'jpeg'))));
+          filename: "photo_$index.jpg", contentType: MediaType('image', 'jpeg'))));
   });
   try {
     final res = await (await Networking.instance).postForm(path: "post/addPost", data: data);

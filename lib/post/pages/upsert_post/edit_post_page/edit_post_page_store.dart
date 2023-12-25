@@ -43,7 +43,7 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      setEditableImages([res.image]);
+      setEditableImages(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image), true);
       
       controller.text = res.caption;
       

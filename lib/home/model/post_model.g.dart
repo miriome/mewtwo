@@ -17,6 +17,10 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       added_by: Utility.parseInt(json['added_by']),
       likes: Utility.parseInt(json['likes']),
       my_like: Utility.parseBool(json['my_like']),
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => _PostImageModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       hashtag: json['hashtag'] as String?,
       posted_by: json['posted_by'] == null
           ? null
@@ -45,6 +49,19 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'posted_by': instance.posted_by?.toJson(),
       'comments': instance.comments?.map((e) => e.toJson()).toList(),
       'mentions': instance.mentions.map((e) => e.toJson()).toList(),
+      'images': instance.images.map((e) => e.toJson()).toList(),
+    };
+
+_PostImageModel _$PostImageModelFromJson(Map<String, dynamic> json) =>
+    _PostImageModel(
+      image: Utility.parseImageUrl(json['image'] as String),
+      index: Utility.parseInt(json['index']),
+    );
+
+Map<String, dynamic> _$PostImageModelToJson(_PostImageModel instance) =>
+    <String, dynamic>{
+      'image': instance.image,
+      'index': Utility.int2Str(instance.index),
     };
 
 // **************************************************************************

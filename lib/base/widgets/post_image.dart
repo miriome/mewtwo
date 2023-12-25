@@ -20,7 +20,7 @@ class PostImage extends StatelessWidget {
           child: 
           imageUrl.startsWith("http") ? CachedNetworkImage(
               memCacheWidth: constraints.maxWidth.isInfinite ? maxWidth.toInt() : constraints.maxWidth.ceil() * 2,
-              imageUrl: Utility.parseImageUrl(imageUrl),
+              imageUrl: imageUrl,
               placeholder: (context, url) {
                 return const Center(
                   child: CircularProgressIndicator(

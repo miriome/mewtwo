@@ -15,6 +15,7 @@ import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
+import 'package:mewtwo/utils.dart';
 
 class UpsertPostBase extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
@@ -109,7 +110,7 @@ class UpsertPostBase extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                   child: FilledButton(
-                      onPressed: store.editableImages.isEmpty
+                      onPressed: !store.canPost
                           ? null
                           : () async {
                               EasyLoading.show(maskType: EasyLoadingMaskType.clear);
@@ -153,20 +154,38 @@ class UpsertPostBase extends StatelessWidget {
                         store.isImageEditing = false;
                       },
                       behavior: HitTestBehavior.translucent,
-                      child: ExtendedImage.file(
-                        File(image.displayImagePath),
-                        extendedImageEditorKey: image.editorStateKey,
-                        fit: BoxFit.contain,
-                        mode: ExtendedImageMode.editor,
-                        initEditorConfigHandler: (state) {
-                          return EditorConfig(
-                              initialCropAspectRatio: PostImage.aspectRatio,
-                              initCropRectType: InitCropRectType.layoutRect,
-                              cropAspectRatio: PostImage.aspectRatio,
-                              cropRectPadding: EdgeInsets.zero,
-                              hitTestBehavior: HitTestBehavior.opaque);
-                        },
-                      ),
+                      child: image.displayImagePath.contains("http")
+                        // ? PostImage(imageUrl: image.displayImagePath)
+                          ? ExtendedImage.network(
+                              image.displayImagePath,
+                              enableLoadState: true,
+                              extendedImageEditorKey: image.editorStateKey,
+                              fit: BoxFit.contain,
+                              mode: ExtendedImageMode.editor,
+                              initEditorConfigHandler: (state) {
+                                return EditorConfig(
+                                    initialCropAspectRatio: PostImage.aspectRatio,
+                                    initCropRectType: InitCropRectType.layoutRect,
+                                    cropAspectRatio: PostImage.aspectRatio,
+                                    cropRectPadding: EdgeInsets.zero,
+                                    hitTestBehavior: HitTestBehavior.opaque);
+                              },
+                            )
+                          : ExtendedImage.file(
+                              File(image.displayImagePath),
+                              extendedImageEditorKey: image.editorStateKey,
+                              fit: BoxFit.contain,
+                              mode: ExtendedImageMode.editor,
+                              cacheRawData: true,
+                              initEditorConfigHandler: (state) {
+                                return EditorConfig(
+                                    initialCropAspectRatio: PostImage.aspectRatio,
+                                    initCropRectType: InitCropRectType.layoutRect,
+                                    cropAspectRatio: PostImage.aspectRatio,
+                                    cropRectPadding: EdgeInsets.zero,
+                                    hitTestBehavior: HitTestBehavior.opaque);
+                              },
+                            ),
                     ),
                     if (store.shopMyLook)
                       const PositionedDirectional(
@@ -259,7 +278,7 @@ class UpsertPostBase extends StatelessWidget {
 
   void selectPhoto({required BuildContext context}) async {
     final imageFiles = await showOtherProfilePostOptions(context);
-    store.setEditableImages(imageFiles.map((e) => e.path));
+    store.setEditableImages(imageFiles.map((e) => e.path), false);
   }
 
   Future<List<XFile>> showOtherProfilePostOptions(BuildContext context) async {

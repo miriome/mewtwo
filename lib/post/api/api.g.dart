@@ -862,7 +862,7 @@ class _EditPostApiProviderElement extends AutoDisposeFutureProviderElement<bool>
   List<PostPhoto> get photos => (origin as EditPostApiProvider).photos;
 }
 
-String _$addPostApiHash() => r'4610830daefd313b9e5021e2bb47b93f2c532984';
+String _$addPostApiHash() => r'5cb512c473eb15a85810ecca65c46d6bc659cdff';
 
 /// See also [addPostApi].
 @ProviderFor(addPostApi)
