@@ -685,7 +685,7 @@ class _MarkPostSoldApiProviderElement
   int get postId => (origin as MarkPostSoldApiProvider).postId;
 }
 
-String _$editPostApiHash() => r'8edb8dd3b3432f1776ba14b1a49c4a554b4185f3';
+String _$editPostApiHash() => r'b1628ed661c048d655139643ddc4418a62c361cd';
 
 /// See also [editPostApi].
 @ProviderFor(editPostApi)

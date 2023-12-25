@@ -126,7 +126,7 @@ Future<bool> editPostApi(EditPostApiRef ref,
   });
 
   photos.forEachIndexed((photo, index) {
-    data.files.add(MapEntry('image_${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
+    data.files.add(MapEntry('${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
           filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg'))));
   });
   try {

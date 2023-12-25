@@ -51,11 +51,10 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   @override
   @action
   Future<bool> post() async {
-    final photosToPost = (await preprocessPostImages());
-    if (photosToPost.contains(null) || photosToPost.isEmpty) {
-      Fluttertoast.showToast(msg: "Images failed to be processed. Please try again.");
-      return false;
-    }
+    final photosToPost = await preprocessPostImages();
+    
+    
+    
     final editPostApiProvider = EditPostApiProvider(
         postId: postId, caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
     final res = await Mew.pc.read(editPostApiProvider.future);

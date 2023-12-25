@@ -161,6 +161,7 @@ class UpsertPostBase extends StatelessWidget {
                               enableLoadState: true,
                               extendedImageEditorKey: image.editorStateKey,
                               fit: BoxFit.contain,
+                              cacheRawData: true,
                               mode: ExtendedImageMode.editor,
                               initEditorConfigHandler: (state) {
                                 return EditorConfig(
@@ -297,7 +298,7 @@ class UpsertPostBase extends StatelessWidget {
                   final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
 
                   if (modalContext.mounted) {
-                    Navigator.pop(modalContext, [image]);
+                    Navigator.pop(modalContext, image != null ? [image] : []);
                   }
                 },
                 child: const Text(
@@ -311,7 +312,7 @@ class UpsertPostBase extends StatelessWidget {
                     source: ImageSource.gallery,
                   );
                   if (modalContext.mounted) {
-                    Navigator.pop(modalContext, [image]);
+                    Navigator.pop(modalContext, image != null ? [image] : []);
                   }
                 },
                 child: const Text('Select a single photo library', style: TextStyle(color: Color(0xFF7D7878))),
