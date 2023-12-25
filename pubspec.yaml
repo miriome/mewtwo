@@ -67,6 +67,7 @@ dependencies:
   flutter_branch_sdk: ^7.0.1
   flutter_nude_detector: ^0.0.4+1
   image: ^4.1.3
+  extended_image: ^8.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

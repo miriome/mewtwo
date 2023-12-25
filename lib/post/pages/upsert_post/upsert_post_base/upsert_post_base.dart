@@ -5,16 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_cropper/image_cropper.dart';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
-import 'package:mobx/mobx.dart';
 
 class UpsertPostBase extends StatelessWidget {
   final ImagePicker picker = ImagePicker();
@@ -31,7 +31,7 @@ class UpsertPostBase extends StatelessWidget {
           appBar: AppBar(
             title: Text(titleText),
             actions: [
-              if (store.displayImagePaths.isNotEmpty)
+              if (store.editableImages.isNotEmpty)
                 IconButton(
                     onPressed: () {
                       selectPhoto(context: context);
@@ -40,32 +40,29 @@ class UpsertPostBase extends StatelessWidget {
             ],
           ),
           body: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
+            physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                (store.displayImagePaths.isEmpty)
-                        ? AspectRatio(
-                    aspectRatio: PostImage.aspectRatio,
-                    child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () async {
-                              selectPhoto(context: context);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: const Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add_a_photo),
-                                  Text("Tap here to upload a new photo for your post")
-                                ],
-                              ),
+                (store.editableImages.isEmpty)
+                    ? AspectRatio(
+                        aspectRatio: PostImage.aspectRatio,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            selectPhoto(context: context);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [Icon(Icons.add_a_photo), Text("Tap here to upload a new photo for your post")],
                             ),
-                          )
-                       )  : postImage,
+                          ),
+                        ))
+                    : postImage,
                 const SizedBox(height: 18),
-                if (store.displayImagePaths.isNotEmpty) ...[
+                if (store.editableImages.isNotEmpty) ...[
                   CompositedTransformTarget(
                     link: link,
                     child: OverlayPortal(
@@ -112,10 +109,10 @@ class UpsertPostBase extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                   child: FilledButton(
-                      onPressed: store.displayImagePaths.isEmpty
+                      onPressed: store.editableImages.isEmpty
                           ? null
                           : () async {
-                              EasyLoading.show();
+                              EasyLoading.show(maskType: EasyLoadingMaskType.clear);
                               final res = await store.post();
                               EasyLoading.dismiss();
                               if (res && context.mounted) {
@@ -142,32 +139,85 @@ class UpsertPostBase extends StatelessWidget {
       children: [
         AspectRatio(
           aspectRatio: PostImage.aspectRatio,
-          child: PageView.builder(
-            controller: store.imagePageController,
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  PostImage(imageUrl: store.displayImagePaths[index]),
-                  if (store.shopMyLook)
-                    const PositionedDirectional(
-                      bottom: 8,
-                      start: 8,
-                      child: ShoppableIcon(
-                        size: 24,
+          child: PageView(
+              controller: store.imagePageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: store.editableImages.map((image) {
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      onVerticalDragStart: (_) {
+                        store.isImageEditing = true;
+                      },
+                      onVerticalDragEnd: (_) {
+                        store.isImageEditing = false;
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: ExtendedImage.file(
+                        File(image.displayImagePath),
+                        extendedImageEditorKey: image.editorStateKey,
+                        fit: BoxFit.contain,
+                        mode: ExtendedImageMode.editor,
+                        initEditorConfigHandler: (state) {
+                          return EditorConfig(
+                              initialCropAspectRatio: PostImage.aspectRatio,
+                              initCropRectType: InitCropRectType.layoutRect,
+                              cropAspectRatio: PostImage.aspectRatio,
+                              cropRectPadding: EdgeInsets.zero,
+                              hitTestBehavior: HitTestBehavior.opaque);
+                        },
                       ),
                     ),
-                ],
-              );
-            },
-            itemCount: store.displayImagePaths.length,
-          ),
+                    if (store.shopMyLook)
+                      const PositionedDirectional(
+                        bottom: 8,
+                        start: 8,
+                        child: ShoppableIcon(
+                          size: 24,
+                        ),
+                      ),
+                  ],
+                );
+              }).toList()),
         ),
-        const SizedBox(height: 8,),
-        if (store.displayImagePaths.length > 1)
-          DotsIndicator(
-            dotsCount: store.displayImagePaths.length,
-            position: store.imagePagePosition,
-          )
+        const SizedBox(
+          height: 8,
+        ),
+        if (store.editableImages.length > 1)
+          Row(
+            children: [
+              (store.imagePagePosition) < 1
+                  ? const Spacer()
+                  : Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: TextButton(
+                          onPressed: () {
+                            store.previousEditingImage();
+                          },
+                          child: const Text("Previous Image")),
+                    ),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: DotsIndicator(
+                  dotsCount: store.editableImages.length,
+                  position: store.imagePagePosition,
+                ),
+              ),
+              (store.imagePagePosition == store.editableImages.length - 1)
+                  ? const Spacer()
+                  : Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: TextButton(
+                          onPressed: () {
+                            store.nextEditingImage();
+                          },
+                          child: const Text("Next Image")),
+                    )
+            ],
+          ),
       ],
     );
   }
@@ -209,7 +259,7 @@ class UpsertPostBase extends StatelessWidget {
 
   void selectPhoto({required BuildContext context}) async {
     final imageFiles = await showOtherProfilePostOptions(context);
-    store.displayImagePaths = ObservableList.of(imageFiles.map((e) => e.path));
+    store.setEditableImages(imageFiles.map((e) => e.path));
   }
 
   Future<List<XFile>> showOtherProfilePostOptions(BuildContext context) async {
@@ -226,7 +276,7 @@ class UpsertPostBase extends StatelessWidget {
               CupertinoActionSheetAction(
                 onPressed: () async {
                   final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
-                  
+
                   if (modalContext.mounted) {
                     Navigator.pop(modalContext, [image]);
                   }

@@ -43,7 +43,8 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      displayImagePaths = ObservableList.of([res.image]) ;
+      setEditableImages([res.image]);
+      
       controller.text = res.caption;
       
     }
@@ -54,8 +55,9 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   @override
   @action
   Future<bool> post() async {
-   final photosToPost = displayImagePaths
-        .mapIndexed<PostPhoto?>((index, path) {
+   final photosToPost = editableImages
+        .mapIndexed<PostPhoto?>((index, image) {
+          final path = image.displayImagePath;
           if (!path.startsWith("http")) {
             PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync());
           }

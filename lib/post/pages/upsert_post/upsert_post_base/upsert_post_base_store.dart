@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartx/dartx.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +14,7 @@ import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search_stor
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:image/image.dart' as img;
 
 part 'upsert_post_base_store.g.dart';
@@ -24,6 +26,14 @@ UpsertPostBaseStore upsertPostBaseStore(UpsertPostBaseStoreRef ref) {
     store.dispose();
   });
   return store;
+}
+
+class _ImageEditModel {
+  final String displayImagePath;
+  final GlobalKey<ExtendedImageEditorState> editorStateKey;
+  Rect? cropRect;
+
+  _ImageEditModel({required this.displayImagePath, required this.editorStateKey});
 }
 
 class UpsertPostBaseStore extends _UpsertPostBaseStore with _$UpsertPostBaseStore {}
@@ -72,8 +82,8 @@ abstract class _UpsertPostBaseStore with Store {
     });
   }
 
-  @observable
-  ObservableList<String> displayImagePaths = ObservableList.of([]);
+  @readonly
+  ObservableList<_ImageEditModel> _editableImages = ObservableList.of([]);
 
   @observable
   bool shopMyLook = false;
@@ -81,10 +91,42 @@ abstract class _UpsertPostBaseStore with Store {
   @observable
   double imagePagePosition = 0;
 
+  @observable
+  bool isImageEditing = false;
+
+  void setEditableImages(Iterable<String> imagePaths) {
+    _editableImages = ObservableList.of(imagePaths
+        .map((path) => _ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>())));
+  }
+
   @action
   void updateDisplayImagePathAtIndex({required String path, required int index}) {
-    displayImagePaths.removeAt(index);
-    displayImagePaths.insert(index, path);
+    _editableImages.removeAt(index);
+    _editableImages.insert(
+        index, _ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>()));
+  }
+
+  void nextEditingImage() {
+    if (!_updateCropRect()) {
+      return;
+    }
+    imagePageController.nextPage(duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+  }
+
+  void previousEditingImage() {
+    if (!_updateCropRect()) {
+      return;
+    }
+    imagePageController.previousPage(duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+  }
+
+  bool _updateCropRect() {
+    final page = imagePageController.page?.toInt();
+    if (page == null) {
+      return false; // Shouldnt
+    }
+    _editableImages[page].cropRect = _editableImages[page].editorStateKey.currentState?.getCropRect();
+    return true;
   }
 
   void dispose() {
@@ -110,33 +152,47 @@ abstract class _UpsertPostBaseStore with Store {
 
   @action
   Future<bool> post() async {
-    final imagesIndexThatHaveNudity = (await Future.wait(displayImagePaths.mapIndexed((index, path) async {
+    if (!_updateCropRect()) {
+      return false;
+    }
+    final imagesIndexThatHaveNudity = (await Future.wait(_editableImages.mapIndexed((index, image) async {
+      final path = image.displayImagePath;
       if (!path.startsWith("http")) {
         final hasNudity = await FlutterNudeDetector.detect(path: path);
         return hasNudity ? index : null;
       }
       return null;
-    }))).whereNotNull();
+    })))
+        .whereNotNull();
 
     if (imagesIndexThatHaveNudity.isNotEmpty) {
-      Fluttertoast.showToast(msg: "Images ${imagesIndexThatHaveNudity.joinToString(separator: ", ")} are inappropriate");
+      Fluttertoast.showToast(
+          msg: "Images ${imagesIndexThatHaveNudity.joinToString(separator: ", ")} are inappropriate");
       return false;
     }
-    
-    
-    final photosToPostFutures = displayImagePaths.mapIndexed<Future<PostPhoto?>>((index, path) async {
+
+    final photosToPostFutures = _editableImages.mapIndexed<Future<PostPhoto?>>((index, image) async {
+      final cropRect = image.cropRect;
+      if (cropRect == null) {
+        return null;
+      }
+
+      final path = image.displayImagePath;
       if (!path.startsWith("http")) {
         //  final jpegImage = await img.decodeImageFile(path);
-        
+
         //  final resizedImage = img.copyResize(jpegImage!, width: PostImage.maxWidth.toInt());
         final cmd = img.Command()
           // Decode the image file at the given path
           ..decodeImageFile(path)
-          // Resize the image to a width of 64 pixels and a height that maintains the aspect ratio of the original.
-          ..copyResize(width: PostImage.maxWidth.toInt());
+          ..copyCrop(
+              x: cropRect.left.toInt(),
+              y: cropRect.top.toInt(),
+              width: cropRect.width.toInt(),
+              height: cropRect.height.toInt());
 
         await cmd.executeThread();
-        
+        // img.copyCrop(src, x: x, y: y, width: width, height: height)
         if (cmd.outputImage == null) {
           return null;
         }
@@ -144,18 +200,19 @@ abstract class _UpsertPostBaseStore with Store {
         if (output == null) {
           return null;
         }
-        
-        
+
         return PostPhoto(index: index, photoFileBytes: output);
       }
       return null;
     });
-    
+
     final photosToPost = (await Future.wait(photosToPostFutures));
     if (photosToPost.contains(null)) {
+      Fluttertoast.showToast(
+          msg: "Images failed to be processed. Please try again.");
       return false;
     }
-    
+
     final upsertPostProvider =
         AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
     final res = await Mew.pc.read(upsertPostProvider.future);

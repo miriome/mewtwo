@@ -33,19 +33,21 @@ typedef UpsertPostBaseStoreRef = AutoDisposeProviderRef<UpsertPostBaseStore>;
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
-  late final _$displayImagePathsAtom =
-      Atom(name: '_UpsertPostBaseStore.displayImagePaths', context: context);
+  late final _$_editableImagesAtom =
+      Atom(name: '_UpsertPostBaseStore._editableImages', context: context);
 
-  @override
-  ObservableList<String> get displayImagePaths {
-    _$displayImagePathsAtom.reportRead();
-    return super.displayImagePaths;
+  ObservableList<_ImageEditModel> get editableImages {
+    _$_editableImagesAtom.reportRead();
+    return super._editableImages;
   }
 
   @override
-  set displayImagePaths(ObservableList<String> value) {
-    _$displayImagePathsAtom.reportWrite(value, super.displayImagePaths, () {
-      super.displayImagePaths = value;
+  ObservableList<_ImageEditModel> get _editableImages => editableImages;
+
+  @override
+  set _editableImages(ObservableList<_ImageEditModel> value) {
+    _$_editableImagesAtom.reportWrite(value, super._editableImages, () {
+      super._editableImages = value;
     });
   }
 
@@ -81,6 +83,22 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     });
   }
 
+  late final _$isImageEditingAtom =
+      Atom(name: '_UpsertPostBaseStore.isImageEditing', context: context);
+
+  @override
+  bool get isImageEditing {
+    _$isImageEditingAtom.reportRead();
+    return super.isImageEditing;
+  }
+
+  @override
+  set isImageEditing(bool value) {
+    _$isImageEditingAtom.reportWrite(value, super.isImageEditing, () {
+      super.isImageEditing = value;
+    });
+  }
+
   late final _$postAsyncAction =
       AsyncAction('_UpsertPostBaseStore.post', context: context);
 
@@ -107,9 +125,9 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
   @override
   String toString() {
     return '''
-displayImagePaths: ${displayImagePaths},
 shopMyLook: ${shopMyLook},
-imagePagePosition: ${imagePagePosition}
+imagePagePosition: ${imagePagePosition},
+isImageEditing: ${isImageEditing}
     ''';
   }
 }
