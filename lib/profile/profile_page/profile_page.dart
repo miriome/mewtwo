@@ -66,7 +66,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           store.load();
                         },
                         child: AlignedGridView.count(
-                          controller: store.isOwnProfile ? Mew.tabPrimaryScrollControllers[_pageTabIndex] : null,
+                          controller: store.isOwnProfile ? Mew.tabPrimaryScrollControllers[_pageTabIndex] : PrimaryScrollController.of(context),
                           crossAxisCount: 2,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
