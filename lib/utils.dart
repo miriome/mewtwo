@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
+import 'package:mewtwo/networking/networking.dart';
+import 'package:path/path.dart' as path;
 
 class MaterialColorGenerator {
   static MaterialColor from(Color color) {
@@ -144,6 +146,13 @@ class Log {
 }
 
 class Utility {
+  static String parseImageUrl(String url) {
+    if (url.startsWith("http")) {
+      // return url;
+      return url.replaceAll("https://miromie.com", Networking.domain);  
+    }
+    return path.join(Networking.imageDomain, url);
+  }
   static String parseStr(dynamic val) {
     if (val is String) {
       return val;

@@ -73,7 +73,16 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
-          
+          iconButtonTheme: IconButtonThemeData(
+            style: ButtonStyle(
+              iconColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return const Color(0xFF787D7D);
+              }
+              return const Color(0xFF6EC6CA);
+            }),
+            )
+          ),
           switchTheme: SwitchThemeData(
             trackColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.disabled)) {

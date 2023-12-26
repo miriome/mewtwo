@@ -7,6 +7,7 @@ import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mewtwo/routes/routes.dart';
+import 'package:mewtwo/utils.dart';
 
 class ProfilePostTile extends StatelessWidget {
   final PostModel post;
@@ -35,7 +36,8 @@ class ProfilePostTile extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        PostImage(imageUrl: post.image),
+                        PostImage(imageUrl: Utility.parseImageUrl(post.image)
+                        ),
                         if (post.chat_enabled)
                       const PositionedDirectional(
                           bottom: 6,

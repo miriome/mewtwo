@@ -4,7 +4,7 @@ import 'package:mewtwo/home/model/mention_data_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
-import 'package:mobx/mobx.dart';
+
 part 'post_model.g.dart';
 
 
@@ -21,6 +21,7 @@ class PostModel extends _PostModel with _$PostModel {
     required super.added_by,
     required super.likes,
     required super.my_like,
+    required super.images,
     super.hashtag,
     super.posted_by,
     super.comments,
@@ -36,7 +37,7 @@ class PostModel extends _PostModel with _$PostModel {
 
 
 abstract class _PostModel with Store {
-  final String image;
+  final String image; // TODO: Deprecate
   final String caption;
   final String hypertext;
   final String hyperlink;
@@ -78,6 +79,8 @@ abstract class _PostModel with Store {
 
   final List<MentionDataModel> mentions;
 
+  final List<_PostImageModel> images;
+
   _PostModel({
     required this.image,
     required this.caption,
@@ -92,7 +95,32 @@ abstract class _PostModel with Store {
     this.hashtag,
     this.posted_by,
     required this.comments,
-    this.mentions = const []
+    this.mentions = const [],
+    this.images = const []
   });
 
+}
+
+
+@JsonSerializable()
+class _PostImageModel {
+  @JsonKey(
+    fromJson: Utility.parseImageUrl
+  )
+  final String image;
+  @JsonKey(
+    fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
+  )
+  final int index;
+  _PostImageModel({
+    required this.image,
+    required this.index
+  });
+  /// Connect the generated [_$PersonFromJson] function to the `fromJson`
+  /// factory.
+  factory _PostImageModel.fromJson(Map<String, dynamic> json) => _$PostImageModelFromJson(json);
+
+  /// Connect the generated [_$_PostImageModelToJson] function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$PostImageModelToJson(this);
 }

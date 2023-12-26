@@ -1,4 +1,5 @@
 import 'package:dartx/dartx.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,26 +45,28 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
   final transformationController = TransformationController();
   late final smallHeartAnimationController = AnimationController(vsync: this);
   late final bigHeartAnimationController = AnimationController(vsync: this);
+  final imagePageController = PageController();
+  bool isPageControllerAttached = false;
   @override
   void initState() {
     store = PostDetailsPageStore(postId: widget.postId, commentsStore: commentsStore)..init();
     commentsStore.reload = () => store.load();
     store.load();
-    MainPlatform.addMethodCallhandler(appearOnLoad);
+    imagePageController.addListener(() { 
+      if (imagePageController.hasClients) {
+        setState(() {
+          isPageControllerAttached = true;
+        });
+      }
 
+    });
     super.initState();
-  }
-
-  Future<void> appearOnLoad(MethodCall call) async {
-    if (call.method == "viewWillAppear") {
-      store.load();
-    }
   }
 
   @override
   void dispose() {
-    MainPlatform.removeMethodCallHandler(appearOnLoad);
     commentsStore.dispose();
+    imagePageController.dispose();
     super.dispose();
   }
 
@@ -122,7 +125,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                       },
                       child: Stack(
                         children: [
-                          PostImage(imageUrl: post.image),
+                          postImage(post),
                           Positioned.fill(
                             child: const Icon(
                               Icons.favorite,
@@ -174,6 +177,14 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                     ),
                   ),
                 ),
+                if (post.images.length > 1)
+                  MultiSliver(children: [
+                    const SizedBox(height: 8),
+                    DotsIndicator(
+                      dotsCount: post.images.length,
+                      position: isPageControllerAttached ? imagePageController.page ?? 0 : 0,
+                    ),
+                  ]),
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -195,6 +206,19 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
         }),
       ),
     );
+  }
+
+  Widget postImage(PostModel post) {
+    return post.images.length > 1
+        ? AspectRatio(
+            aspectRatio: PostImage.aspectRatio,
+            child: PageView.builder(
+              controller: imagePageController,
+              itemBuilder: (context, index) => PostImage(imageUrl: Utility.parseImageUrl(post.images[index].image)),
+              itemCount: post.images.length,
+            ),
+          )
+        : PostImage(imageUrl: post.image);
   }
 
   Widget statsRow(PostModel post) {
@@ -303,7 +327,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
           options: const LinkifyOptions(defaultToHttps: true, looseUrl: true),
           onOpen: (element) async {
             if (element is MentionElement) {
-              OtherProfilePageRoute(userId: element.user.user_id).push(context).then((value) => store.load());              
+              OtherProfilePageRoute(userId: element.user.user_id).push(context).then((value) => store.load());
               return;
             }
             if (element is HashtagElement) {
