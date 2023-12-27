@@ -294,7 +294,7 @@ class UpsertPostBase extends StatelessWidget {
                     Navigator.pop(modalContext, images);
                   }
                 },
-                child: const Text('Select multiple photos library', style: TextStyle(color: Color(0xFF7D7878))),
+                child: const Text('Select from library', style: TextStyle(color: Color(0xFF7D7878))),
               ),
             ],
           ),

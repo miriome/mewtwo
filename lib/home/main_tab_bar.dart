@@ -28,12 +28,11 @@ class _MainTabBarState extends State<MainTabBar> {
         case "goToHome":
           HomePageRoute().go(context);
         case "goToLogin":
-        final sp = await SharedPreferences.getInstance();
-        await sp.clear();
-        if (context.mounted) {
-                LoginRoute().go(context);
-        }
-
+          final sp = await SharedPreferences.getInstance();
+          await sp.clear();
+          if (context.mounted) {
+            LoginRoute().go(context);
+          }
 
         // LoginRoute().go(context);
         case 'goToSearch':
@@ -70,8 +69,6 @@ class _MainTabBarState extends State<MainTabBar> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return PrimaryScrollController(
@@ -86,6 +83,13 @@ class _MainTabBarState extends State<MainTabBar> {
                 selectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
                 unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
                 onTap: (index) {
+                  if (index == widget.child.currentIndex) {
+                    Mew.tabPrimaryScrollControllers[widget.child.currentIndex].animateTo(
+                      0.0,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.easeOutCirc,
+                    );
+                  }
                   if (index == 2) {
                     CreatePostRoute().push(context);
                     return;
