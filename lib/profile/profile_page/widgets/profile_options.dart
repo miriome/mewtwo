@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mewtwo/base/stores/current_user_store.dart';
+import 'package:mewtwo/base/widgets/confirm_dialog.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
@@ -131,8 +132,8 @@ class ProfileOptions {
             },
             child: const Text(
               'Report User',
-              ),
             ),
+          ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () async {
@@ -147,39 +148,24 @@ class ProfileOptions {
   }
 
   static Future<void> _showBlockUserDialog(BuildContext parentContext, ProfilePageStore store) async {
-    return showDialog<void>(
-      context: parentContext,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Block User'),
-          content: const Text('"Are you sure you want to block this user?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Approve', style: TextStyle(color: Colors.red)),
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
-                final blocked = await store.blockUser();
-                if (blocked) {
-                  if (parentContext.mounted) {
-                    Fluttertoast.showToast(
-                        msg: "You have successfully blocked ${store.user?.username ?? "the user"}",
-                        gravity: ToastGravity.CENTER);
-                    HomePageRoute().go(parentContext);
-                  }
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    return ConfirmDialog.show(parentContext,
+        title: 'Block User',
+        content: 'Are you sure you want to block this user?',
+        actionText: 'Cancel',
+        onActionTap: (context) => Navigator.of(context).pop(),
+        destructiveText: 'Block',
+        onDestructiveTap: (context) async {
+          Navigator.of(context).pop();
+          final blocked = await store.blockUser();
+          if (blocked) {
+            if (parentContext.mounted) {
+              Fluttertoast.showToast(
+                  msg: "You have successfully blocked ${store.user?.username ?? "the user"}",
+                  gravity: ToastGravity.CENTER);
+              HomePageRoute().go(parentContext);
+            }
+          }
+        });
   }
 
   static Future<void> _shareProfile(ProfilePageStore store) async {
@@ -202,9 +188,9 @@ class ProfileOptions {
       feature: 'sharing',
       stage: 'new share',
     );
-  
-    BranchResponse response = await FlutterBranchSdk.showShareSheet(
-        buo: buo, linkProperties: lp, messageText: "Share Profile:");
+
+    BranchResponse response =
+        await FlutterBranchSdk.showShareSheet(buo: buo, linkProperties: lp, messageText: "Share Profile:");
     if (response.success) {
       Fluttertoast.showToast(msg: "Profile link copied", gravity: ToastGravity.CENTER);
     }

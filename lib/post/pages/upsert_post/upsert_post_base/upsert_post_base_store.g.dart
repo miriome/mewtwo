@@ -32,9 +32,9 @@ typedef UpsertPostBaseStoreRef = AutoDisposeProviderRef<UpsertPostBaseStore>;
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$_ImageEditModel on __ImageEditModel, Store {
+mixin _$ImageEditModel on _ImageEditModel, Store {
   late final _$hasBeenCroppedAtom =
-      Atom(name: '__ImageEditModel.hasBeenCropped', context: context);
+      Atom(name: '_ImageEditModel.hasBeenCropped', context: context);
 
   @override
   bool get hasBeenCropped {
@@ -68,16 +68,16 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
   late final _$_editableImagesAtom =
       Atom(name: '_UpsertPostBaseStore._editableImages', context: context);
 
-  ObservableList<_ImageEditModel> get editableImages {
+  ObservableList<ImageEditModel> get editableImages {
     _$_editableImagesAtom.reportRead();
     return super._editableImages;
   }
 
   @override
-  ObservableList<_ImageEditModel> get _editableImages => editableImages;
+  ObservableList<ImageEditModel> get _editableImages => editableImages;
 
   @override
-  set _editableImages(ObservableList<_ImageEditModel> value) {
+  set _editableImages(ObservableList<ImageEditModel> value) {
     _$_editableImagesAtom.reportWrite(value, super._editableImages, () {
       super._editableImages = value;
     });
@@ -115,19 +115,21 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     });
   }
 
-  late final _$isImageEditingAtom =
-      Atom(name: '_UpsertPostBaseStore.isImageEditing', context: context);
+  late final _$_isImageEditingAtom =
+      Atom(name: '_UpsertPostBaseStore._isImageEditing', context: context);
 
-  @override
   bool get isImageEditing {
-    _$isImageEditingAtom.reportRead();
-    return super.isImageEditing;
+    _$_isImageEditingAtom.reportRead();
+    return super._isImageEditing;
   }
 
   @override
-  set isImageEditing(bool value) {
-    _$isImageEditingAtom.reportWrite(value, super.isImageEditing, () {
-      super.isImageEditing = value;
+  bool get _isImageEditing => isImageEditing;
+
+  @override
+  set _isImageEditing(bool value) {
+    _$_isImageEditingAtom.reportWrite(value, super._isImageEditing, () {
+      super._isImageEditing = value;
     });
   }
 
@@ -141,6 +143,17 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
 
   late final _$_UpsertPostBaseStoreActionController =
       ActionController(name: '_UpsertPostBaseStore', context: context);
+
+  @override
+  void toggleEdit() {
+    final _$actionInfo = _$_UpsertPostBaseStoreActionController.startAction(
+        name: '_UpsertPostBaseStore.toggleEdit');
+    try {
+      return super.toggleEdit();
+    } finally {
+      _$_UpsertPostBaseStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void updateDisplayImagePathAtIndex(
@@ -159,7 +172,6 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     return '''
 shopMyLook: ${shopMyLook},
 imagePagePosition: ${imagePagePosition},
-isImageEditing: ${isImageEditing},
 canPost: ${canPost}
     ''';
   }

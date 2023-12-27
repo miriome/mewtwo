@@ -32,16 +32,22 @@ class UpsertPostBase extends StatelessWidget {
           appBar: AppBar(
             title: Text(titleText),
             actions: [
-              if (store.editableImages.isNotEmpty)
+              if (store.editableImages.isNotEmpty) ...[
+                IconButton(
+                    onPressed: () {
+                      store.toggleEdit();
+                    },
+                    icon: const Icon(Icons.edit)),
                 IconButton(
                     onPressed: () {
                       selectPhoto(context: context);
                     },
                     icon: const Icon(Icons.restart_alt))
+              ]
             ],
           ),
           body: SingleChildScrollView(
-            physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+            physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -61,7 +67,7 @@ class UpsertPostBase extends StatelessWidget {
                             ),
                           ),
                         ))
-                    : postImage,
+                    : postImageSection,
                 const SizedBox(height: 18),
                 if (store.editableImages.isNotEmpty) ...[
                   CompositedTransformTarget(
@@ -134,71 +140,68 @@ class UpsertPostBase extends StatelessWidget {
     });
   }
 
-  Widget get postImage {
+  Widget buildPostImage(ImageEditModel image) {
+    // if (!store.isImageEditing) {
+    //   return PostImage(imageUrl: image.displayImagePath);
+    // }
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: image.displayImagePath.contains("http")
+              ? ExtendedImage.network(
+                  image.displayImagePath,
+                  enableLoadState: true,
+                  extendedImageEditorKey: image.editorStateKey,
+                  fit: store.isImageEditing ? BoxFit.contain : BoxFit.cover,
+                  mode: store.isImageEditing ? ExtendedImageMode.editor : ExtendedImageMode.none,
+                  cacheRawData: true,
+                  initEditorConfigHandler: (state) {
+                    return EditorConfig(
+                        initialCropAspectRatio: PostImage.aspectRatio,
+                        initCropRectType: InitCropRectType.layoutRect,
+                        cropAspectRatio: PostImage.aspectRatio,
+                        cropRectPadding: EdgeInsets.zero,
+                        hitTestBehavior: HitTestBehavior.opaque);
+                  },
+                )
+              : ExtendedImage.file(
+                  File(image.displayImagePath),
+                  extendedImageEditorKey: image.editorStateKey,
+                  fit: store.isImageEditing ? BoxFit.contain : BoxFit.cover,
+                  mode: store.isImageEditing ? ExtendedImageMode.editor : ExtendedImageMode.none,
+                  cacheRawData: true,
+                  initEditorConfigHandler: (state) {
+                    return EditorConfig(
+                        initialCropAspectRatio: PostImage.aspectRatio,
+                        initCropRectType: InitCropRectType.layoutRect,
+                        cropAspectRatio: PostImage.aspectRatio,
+                        cropRectPadding: EdgeInsets.zero,
+                        hitTestBehavior: HitTestBehavior.opaque);
+                  },
+                ),
+        ),
+        if (store.shopMyLook)
+          const PositionedDirectional(
+            bottom: 8,
+            start: 8,
+            child: ShoppableIcon(
+              size: 24,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget get postImageSection {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AspectRatio(
           aspectRatio: PostImage.aspectRatio,
           child: PageView(
+              physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : null,
               controller: store.imagePageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: store.editableImages.map((image) {
-                return Stack(
-                  children: [
-                    GestureDetector(
-                      onVerticalDragStart: (_) {
-                        store.isImageEditing = true;
-                      },
-                      onVerticalDragEnd: (_) {
-                        store.isImageEditing = false;
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: image.displayImagePath.contains("http")
-                        // ? PostImage(imageUrl: image.displayImagePath)
-                          ? ExtendedImage.network(
-                              image.displayImagePath,
-                              enableLoadState: true,
-                              extendedImageEditorKey: image.editorStateKey,
-                              fit: BoxFit.contain,
-                              cacheRawData: true,
-                              mode: ExtendedImageMode.editor,
-                              initEditorConfigHandler: (state) {
-                                return EditorConfig(
-                                    initialCropAspectRatio: PostImage.aspectRatio,
-                                    initCropRectType: InitCropRectType.layoutRect,
-                                    cropAspectRatio: PostImage.aspectRatio,
-                                    cropRectPadding: EdgeInsets.zero,
-                                    hitTestBehavior: HitTestBehavior.opaque);
-                              },
-                            )
-                          : ExtendedImage.file(
-                              File(image.displayImagePath),
-                              extendedImageEditorKey: image.editorStateKey,
-                              fit: BoxFit.contain,
-                              mode: ExtendedImageMode.editor,
-                              cacheRawData: true,
-                              initEditorConfigHandler: (state) {
-                                return EditorConfig(
-                                    initialCropAspectRatio: PostImage.aspectRatio,
-                                    initCropRectType: InitCropRectType.layoutRect,
-                                    cropAspectRatio: PostImage.aspectRatio,
-                                    cropRectPadding: EdgeInsets.zero,
-                                    hitTestBehavior: HitTestBehavior.opaque);
-                              },
-                            ),
-                    ),
-                    if (store.shopMyLook)
-                      const PositionedDirectional(
-                        bottom: 8,
-                        start: 8,
-                        child: ShoppableIcon(
-                          size: 24,
-                        ),
-                      ),
-                  ],
-                );
-              }).toList()),
+              children: store.editableImages.map((image) => buildPostImage(image)).toList()),
         ),
         const SizedBox(
           height: 8,
@@ -206,17 +209,6 @@ class UpsertPostBase extends StatelessWidget {
         if (store.editableImages.length > 1)
           Row(
             children: [
-              (store.imagePagePosition) < 1
-                  ? const Spacer()
-                  : Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: TextButton(
-                          onPressed: () {
-                            store.previousEditingImage();
-                          },
-                          child: const Text("Previous Image")),
-                    ),
               Flexible(
                 flex: 1,
                 fit: FlexFit.tight,
@@ -225,17 +217,6 @@ class UpsertPostBase extends StatelessWidget {
                   position: store.imagePagePosition,
                 ),
               ),
-              (store.imagePagePosition == store.editableImages.length - 1)
-                  ? const Spacer()
-                  : Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: TextButton(
-                          onPressed: () {
-                            store.nextEditingImage();
-                          },
-                          child: const Text("Next Image")),
-                    )
             ],
           ),
       ],

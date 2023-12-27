@@ -29,18 +29,18 @@ UpsertPostBaseStore upsertPostBaseStore(UpsertPostBaseStoreRef ref) {
   return store;
 }
 
-class _ImageEditModel extends __ImageEditModel with _$_ImageEditModel {
-  _ImageEditModel({required super.displayImagePath, required super.editorStateKey, required super.hasBeenCropped});
+class ImageEditModel extends _ImageEditModel with _$ImageEditModel {
+  ImageEditModel({required super.displayImagePath, required super.editorStateKey, required super.hasBeenCropped});
 }
 
-abstract class __ImageEditModel with Store {
+abstract class _ImageEditModel with Store {
   final String displayImagePath;
   final GlobalKey<ExtendedImageEditorState> editorStateKey;
   Rect? cropRect;
   Uint8List? imageBytes;
   @observable
   bool hasBeenCropped = false;
-  __ImageEditModel({required this.displayImagePath, required this.editorStateKey, required this.hasBeenCropped});
+  _ImageEditModel({required this.displayImagePath, required this.editorStateKey, required this.hasBeenCropped});
 }
 
 class UpsertPostBaseStore extends _UpsertPostBaseStore with _$UpsertPostBaseStore {}
@@ -91,7 +91,7 @@ abstract class _UpsertPostBaseStore with Store {
   }
 
   @readonly
-  ObservableList<_ImageEditModel> _editableImages = ObservableList.of([]);
+  ObservableList<ImageEditModel> _editableImages = ObservableList.of([]);
 
   @observable
   bool shopMyLook = false;
@@ -99,8 +99,17 @@ abstract class _UpsertPostBaseStore with Store {
   @observable
   double imagePagePosition = 0;
 
-  @observable
-  bool isImageEditing = false;
+  @readonly
+  bool _isImageEditing = false;
+
+  @action
+  void toggleEdit() {
+    _isImageEditing = !_isImageEditing;
+    // From editing to not editing
+    if (!_isImageEditing) {
+
+    }
+  }
 
   @computed
   bool get canPost {
@@ -109,30 +118,17 @@ abstract class _UpsertPostBaseStore with Store {
 
   void setEditableImages(Iterable<String> imagePaths, bool hasBeenCropped) {
     _editableImages = ObservableList.of(imagePaths
-        .map((path) => _ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>(), hasBeenCropped: hasBeenCropped)));
+        .map((path) => ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>(), hasBeenCropped: hasBeenCropped)));
   }
 
   @action
   void updateDisplayImagePathAtIndex({required String path, required int index}) {
     _editableImages.removeAt(index);
     _editableImages.insert(
-        index, _ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>(), hasBeenCropped: true));
+        index, ImageEditModel(displayImagePath: path, editorStateKey: GlobalKey<ExtendedImageEditorState>(), hasBeenCropped: true));
     _updateCropRect();
   }
 
-  void nextEditingImage() {
-    // if (!_updateCropRect()) {
-    //   return;
-    // }
-    imagePageController.nextPage(duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
-  }
-
-  void previousEditingImage() {
-    // if (!_updateCropRect()) {
-    //   return;
-    // }
-    imagePageController.previousPage(duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
-  }
 
   bool _updateCropRect() {
     final page = imagePageController.page?.toInt();

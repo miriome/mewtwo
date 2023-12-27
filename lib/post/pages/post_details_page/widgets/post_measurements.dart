@@ -10,7 +10,7 @@ class PostMeasurements extends StatelessWidget {
     return Center(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 9),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: const Color(0xFFD9D9D9)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white.withOpacity(0.85)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(
             "${user.username}'s measurements",
