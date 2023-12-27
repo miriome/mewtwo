@@ -42,14 +42,13 @@ class MentionLinkifier extends Linkifier {
           if (textElement.isNotEmpty || match?.group(1)?.isNotEmpty == true) {
             list.add(TextElement(textElement + (match?.group(1) ?? '')));
           }
-
           if (match?.group(2)?.isNotEmpty == true) {
             
             final mentionedUser = mentionedUsers.firstOrNullWhere((user) => user.username == match!.group(2)!.trim());
             if (mentionedUser != null) {
               list.add(MentionElement(mentionedUser));  
             } else {
-              list.add(element);
+              list.add(TextElement("@${match!.group(2)!.trim()}"));
             }
 
             // list.add(UserTagElement('@${match!.group(2)!}'));

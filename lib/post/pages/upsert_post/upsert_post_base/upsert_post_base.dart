@@ -288,7 +288,7 @@ class UpsertPostBase extends StatelessWidget {
           builder: (BuildContext modalContext) => CupertinoActionSheet(
             cancelButton: CupertinoActionSheetAction(
               onPressed: () {
-                Navigator.pop(modalContext, []);
+                Navigator.pop(modalContext, <XFile>[]);
               },
               child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
             ),
@@ -298,24 +298,13 @@ class UpsertPostBase extends StatelessWidget {
                   final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
 
                   if (modalContext.mounted) {
-                    Navigator.pop(modalContext, image != null ? [image] : []);
+                    Navigator.pop(modalContext, image != null ? [image] : <XFile>[]);
                   }
                 },
                 child: const Text(
                   'Select from camera',
                   style: TextStyle(color: Color(0xFF7D7878)),
                 ),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  final image = await picker.pickImage(
-                    source: ImageSource.gallery,
-                  );
-                  if (modalContext.mounted) {
-                    Navigator.pop(modalContext, image != null ? [image] : []);
-                  }
-                },
-                child: const Text('Select a single photo library', style: TextStyle(color: Color(0xFF7D7878))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () async {
