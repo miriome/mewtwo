@@ -127,6 +127,6 @@ abstract class _UpsertPostBaseStore with Store {
         Mew.pc.read(currentUserProfilePageStoreProvider).load();
       });
     }
-    return false;
+    return res;
   }
 }
