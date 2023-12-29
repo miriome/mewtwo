@@ -14,7 +14,7 @@ class CreatePostPage extends ConsumerWidget {
     return UpsertPostBase(
       
       store: store,
-      titleText: "New Post",
+      isNewPost: true,
     );
   }
 }

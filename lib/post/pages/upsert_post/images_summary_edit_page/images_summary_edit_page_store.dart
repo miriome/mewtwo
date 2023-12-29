@@ -38,8 +38,6 @@ abstract class _ImageSummaryEditPageStore with Store {
     
   }
 
-
-
   @observable
   double imagePagePosition = 0;
 
@@ -72,6 +70,12 @@ abstract class _ImageSummaryEditPageStore with Store {
     if (index == _postImages.length) {
       imagePagePosition = imagePagePosition - 1;
     }
+  }
+
+  @action
+  void updateImagePathAt({required int index, required String path}) {
+    _postImages.removeAt(index);
+    _postImages.insert(index, _PostImage(isEdited: true, path: path));
   }
 
   @action

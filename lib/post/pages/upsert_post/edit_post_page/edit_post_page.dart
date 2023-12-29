@@ -11,6 +11,6 @@ const EditPostPage({ Key? key, required this.postId }) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref){
     final store = ref.watch(editPostPageStoreProvider(postId: postId));
-    return UpsertPostBase(store: store, titleText: "Edit Post");
+    return UpsertPostBase(store: store, isNewPost: false);
   }
 }

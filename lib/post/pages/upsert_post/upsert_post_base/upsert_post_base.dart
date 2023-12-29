@@ -16,12 +16,24 @@ import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
 import 'package:mewtwo/routes/routes.dart';
 
-class UpsertPostBase extends StatelessWidget {
+class UpsertPostBase extends StatefulWidget {
+  final UpsertPostBaseStore store;
+  final bool isNewPost;
+  const UpsertPostBase({Key? key, required this.store, required this.isNewPost}) : super(key: key);
+
+  @override
+  State<UpsertPostBase> createState() => _UpsertPostBaseState();
+}
+
+class _UpsertPostBaseState extends State<UpsertPostBase> {
   final ImagePicker picker = ImagePicker();
   final link = LayerLink();
-  final UpsertPostBaseStore store;
-  final String titleText;
-  UpsertPostBase({Key? key, required this.store, required this.titleText}) : super(key: key);
+  final portalController = OverlayPortalController();
+  @override
+  void initState() {
+    widget.store.addListenerForPortalController(portalController);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +41,9 @@ class UpsertPostBase extends StatelessWidget {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text(titleText),
+            title: Text(widget.isNewPost ? "New Post" : "Edit Post"),
           ),
           body: SingleChildScrollView(
-            physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -44,7 +55,7 @@ class UpsertPostBase extends StatelessWidget {
                 CompositedTransformTarget(
                   link: link,
                   child: OverlayPortal(
-                    controller: store.portalController,
+                    controller: portalController,
                     overlayChildBuilder: (context) => PositionedDirectional(
                       height: 200,
                       start: 0,
@@ -55,10 +66,10 @@ class UpsertPostBase extends StatelessWidget {
                         followerAnchor: Alignment.bottomLeft,
                         child: UserMentionSearch(
                             onUserResultsTap: (user) {
-                              store.onMentionUserSearchTap(user);
-                              store.portalController.hide();
+                              widget.store.onMentionUserSearchTap(user);
+                              portalController.hide();
                             },
-                            store: store.userMentionStore),
+                            store: widget.store.userMentionStore),
                       ),
                     ),
                     child: Padding(
@@ -73,7 +84,7 @@ class UpsertPostBase extends StatelessWidget {
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
                     maxLines: 5,
                     style: const TextStyle(fontSize: 16),
-                    controller: store.controller,
+                    controller: widget.store.controller,
                     decoration: const InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 8),
                         hintText:
@@ -88,7 +99,7 @@ class UpsertPostBase extends StatelessWidget {
                   child: FilledButton(
                       onPressed: () async {
                         EasyLoading.show(maskType: EasyLoadingMaskType.clear);
-                        final res = await store.post();
+                        final res = await widget.store.post();
                         EasyLoading.dismiss();
                         if (res && context.mounted) {
                           Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
@@ -115,11 +126,11 @@ class UpsertPostBase extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ...store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
-            if (store.postImagePaths.length != 10)
+            ...widget.store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
+            if (widget.store.postImagePaths.length != 10)
             GestureDetector(
               onTap: () {
-                ImageSummaryEditPageRoute(showCameraOptionsOnEnter: true).go(context);
+                ImageSummaryEditPageRoute(showCameraOptionsOnEnter: true, isNewPost: false).go(context);
               },
               child: Container(
                 height: 120,
@@ -147,11 +158,11 @@ class UpsertPostBase extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                  ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false).push(context);
+                  ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false, isNewPost: widget.isNewPost).push(context);
                 },
                 child: Observer(builder: (context) {
                   return ClipRRect(
-                      borderRadius: BorderRadius.circular(5), child: PostImage(imageUrl: store.postImagePaths[index]));
+                      borderRadius: BorderRadius.circular(5), child: PostImage(imageUrl: widget.store.postImagePaths[index]));
                 }),
               ),
             ),
@@ -160,7 +171,7 @@ class UpsertPostBase extends StatelessWidget {
                 end: 4,
                 child: GestureDetector(
                     onTap: () {
-                      store.removeImageAt(index: index);
+                      widget.store.removeImageAt(index: index);
                     },
                     child: SvgPicture.asset("assets/icons/ic_remove.svg")))
           ],
@@ -176,8 +187,8 @@ class UpsertPostBase extends StatelessWidget {
         SizedBox(
           height: 24,
           child: Checkbox(
-              value: store.shopMyLook,
-              onChanged: (toggle) => store.shopMyLook = toggle ?? false,
+              value: widget.store.shopMyLook,
+              onChanged: (toggle) => widget.store.shopMyLook = toggle ?? false,
               fillColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {
                   return const Color(0xFF8474A1);
@@ -194,7 +205,7 @@ class UpsertPostBase extends StatelessWidget {
         ),
         Flexible(
             child: Text(
-          store.shopMyLook
+          widget.store.shopMyLook
               ? "Others can chat with you to purchase your item(s)"
               : "Enable this if you are selling any items",
           maxLines: 2,

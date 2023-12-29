@@ -17,8 +17,6 @@ import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-
-
 part 'upsert_post_base_store.g.dart';
 
 @riverpod
@@ -31,24 +29,21 @@ UpsertPostBaseStore upsertPostBaseStore(UpsertPostBaseStoreRef ref) {
   return store;
 }
 
-
-
 class UpsertPostBaseStore extends _UpsertPostBaseStore with _$UpsertPostBaseStore {
   UpsertPostBaseStore(super.editedImagePaths);
 }
 
 abstract class _UpsertPostBaseStore with Store {
-  
   final controller = DetectableTextEditingController();
-
-  final portalController = OverlayPortalController();
 
   final userMentionStore = UserMentionSearchStore();
 
-
   _UpsertPostBaseStore(List<String> editedImagePaths) {
     postImagePaths = ObservableList.of(editedImagePaths);
-    controller.addListener(() async {
+  }
+
+  void addListenerForPortalController(OverlayPortalController portalController) {
+    controller.addListener(() {
       if (userMentionStore.userResults.isEmpty) {
         portalController.hide();
       }
@@ -91,17 +86,14 @@ abstract class _UpsertPostBaseStore with Store {
   @readonly
   bool _isImageEditing = false;
 
-
   @action
   void removeImageAt({required int index}) {
     postImagePaths.removeAt(index);
   }
 
-
   void setPostImages(Iterable<String> imagePaths) {
     postImagePaths = ObservableList.of(imagePaths);
   }
-
 
   void dispose() {
     controller.dispose();
@@ -123,13 +115,12 @@ abstract class _UpsertPostBaseStore with Store {
     controller.text = mentionedString + controller.text.substring(controller.selection.baseOffset);
   }
 
-  
-
   @action
   Future<bool> post() async {
-    final photosToPost = postImagePaths.mapIndexed((index, path) => PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync()));
-    final upsertPostProvider = AddPostApiProvider(
-        caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.toList());
+    final photosToPost = postImagePaths
+        .mapIndexed((index, path) => PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync()));
+    final upsertPostProvider =
+        AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.toList());
     final res = await Mew.pc.read(upsertPostProvider.future);
     if (res) {
       Future.delayed(const Duration(milliseconds: 250), () {
@@ -137,6 +128,5 @@ abstract class _UpsertPostBaseStore with Store {
       });
     }
     return false;
-    
   }
 }

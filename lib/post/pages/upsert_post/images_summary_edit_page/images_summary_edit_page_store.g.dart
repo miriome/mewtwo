@@ -128,6 +128,17 @@ mixin _$ImageSummaryEditPageStore on _ImageSummaryEditPageStore, Store {
   }
 
   @override
+  void updateImagePathAt({required int index, required String path}) {
+    final _$actionInfo = _$_ImageSummaryEditPageStoreActionController
+        .startAction(name: '_ImageSummaryEditPageStore.updateImagePathAt');
+    try {
+      return super.updateImagePathAt(index: index, path: path);
+    } finally {
+      _$_ImageSummaryEditPageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 imagePagePosition: ${imagePagePosition},
