@@ -3,11 +3,9 @@ import 'dart:typed_data';
 
 import 'package:dartx/dartx.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
@@ -117,8 +115,24 @@ abstract class _UpsertPostBaseStore with Store {
 
   @action
   Future<bool> post() async {
+    final imagesIndexThatHaveNudity = (await Future.wait(postImagePaths.mapIndexed((index, image) async {
+      final path = image;
+      if (!path.startsWith("http")) {
+        final hasNudity = await FlutterNudeDetector.detect(path: path);
+        return hasNudity ? index + 1 : null;
+      }
+      return null;
+    })))
+        .whereNotNull();
+
+    if (imagesIndexThatHaveNudity.isNotEmpty) {
+      Fluttertoast.showToast(
+          msg: "Images ${imagesIndexThatHaveNudity.joinToString(separator: ", ")} are inappropriate");
+      return false;
+    }
     final photosToPost = postImagePaths
         .mapIndexed((index, path) => PostPhoto(index: index, photoFileBytes: File(path).readAsBytesSync()));
+
     final upsertPostProvider =
         AddPostApiProvider(caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.toList());
     final res = await Mew.pc.read(upsertPostProvider.future);
