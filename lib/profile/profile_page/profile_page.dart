@@ -80,7 +80,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () async {
-                              await CreatePostRoute().push(context);
+                              await ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false).push(context);
                               store.load();
                             },
                             child: const Text.rich(

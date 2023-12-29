@@ -5,6 +5,7 @@ import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base.
 
 class EditPostPage extends ConsumerWidget {
   final int postId;
+  
 const EditPostPage({ Key? key, required this.postId }) : super(key: key);
 
   @override

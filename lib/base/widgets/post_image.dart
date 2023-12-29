@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mewtwo/utils.dart';
+
 
 class PostImage extends StatelessWidget {
   static const double maxWidth = 184 * 3;

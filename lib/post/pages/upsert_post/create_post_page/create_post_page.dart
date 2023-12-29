@@ -5,12 +5,14 @@ import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base.
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 
 class CreatePostPage extends ConsumerWidget {
-  const CreatePostPage({Key? key}) : super(key: key);
+  
+  const CreatePostPage({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(upsertPostBaseStoreProvider);
     return UpsertPostBase(
+      
       store: store,
       titleText: "New Post",
     );

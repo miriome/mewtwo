@@ -91,7 +91,7 @@ class _MainTabBarState extends State<MainTabBar> {
                     );
                   }
                   if (index == 2) {
-                    CreatePostRoute().push(context);
+                    ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false).push(context);
                     return;
                   }
                   widget.child.goBranch(

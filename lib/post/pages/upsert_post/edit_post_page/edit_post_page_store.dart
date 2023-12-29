@@ -22,12 +22,12 @@ EditPostPageStore editPostPageStore(EditPostPageStoreRef ref, {required int post
 }
 
 class EditPostPageStore extends AbsEditPostPageStore with _$EditPostPageStore {
-  EditPostPageStore({required int postId}) : super(postId: postId);
+  EditPostPageStore({required int postId}) : super([], postId: postId); // Empty because pots images come from api
 }
 
 abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   final int postId;
-  AbsEditPostPageStore({required this.postId});
+  AbsEditPostPageStore(super.editedImagePaths, {required this.postId});
 
   @observable
   bool _isLoading = false;
@@ -41,8 +41,7 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      setEditableImages(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image), true);
-
+      postImagePaths = ObservableList.of(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
       controller.text = res.caption;
     }
     listener.close();
@@ -51,13 +50,13 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   @override
   @action
   Future<bool> post() async {
-    final photosToPost = await preprocessPostImages();
     
     
     
-    final editPostApiProvider = EditPostApiProvider(
-        postId: postId, caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
-    final res = await Mew.pc.read(editPostApiProvider.future);
-    return res;
+    // final editPostApiProvider = EditPostApiProvider(
+    //     postId: postId, caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
+    // final res = await Mew.pc.read(editPostApiProvider.future);
+    // return res;
+    return false;
   }
 }

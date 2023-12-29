@@ -1,6 +1,5 @@
 part of 'routes.dart';
 
-
 class PostDetailsRoute extends GoRouteData {
   final int postId;
   final bool isFromApp;
@@ -11,9 +10,19 @@ class PostDetailsRoute extends GoRouteData {
   }
 }
 
-class CreatePostRoute extends GoRouteData {
-  
+class ImageSummaryEditPageRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
+  final bool showCameraOptionsOnEnter;
+  ImageSummaryEditPageRoute({required this.showCameraOptionsOnEnter});
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return ImagesSummaryEditPage(showCameraOptionsOnEnter: showCameraOptionsOnEnter,);
+  }
+}
+
+class CreatePostRoute extends GoRouteData {
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
+  
   
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -25,7 +34,7 @@ class EditPostRoute extends GoRouteData {
   final int postId;
   EditPostRoute({required this.postId});
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
-  
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return EditPostPage(postId: postId);
