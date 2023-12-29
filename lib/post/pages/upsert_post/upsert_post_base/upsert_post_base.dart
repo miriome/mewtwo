@@ -120,7 +120,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
   }
 
   Widget buildPostImageSection() {
-    return Builder(
+    return Observer(
       builder: (context) {
         return Wrap(
           spacing: 8,
