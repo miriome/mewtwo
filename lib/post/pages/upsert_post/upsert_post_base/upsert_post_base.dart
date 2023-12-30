@@ -16,6 +16,7 @@ import 'package:mewtwo/post/pages/upsert_post/images_summary_edit_page/images_su
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
+import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 
 class UpsertPostBase extends StatefulWidget {
@@ -106,7 +107,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                         EasyLoading.dismiss();
                         if (res && context.mounted) {
                           Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
-                          Navigator.of(context).pop();
+                          ProfilePageRoute().go(context);
                         }
                       },
                       child: const Text(
