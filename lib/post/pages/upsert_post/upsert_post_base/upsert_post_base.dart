@@ -48,42 +48,42 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
           appBar: AppBar(
             title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: buildPostImageSection(),
-                ),
-                const SizedBox(height: 18),
-                CompositedTransformTarget(
-                  link: link,
-                  child: OverlayPortal(
-                    controller: portalController,
-                    overlayChildBuilder: (context) => PositionedDirectional(
-                      height: 200,
-                      start: 0,
-                      end: 0,
-                      child: CompositedTransformFollower(
-                        link: link,
-                        targetAnchor: Alignment.bottomLeft,
-                        followerAnchor: Alignment.bottomLeft,
-                        child: UserMentionSearch(
-                            onUserResultsTap: (user) {
-                              widget.store.onMentionUserSearchTap(user);
-                              portalController.hide();
-                            },
-                            store: widget.store.userMentionStore),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: shopMyLook(),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: buildPostImageSection(),
+              ),
+              const SizedBox(height: 18),
+              CompositedTransformTarget(
+                link: link,
+                child: OverlayPortal(
+                  controller: portalController,
+                  overlayChildBuilder: (context) => PositionedDirectional(
+                    height: 200,
+                    start: 0,
+                    end: 0,
+                    child: CompositedTransformFollower(
+                      link: link,
+                      targetAnchor: Alignment.bottomLeft,
+                      followerAnchor: Alignment.bottomLeft,
+                      child: UserMentionSearch(
+                          onUserResultsTap: (user) {
+                            widget.store.onMentionUserSearchTap(user);
+                            portalController.hide();
+                          },
+                          store: widget.store.userMentionStore),
                     ),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: shopMyLook(),
+                  ),
                 ),
-                Padding(
+              ),
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: DetectableTextField(
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
@@ -99,25 +99,26 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                         enabledBorder: InputBorder.none),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                  child: FilledButton(
-                      onPressed: () async {
-                        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
-                        final res = await widget.store.post();
-                        EasyLoading.dismiss();
-                        if (res && context.mounted) {
-                          Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
-                          ProfilePageRoute().go(context);
-                        }
-                      },
-                      child: const Text(
-                        "Post",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                      )),
-                )
-              ],
-            ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                child: FilledButton(
+                    onPressed: () async {
+                      EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+                      final res = await widget.store.post();
+                      EasyLoading.dismiss();
+                      if (res && context.mounted) {
+                        Fluttertoast.showToast(msg: widget.editPostId != null ? "Post edited" : "Post uploaded", gravity: ToastGravity.CENTER);
+                        ProfilePageRoute().go(context);
+                      }
+                    },
+                    child: const Text(
+                      "Post",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )),
+              )
+            ],
           ),
         ),
       );

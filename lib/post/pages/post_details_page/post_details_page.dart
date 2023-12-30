@@ -3,12 +3,13 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:linkify/linkify.dart';
+import 'package:flutter_linkify/flutter_linkify.dart' hide UrlLinkifier, UrlElement;
+
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
 import 'package:mewtwo/base/linkify/mention_linkifier.dart';
+import 'package:mewtwo/base/linkify/url_linkifier.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
 import 'package:mewtwo/constants.dart';
@@ -324,7 +325,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
           linkifiers: [const UrlLinkifier(), MentionLinkifier(mentionedUsers: post.mentions), const HashtagLinkifier()],
           linkStyle: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor, decoration: TextDecoration.none),
           style: const TextStyle(fontSize: 16, color: Color(0xFF7D7878)),
-          options: const LinkifyOptions(defaultToHttps: true, looseUrl: true),
+          options: const LinkifyOptions(looseUrl: true),
           onOpen: (element) async {
             if (element is MentionElement) {
               OtherProfilePageRoute(userId: element.user.user_id).push(context).then((value) => store.load());

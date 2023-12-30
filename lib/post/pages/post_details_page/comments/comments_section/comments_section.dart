@@ -1,10 +1,11 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_linkify/flutter_linkify.dart' hide UrlLinkifier, UrlElement;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/base/linkify/mention_linkifier.dart';
 import 'package:mewtwo/base/linkify/hashtag_linkifier.dart';
+import 'package:mewtwo/base/linkify/url_linkifier.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/comment_model.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
