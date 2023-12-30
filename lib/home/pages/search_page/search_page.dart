@@ -5,6 +5,7 @@ import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/seach_post_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mewtwo/home/pages/search_page/widgets/search_page_search_bar.dart';
+import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
@@ -20,6 +21,7 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchPageState extends ConsumerState<SearchPage> {
+  static const int _pageTabIndex = 1;
   @override
   void initState() {
     final store = ref.read(searchPageStoreProvider);
@@ -55,6 +57,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                       )),
                   Expanded(
                     child: CustomScrollView(
+                      controller: Mew.tabPrimaryScrollControllers[_pageTabIndex],
                       slivers: [
                         SliverPinnedHeader(
                             child: Container(

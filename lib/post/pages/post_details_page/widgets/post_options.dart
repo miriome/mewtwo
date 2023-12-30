@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mewtwo/base/widgets/confirm_dialog.dart';
 import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/post/pages/post_details_page/post_details_page_store.dart';
 import 'package:mewtwo/post/routes/routes.dart';
@@ -33,15 +34,15 @@ class PostOptions {
         builder: (BuildContext modalContext) {
           final List<CupertinoActionSheetAction> actions = [];
           actions.add(CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(modalContext);
-                sharePost(store);
-              },
-              child: const Text(
-                'Share post',
-                style: TextStyle(color: Color(0xFF7D7878)),
-              ),
-            ));
+            onPressed: () {
+              Navigator.pop(modalContext);
+              sharePost(store);
+            },
+            child: const Text(
+              'Share post',
+              style: TextStyle(color: Color(0xFF7D7878)),
+            ),
+          ));
           if (!isMyPost) {
             actions.add(CupertinoActionSheetAction(
               isDestructiveAction: true,
@@ -103,37 +104,22 @@ class PostOptions {
 
   static Future<void> _showDeletePostDialog(
       {required BuildContext parentContext, required PostDetailsPageStore store}) async {
-    return showDialog<void>(
-      context: parentContext,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete post'),
-          content: const Text('Are you sure you want to delete this post?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                final deleted = await store.deletePost();
-                if (deleted) {
-                  if (parentContext.mounted) {
-                    Fluttertoast.showToast(msg: "Post deleted", gravity: ToastGravity.CENTER);
-                    Navigator.of(parentContext).pop();
-                  }
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    return ConfirmDialog.show(parentContext,
+        title: "Delete post",
+        content: 'Are you sure you want to delete this post?',
+        actionText: 'Cancel',
+        onActionTap: (context) => Navigator.of(context).pop(),
+        destructiveText: 'Delete',
+        onDestructiveTap: (context) async {
+          Navigator.of(context).pop();
+          final deleted = await store.deletePost();
+          if (deleted) {
+            if (parentContext.mounted) {
+              Fluttertoast.showToast(msg: "Post deleted", gravity: ToastGravity.CENTER);
+              Navigator.of(parentContext).pop();
+            }
+          }
+        });
   }
 
   static Future<void> _showMarkPostSoldDialog(
@@ -176,7 +162,7 @@ class PostOptions {
     if (post == null) {
       return;
     }
-    
+
     BranchUniversalObject buo = BranchUniversalObject(
       canonicalIdentifier: PostDetailsRoute(postId: post.id).location,
       title: "Check out ${post.posted_by?.username ?? "this user"}'s OOTD on miromie!",
@@ -191,11 +177,11 @@ class PostOptions {
       feature: 'sharing',
       stage: 'new share',
     );
-    
+
     BranchResponse response =
         await FlutterBranchSdk.showShareSheet(buo: buo, linkProperties: lp, messageText: "Share post:");
     if (response.success) {
       Fluttertoast.showToast(msg: "Post link copied", gravity: ToastGravity.CENTER);
-    } 
+    }
   }
 }

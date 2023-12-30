@@ -5,11 +5,12 @@ import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base.
 
 class EditPostPage extends ConsumerWidget {
   final int postId;
+  
 const EditPostPage({ Key? key, required this.postId }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref){
     final store = ref.watch(editPostPageStoreProvider(postId: postId));
-    return UpsertPostBase(store: store, titleText: "Edit Post");
+    return UpsertPostBase(store: store, editPostId: postId,);
   }
 }

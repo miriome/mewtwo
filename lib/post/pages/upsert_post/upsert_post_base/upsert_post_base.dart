@@ -1,28 +1,42 @@
 import 'dart:io';
 
+import 'package:dartx/dartx.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
-import 'package:mewtwo/base/widgets/shoppable_icon.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:mewtwo/post/pages/upsert_post/images_summary_edit_page/images_summary_edit_page_store.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/post/widgets/user_mention_search/user_mention_search.dart';
-import 'package:mewtwo/utils.dart';
+import 'package:mewtwo/routes/routes.dart';
 
-class UpsertPostBase extends StatelessWidget {
+class UpsertPostBase extends StatefulWidget {
+  final UpsertPostBaseStore store;
+  /// If this is not null, this is edit post
+  final int? editPostId;
+  const UpsertPostBase({Key? key, required this.store, this.editPostId}) : super(key: key);
+
+  @override
+  State<UpsertPostBase> createState() => _UpsertPostBaseState();
+}
+
+class _UpsertPostBaseState extends State<UpsertPostBase> {
   final ImagePicker picker = ImagePicker();
   final link = LayerLink();
-  final UpsertPostBaseStore store;
-  final String titleText;
-  UpsertPostBase({Key? key, required this.store, required this.titleText}) : super(key: key);
+  final portalController = OverlayPortalController();
+  @override
+  void initState() {
+    widget.store.addListenerForPortalController(portalController);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,97 +44,71 @@ class UpsertPostBase extends StatelessWidget {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text(titleText),
-            actions: [
-              if (store.editableImages.isNotEmpty)
-                IconButton(
-                    onPressed: () {
-                      selectPhoto(context: context);
-                    },
-                    icon: const Icon(Icons.restart_alt))
-            ],
+            title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
           ),
           body: SingleChildScrollView(
-            physics: store.isImageEditing ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                (store.editableImages.isEmpty)
-                    ? AspectRatio(
-                        aspectRatio: PostImage.aspectRatio,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () async {
-                            selectPhoto(context: context);
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: const Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [Icon(Icons.add_a_photo), Text("Tap here to upload a new photo for your post")],
-                            ),
-                          ),
-                        ))
-                    : postImage,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: buildPostImageSection(),
+                ),
                 const SizedBox(height: 18),
-                if (store.editableImages.isNotEmpty) ...[
-                  CompositedTransformTarget(
-                    link: link,
-                    child: OverlayPortal(
-                      controller: store.portalController,
-                      overlayChildBuilder: (context) => PositionedDirectional(
-                        height: 200,
-                        start: 0,
-                        end: 0,
-                        child: CompositedTransformFollower(
-                          link: link,
-                          targetAnchor: Alignment.bottomLeft,
-                          followerAnchor: Alignment.bottomLeft,
-                          child: UserMentionSearch(
-                              onUserResultsTap: (user) {
-                                store.onMentionUserSearchTap(user);
-                                store.portalController.hide();
-                              },
-                              store: store.userMentionStore),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: shopMyLook(),
+                CompositedTransformTarget(
+                  link: link,
+                  child: OverlayPortal(
+                    controller: portalController,
+                    overlayChildBuilder: (context) => PositionedDirectional(
+                      height: 200,
+                      start: 0,
+                      end: 0,
+                      child: CompositedTransformFollower(
+                        link: link,
+                        targetAnchor: Alignment.bottomLeft,
+                        followerAnchor: Alignment.bottomLeft,
+                        child: UserMentionSearch(
+                            onUserResultsTap: (user) {
+                              widget.store.onMentionUserSearchTap(user);
+                              portalController.hide();
+                            },
+                            store: widget.store.userMentionStore),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: DetectableTextField(
-                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                      maxLines: 5,
-                      style: const TextStyle(fontSize: 16),
-                      controller: store.controller,
-                      decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                          hintText:
-                              "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                          hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: shopMyLook(),
                     ),
                   ),
-                ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: DetectableTextField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    maxLines: 5,
+                    style: const TextStyle(fontSize: 16),
+                    controller: widget.store.controller,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        hintText:
+                            "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                        hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                   child: FilledButton(
-                      onPressed: !store.canPost
-                          ? null
-                          : () async {
-                              EasyLoading.show(maskType: EasyLoadingMaskType.clear);
-                              final res = await store.post();
-                              EasyLoading.dismiss();
-                              if (res && context.mounted) {
-                                Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
-                                Navigator.of(context).pop();
-                              }
-                            },
+                      onPressed: () async {
+                        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+                        final res = await widget.store.post();
+                        EasyLoading.dismiss();
+                        if (res && context.mounted) {
+                          Fluttertoast.showToast(msg: "Post uploaded", gravity: ToastGravity.CENTER);
+                          Navigator.of(context).pop();
+                        }
+                      },
                       child: const Text(
                         "Post",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -134,111 +122,75 @@ class UpsertPostBase extends StatelessWidget {
     });
   }
 
-  Widget get postImage {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AspectRatio(
-          aspectRatio: PostImage.aspectRatio,
-          child: PageView(
-              controller: store.imagePageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: store.editableImages.map((image) {
-                return Stack(
-                  children: [
-                    GestureDetector(
-                      onVerticalDragStart: (_) {
-                        store.isImageEditing = true;
-                      },
-                      onVerticalDragEnd: (_) {
-                        store.isImageEditing = false;
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: image.displayImagePath.contains("http")
-                        // ? PostImage(imageUrl: image.displayImagePath)
-                          ? ExtendedImage.network(
-                              image.displayImagePath,
-                              enableLoadState: true,
-                              extendedImageEditorKey: image.editorStateKey,
-                              fit: BoxFit.contain,
-                              cacheRawData: true,
-                              mode: ExtendedImageMode.editor,
-                              initEditorConfigHandler: (state) {
-                                return EditorConfig(
-                                    initialCropAspectRatio: PostImage.aspectRatio,
-                                    initCropRectType: InitCropRectType.layoutRect,
-                                    cropAspectRatio: PostImage.aspectRatio,
-                                    cropRectPadding: EdgeInsets.zero,
-                                    hitTestBehavior: HitTestBehavior.opaque);
-                              },
-                            )
-                          : ExtendedImage.file(
-                              File(image.displayImagePath),
-                              extendedImageEditorKey: image.editorStateKey,
-                              fit: BoxFit.contain,
-                              mode: ExtendedImageMode.editor,
-                              cacheRawData: true,
-                              initEditorConfigHandler: (state) {
-                                return EditorConfig(
-                                    initialCropAspectRatio: PostImage.aspectRatio,
-                                    initCropRectType: InitCropRectType.layoutRect,
-                                    cropAspectRatio: PostImage.aspectRatio,
-                                    cropRectPadding: EdgeInsets.zero,
-                                    hitTestBehavior: HitTestBehavior.opaque);
-                              },
-                            ),
-                    ),
-                    if (store.shopMyLook)
-                      const PositionedDirectional(
-                        bottom: 8,
-                        start: 8,
-                        child: ShoppableIcon(
-                          size: 24,
-                        ),
-                      ),
-                  ],
-                );
-              }).toList()),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        if (store.editableImages.length > 1)
-          Row(
-            children: [
-              (store.imagePagePosition) < 1
-                  ? const Spacer()
-                  : Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: TextButton(
-                          onPressed: () {
-                            store.previousEditingImage();
-                          },
-                          child: const Text("Previous Image")),
-                    ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: DotsIndicator(
-                  dotsCount: store.editableImages.length,
-                  position: store.imagePagePosition,
-                ),
+  Widget buildPostImageSection() {
+    return Consumer(
+      builder: (context, ref, child) {
+        return Observer(
+          builder: (context) {
+            return Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ...widget.store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
+                if (widget.store.postImagePaths.length != 10)
+                GestureDetector(
+                  onTap: () {
+                    // We use watch so that the state remains alive for the next page to attach in.
+                      final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
+                      imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
+                    ImageSummaryEditPageRoute(showCameraOptionsOnEnter: true, editPostId: widget.editPostId).push(context);
+                  },
+                  child: Container(
+                    height: 120,
+                    width: PostImage.aspectRatio * 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: const Color(0xFF7D7878))),
+                    child: const Icon(Icons.add),
+                  ),
+                )
+              ],
+            );
+          }
+        );
+      }
+    );
+  }
+
+  Widget buildPostImageItem({required int index}) {
+    return Consumer(
+      builder: (context,ref, child) {
+        return Stack(
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 120,
               ),
-              (store.imagePagePosition == store.editableImages.length - 1)
-                  ? const Spacer()
-                  : Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: TextButton(
-                          onPressed: () {
-                            store.nextEditingImage();
-                          },
-                          child: const Text("Next Image")),
-                    )
-            ],
-          ),
-      ],
+              child: GestureDetector(
+                onTap: () {
+                  // We use watch so that the state remains alive for the next page to attach in.
+                  final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
+                  imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
+                  ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false, editPostId: widget.editPostId).push(context);
+                },
+                child: Observer(builder: (context) {
+                  return ClipRRect(
+                      borderRadius: BorderRadius.circular(5), child: PostImage(imageUrl: widget.store.postImagePaths[index]));
+                }),
+              ),
+            ),
+            if (widget.editPostId == null)
+            PositionedDirectional(
+                top: 4,
+                end: 4,
+                child: GestureDetector(
+                    onTap: () {
+                      widget.store.removeImageAt(index: index);
+                    },
+                    child: SvgPicture.asset("assets/icons/ic_remove.svg")))
+          ],
+        );
+      }
     );
   }
 
@@ -249,8 +201,8 @@ class UpsertPostBase extends StatelessWidget {
         SizedBox(
           height: 24,
           child: Checkbox(
-              value: store.shopMyLook,
-              onChanged: (toggle) => store.shopMyLook = toggle ?? false,
+              value: widget.store.shopMyLook,
+              onChanged: (toggle) => widget.store.shopMyLook = toggle ?? false,
               fillColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.selected)) {
                   return const Color(0xFF8474A1);
@@ -267,7 +219,7 @@ class UpsertPostBase extends StatelessWidget {
         ),
         Flexible(
             child: Text(
-          store.shopMyLook
+          widget.store.shopMyLook
               ? "Others can chat with you to purchase your item(s)"
               : "Enable this if you are selling any items",
           maxLines: 2,
@@ -275,60 +227,5 @@ class UpsertPostBase extends StatelessWidget {
         ))
       ],
     );
-  }
-
-  void selectPhoto({required BuildContext context}) async {
-    final imageFiles = await showOtherProfilePostOptions(context);
-    store.setEditableImages(imageFiles.map((e) => e.path), false);
-  }
-
-  Future<List<XFile>> showOtherProfilePostOptions(BuildContext context) async {
-    return await showCupertinoModalPopup<List<XFile>>(
-          context: context,
-          builder: (BuildContext modalContext) => CupertinoActionSheet(
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.pop(modalContext, []);
-              },
-              child: const Text('Cancel', style: TextStyle(color: Color(0xFF7D7878))),
-            ),
-            actions: <CupertinoActionSheetAction>[
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
-
-                  if (modalContext.mounted) {
-                    Navigator.pop(modalContext, image != null ? [image] : []);
-                  }
-                },
-                child: const Text(
-                  'Select from camera',
-                  style: TextStyle(color: Color(0xFF7D7878)),
-                ),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  final image = await picker.pickImage(
-                    source: ImageSource.gallery,
-                  );
-                  if (modalContext.mounted) {
-                    Navigator.pop(modalContext, image != null ? [image] : []);
-                  }
-                },
-                child: const Text('Select a single photo library', style: TextStyle(color: Color(0xFF7D7878))),
-              ),
-              CupertinoActionSheetAction(
-                onPressed: () async {
-                  final images = await picker.pickMultiImage();
-                  if (modalContext.mounted) {
-                    Navigator.pop(modalContext, images);
-                  }
-                },
-                child: const Text('Select multiple photos library', style: TextStyle(color: Color(0xFF7D7878))),
-              ),
-            ],
-          ),
-        ) ??
-        [];
   }
 }

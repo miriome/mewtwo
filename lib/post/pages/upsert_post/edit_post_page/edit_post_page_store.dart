@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:dartx/dartx.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
@@ -22,12 +20,12 @@ EditPostPageStore editPostPageStore(EditPostPageStoreRef ref, {required int post
 }
 
 class EditPostPageStore extends AbsEditPostPageStore with _$EditPostPageStore {
-  EditPostPageStore({required int postId}) : super(postId: postId);
+  EditPostPageStore({required int postId}) : super([], postId: postId); // Empty because pots images come from api
 }
 
 abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
   final int postId;
-  AbsEditPostPageStore({required this.postId});
+  AbsEditPostPageStore(super.editedImagePaths, {required this.postId});
 
   @observable
   bool _isLoading = false;
@@ -41,22 +39,32 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      setEditableImages(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image), true);
-
+      updatePostImagePaths(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
       controller.text = res.caption;
     }
     listener.close();
   }
 
+  @action
+  void updatePostImagePaths(Iterable<String> imagePaths) {
+    postImagePaths = ObservableList.of(imagePaths);
+  }
+
   @override
   @action
   Future<bool> post() async {
-    final photosToPost = await preprocessPostImages();
-    
-    
-    
+    // Only take edited images
+    final photosToPost = postImagePaths
+        .mapIndexed((index, imagePath) => imagePath.startsWith("http")
+            ? null
+            : PostPhoto(index: index, photoFileBytes: File(imagePath).readAsBytesSync()))
+        .whereNotNull();
+
     final editPostApiProvider = EditPostApiProvider(
-        postId: postId, caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
+        postId: postId,
+        caption: controller.text,
+        chatEnabled: shopMyLook,
+        photos: photosToPost.whereNotNull().toList());
     final res = await Mew.pc.read(editPostApiProvider.future);
     return res;
   }

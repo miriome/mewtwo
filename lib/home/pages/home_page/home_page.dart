@@ -4,6 +4,7 @@ import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/home_page/widgets/home_post_tile.dart';
+import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -16,14 +17,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const int _pageTabIndex = 0;
   final store = HomePageStore();
   @override
   void initState() {
     MainPlatform.addMethodCallhandler((call) async {
       if (call.method == "viewWillAppear") {
         store.loadPosts();
-        
-      }});
+      }
+    });
     super.initState();
   }
   @override
@@ -35,18 +37,17 @@ class _HomePageState extends State<HomePage> {
           store.loadPosts();
         }
       },
-      child: Observer(
-        builder: (context) {
-          return Scaffold(
-          backgroundColor: Colors.white,
+      child: Observer(builder: (context) {
+        return Scaffold(
+            backgroundColor: Colors.white,
             appBar: appBar,
             body: Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: 
-              RefreshIndicator(
+              child: RefreshIndicator(
                 onRefresh: () => store.loadPosts(),
                 child: AlignedGridView.count(
+                  controller: Mew.tabPrimaryScrollControllers[_pageTabIndex],
                   crossAxisCount: 2,
                   mainAxisSpacing: 8,
                   crossAxisSpacing: 8,
@@ -60,10 +61,8 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-            ),
-          );
-        }
-      ),
+            ));
+      }),
     );
   }
 

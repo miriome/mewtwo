@@ -177,6 +177,12 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                   parentNavigatorKey: EditPostRoute.$parentNavigatorKey,
                   factory: $EditPostRouteExtension._fromState,
                 ),
+                GoRouteData.$route(
+                  path: 'image-summary-edit',
+                  parentNavigatorKey:
+                      ImageSummaryEditPageRoute.$parentNavigatorKey,
+                  factory: $ImageSummaryEditPageRouteExtension._fromState,
+                ),
               ],
             ),
           ],
@@ -433,6 +439,33 @@ extension $EditPostRouteExtension on EditPostRoute {
         '/edit-post',
         queryParams: {
           'post-id': postId.toString(),
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ImageSummaryEditPageRouteExtension on ImageSummaryEditPageRoute {
+  static ImageSummaryEditPageRoute _fromState(GoRouterState state) =>
+      ImageSummaryEditPageRoute(
+        showCameraOptionsOnEnter: _$boolConverter(
+            state.uri.queryParameters['show-camera-options-on-enter']!),
+        editPostId: _$convertMapValue(
+            'edit-post-id', state.uri.queryParameters, int.parse),
+      );
+
+  String get location => GoRouteData.$location(
+        '/image-summary-edit',
+        queryParams: {
+          'show-camera-options-on-enter': showCameraOptionsOnEnter.toString(),
+          if (editPostId != null) 'edit-post-id': editPostId!.toString(),
         },
       );
 

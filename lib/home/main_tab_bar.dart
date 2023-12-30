@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/unauth/routes/routes.dart';
@@ -27,12 +28,11 @@ class _MainTabBarState extends State<MainTabBar> {
         case "goToHome":
           HomePageRoute().go(context);
         case "goToLogin":
-        final sp = await SharedPreferences.getInstance();
-        await sp.clear();
-        if (context.mounted) {
-                LoginRoute().go(context);
-        }
-
+          final sp = await SharedPreferences.getInstance();
+          await sp.clear();
+          if (context.mounted) {
+            LoginRoute().go(context);
+          }
 
         // LoginRoute().go(context);
         case 'goToSearch':
@@ -71,48 +71,58 @@ class _MainTabBarState extends State<MainTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(splashColor: Colors.transparent, highlightColor: Colors.transparent),
-          child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: widget.child.currentIndex,
-              selectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
-              unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
-              onTap: (index) {
-                if (index == 2) {
-                  CreatePostRoute().push(context);
-                  return;
-                }
-                widget.child.goBranch(
-                  index,
-                );
-              },
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              items: [
-                const BottomNavigationBarItem(
-                  label: "",
-                  activeIcon: Icon(Icons.home),
-                  icon: Icon(Icons.home_outlined),
-                ),
-                BottomNavigationBarItem(
+    return PrimaryScrollController(
+      controller: Mew.tabPrimaryScrollControllers[widget.child.currentIndex],
+      child: Scaffold(
+        body: widget.child,
+        bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(splashColor: Colors.transparent, highlightColor: Colors.transparent),
+            child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                currentIndex: widget.child.currentIndex,
+                selectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
+                unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
+                onTap: (index) {
+                  if (index == widget.child.currentIndex) {
+                    Mew.tabPrimaryScrollControllers[widget.child.currentIndex].animateTo(
+                      0.0,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.easeOutCirc,
+                    );
+                  }
+                  if (index == 2) {
+                    ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false).push(context);
+                    return;
+                  }
+                  widget.child.goBranch(
+                    index,
+                  );
+                },
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                items: [
+                  const BottomNavigationBarItem(
                     label: "",
-                    icon: const Icon(
-                      Icons.search_outlined,
-                    ),
-                    activeIcon: Image.asset(
-                      'assets/icons/search_filled.png',
-                      height: 35,
-                      width: 35,
-                    )),
-                const BottomNavigationBarItem(label: "", icon: Icon(Icons.add_circle)),
-                const BottomNavigationBarItem(
-                    label: "", icon: Icon(Icons.notifications_outlined), activeIcon: Icon(Icons.notifications)),
-                const BottomNavigationBarItem(
-                    label: "", icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person)),
-              ])),
+                    activeIcon: Icon(Icons.home),
+                    icon: Icon(Icons.home_outlined),
+                  ),
+                  BottomNavigationBarItem(
+                      label: "",
+                      icon: const Icon(
+                        Icons.search_outlined,
+                      ),
+                      activeIcon: Image.asset(
+                        'assets/icons/search_filled.png',
+                        height: 35,
+                        width: 35,
+                      )),
+                  const BottomNavigationBarItem(label: "", icon: Icon(Icons.add_circle)),
+                  const BottomNavigationBarItem(
+                      label: "", icon: Icon(Icons.notifications_outlined), activeIcon: Icon(Icons.notifications)),
+                  const BottomNavigationBarItem(
+                      label: "", icon: Icon(Icons.person_outline), activeIcon: Icon(Icons.person)),
+                ])),
+      ),
     );
   }
 }

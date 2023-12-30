@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/notification_page/notification_page_store.dart';
 import 'package:mewtwo/home/pages/notification_page/widgets/notification_tile.dart';
+import 'package:mewtwo/mew.dart';
 
 class NotificationPage extends StatelessWidget {
+  static const int _pageTabIndex = 3;
   final store = NotificationPageStore()..load();
   NotificationPage({Key? key}) : super(key: key);
 
@@ -29,6 +31,7 @@ class NotificationPage extends StatelessWidget {
                     ),
                 )
                 : ListView.separated(
+                  controller: Mew.tabPrimaryScrollControllers[_pageTabIndex],
                     separatorBuilder: (context, index) => const SizedBox(
                           height: 16,
                         ),

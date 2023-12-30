@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mewtwo/home/model/user_model.dart';
+import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/networking/networking.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/profile/profile_page/profile_page_store.dart';
@@ -25,6 +26,8 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
+  // For when it is rendered in main tab.
+  static const int _pageTabIndex = 4;
 
   ProfilePageStore get store {
     return widget.userId != null ? ref.watch(OtherUserProfilePageStoreProvider(userId: widget.userId!)) : ref.watch(currentUserProfilePageStoreProvider);
@@ -63,6 +66,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           store.load();
                         },
                         child: AlignedGridView.count(
+                          controller: store.isOwnProfile ? Mew.tabPrimaryScrollControllers[_pageTabIndex] : PrimaryScrollController.of(context),
                           crossAxisCount: 2,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
@@ -76,7 +80,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () async {
-                              await CreatePostRoute().push(context);
+                              await ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false,).push(context);
                               store.load();
                             },
                             child: const Text.rich(

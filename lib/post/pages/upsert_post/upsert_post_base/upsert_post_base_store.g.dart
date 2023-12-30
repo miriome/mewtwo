@@ -7,7 +7,7 @@ part of 'upsert_post_base_store.dart';
 // **************************************************************************
 
 String _$upsertPostBaseStoreHash() =>
-    r'9e8e00b2db981edb07970d05b40e76be54cb2689';
+    r'716630af35a6a4ae70ad3e3b7f8c163c5256b5ec';
 
 /// See also [upsertPostBaseStore].
 @ProviderFor(upsertPostBaseStore)
@@ -32,54 +32,20 @@ typedef UpsertPostBaseStoreRef = AutoDisposeProviderRef<UpsertPostBaseStore>;
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$_ImageEditModel on __ImageEditModel, Store {
-  late final _$hasBeenCroppedAtom =
-      Atom(name: '__ImageEditModel.hasBeenCropped', context: context);
-
-  @override
-  bool get hasBeenCropped {
-    _$hasBeenCroppedAtom.reportRead();
-    return super.hasBeenCropped;
-  }
-
-  @override
-  set hasBeenCropped(bool value) {
-    _$hasBeenCroppedAtom.reportWrite(value, super.hasBeenCropped, () {
-      super.hasBeenCropped = value;
-    });
-  }
-
-  @override
-  String toString() {
-    return '''
-hasBeenCropped: ${hasBeenCropped}
-    ''';
-  }
-}
-
 mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
-  Computed<bool>? _$canPostComputed;
+  late final _$postImagePathsAtom =
+      Atom(name: '_UpsertPostBaseStore.postImagePaths', context: context);
 
   @override
-  bool get canPost => (_$canPostComputed ??= Computed<bool>(() => super.canPost,
-          name: '_UpsertPostBaseStore.canPost'))
-      .value;
-
-  late final _$_editableImagesAtom =
-      Atom(name: '_UpsertPostBaseStore._editableImages', context: context);
-
-  ObservableList<_ImageEditModel> get editableImages {
-    _$_editableImagesAtom.reportRead();
-    return super._editableImages;
+  ObservableList<String> get postImagePaths {
+    _$postImagePathsAtom.reportRead();
+    return super.postImagePaths;
   }
 
   @override
-  ObservableList<_ImageEditModel> get _editableImages => editableImages;
-
-  @override
-  set _editableImages(ObservableList<_ImageEditModel> value) {
-    _$_editableImagesAtom.reportWrite(value, super._editableImages, () {
-      super._editableImages = value;
+  set postImagePaths(ObservableList<String> value) {
+    _$postImagePathsAtom.reportWrite(value, super.postImagePaths, () {
+      super.postImagePaths = value;
     });
   }
 
@@ -115,19 +81,21 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
     });
   }
 
-  late final _$isImageEditingAtom =
-      Atom(name: '_UpsertPostBaseStore.isImageEditing', context: context);
+  late final _$_isImageEditingAtom =
+      Atom(name: '_UpsertPostBaseStore._isImageEditing', context: context);
 
-  @override
   bool get isImageEditing {
-    _$isImageEditingAtom.reportRead();
-    return super.isImageEditing;
+    _$_isImageEditingAtom.reportRead();
+    return super._isImageEditing;
   }
 
   @override
-  set isImageEditing(bool value) {
-    _$isImageEditingAtom.reportWrite(value, super.isImageEditing, () {
-      super.isImageEditing = value;
+  bool get _isImageEditing => isImageEditing;
+
+  @override
+  set _isImageEditing(bool value) {
+    _$_isImageEditingAtom.reportWrite(value, super._isImageEditing, () {
+      super._isImageEditing = value;
     });
   }
 
@@ -143,12 +111,11 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
       ActionController(name: '_UpsertPostBaseStore', context: context);
 
   @override
-  void updateDisplayImagePathAtIndex(
-      {required String path, required int index}) {
+  void removeImageAt({required int index}) {
     final _$actionInfo = _$_UpsertPostBaseStoreActionController.startAction(
-        name: '_UpsertPostBaseStore.updateDisplayImagePathAtIndex');
+        name: '_UpsertPostBaseStore.removeImageAt');
     try {
-      return super.updateDisplayImagePathAtIndex(path: path, index: index);
+      return super.removeImageAt(index: index);
     } finally {
       _$_UpsertPostBaseStoreActionController.endAction(_$actionInfo);
     }
@@ -157,10 +124,9 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
   @override
   String toString() {
     return '''
+postImagePaths: ${postImagePaths},
 shopMyLook: ${shopMyLook},
-imagePagePosition: ${imagePagePosition},
-isImageEditing: ${isImageEditing},
-canPost: ${canPost}
+imagePagePosition: ${imagePagePosition}
     ''';
   }
 }
