@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:crypto/crypto.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,15 +14,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
+import 'package:mewtwo/post/pages/upsert_post/edit_post_page/edit_post_page_store.dart';
 import 'package:mewtwo/post/pages/upsert_post/images_summary_edit_page/images_summary_edit_page_store.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 class ImagesSummaryEditPage extends ConsumerStatefulWidget {
   final bool showCameraOptionsOnEnter;
-  final bool isNewPost;
+  final int? editPostId;
 
-  ImagesSummaryEditPage({Key? key, required this.showCameraOptionsOnEnter, required this.isNewPost}) : super(key: key);
+  const ImagesSummaryEditPage({Key? key, required this.showCameraOptionsOnEnter, this.editPostId}) : super(key: key);
 
   @override
   ConsumerState<ImagesSummaryEditPage> createState() => _ImagesSummaryEditPageState();
@@ -55,7 +63,7 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("New Post"),
+          title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
         ),
         body: Observer(builder: (context) {
           if (store.displayImagePaths.isEmpty) {
@@ -93,11 +101,9 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                                     end: 8,
                                     child: GestureDetector(
                                         onTap: () async {
-                                          final croppedFile = await ImageCropper().cropImage(
-                                              sourcePath: image,
-                                              aspectRatio: const CropAspectRatio(ratioX: 184, ratioY: 242));
-                                          if (croppedFile != null) {
-                                            store.updateImagePathAt(index: index, path: croppedFile.path);
+                                          final croppedImagePath = await cropImage(image);
+                                          if (croppedImagePath != null) {
+                                            store.updateImagePathAt(index: index, path: croppedImagePath);
                                           }
                                         },
                                         child: SvgPicture.asset(
@@ -133,7 +139,13 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                         return;
                       }
                       if (context.mounted) {
-                        CreatePostRoute().push(context);
+                        if (widget.editPostId == null) {
+                          CreatePostRoute().push(context);
+                        } else {
+                          ref.read(editPostPageStoreProvider( postId: widget.editPostId!)).setPostImages(store.displayImagePaths);
+                          Navigator.of(context).pop();
+                        }
+                        
                       }
                     },
                     child: const Text(
@@ -146,6 +158,24 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
         }),
       ),
     );
+  }
+
+  /// Returns the path to the cropped image.
+  Future<String?> cropImage(String imagePath) async {
+    late final String imageFilePathToCrop;
+    if (imagePath.contains('http')) {
+      final ByteData imageData = await NetworkAssetBundle(Uri.parse(imagePath)).load("");
+      final Uint8List bytes = imageData.buffer.asUint8List();
+      final tempDir = await getTemporaryDirectory();
+      final tempFile =File(p.join(tempDir.path, "${md5.convert(utf8.encode(imagePath)).toString()}.${p.extension(imagePath)}"))
+          ..writeAsBytesSync(bytes);
+      imageFilePathToCrop = tempFile.path;
+    } else {
+      imageFilePathToCrop = imagePath;
+    }
+    final croppedFile = await ImageCropper()
+        .cropImage(sourcePath: imageFilePathToCrop, aspectRatio: const CropAspectRatio(ratioX: 184, ratioY: 242));
+    return croppedFile?.path;
   }
 
   Widget buildPhotoList() {
@@ -187,21 +217,22 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                     child: PostImage(imageUrl: store.displayImagePaths[index])));
           }),
         ),
-        PositionedDirectional(
-            top: 4,
-            end: 4,
-            child: GestureDetector(
-                onTap: () {
-                  store.removeImageAt(index: index);
-                },
-                child: SvgPicture.asset("assets/icons/ic_remove.svg")))
+        if (widget.editPostId == null)
+          PositionedDirectional(
+              top: 4,
+              end: 4,
+              child: GestureDetector(
+                  onTap: () {
+                    store.removeImageAt(index: index);
+                  },
+                  child: SvgPicture.asset("assets/icons/ic_remove.svg")))
       ],
     );
   }
 
   void selectPhoto({required BuildContext context, required ImageSummaryEditPageStore store}) async {
     final imageFiles = await showOtherProfilePostOptions(context);
-    store.setSelectedImages([...store.displayImagePaths, ...imageFiles.map((e) => e.path)]);
+    store.addSelectedImages(imageFiles.map((e) => e.path), false);
   }
 
   Future<List<XFile>> showOtherProfilePostOptions(BuildContext context) async {

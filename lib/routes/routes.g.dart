@@ -457,14 +457,15 @@ extension $ImageSummaryEditPageRouteExtension on ImageSummaryEditPageRoute {
       ImageSummaryEditPageRoute(
         showCameraOptionsOnEnter: _$boolConverter(
             state.uri.queryParameters['show-camera-options-on-enter']!),
-        isNewPost: _$boolConverter(state.uri.queryParameters['is-new-post']!),
+        editPostId: _$convertMapValue(
+            'edit-post-id', state.uri.queryParameters, int.parse),
       );
 
   String get location => GoRouteData.$location(
         '/image-summary-edit',
         queryParams: {
           'show-camera-options-on-enter': showCameraOptionsOnEnter.toString(),
-          'is-new-post': isNewPost.toString(),
+          if (editPostId != null) 'edit-post-id': editPostId!.toString(),
         },
       );
 

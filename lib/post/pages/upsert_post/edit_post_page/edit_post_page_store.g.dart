@@ -197,6 +197,20 @@ mixin _$EditPostPageStore on AbsEditPostPageStore, Store {
     return _$postAsyncAction.run(() => super.post());
   }
 
+  late final _$AbsEditPostPageStoreActionController =
+      ActionController(name: 'AbsEditPostPageStore', context: context);
+
+  @override
+  void updatePostImagePaths(Iterable<String> imagePaths) {
+    final _$actionInfo = _$AbsEditPostPageStoreActionController.startAction(
+        name: 'AbsEditPostPageStore.updatePostImagePaths');
+    try {
+      return super.updatePostImagePaths(imagePaths);
+    } finally {
+      _$AbsEditPostPageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

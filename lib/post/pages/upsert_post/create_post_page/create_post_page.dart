@@ -12,9 +12,7 @@ class CreatePostPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(upsertPostBaseStoreProvider);
     return UpsertPostBase(
-      
       store: store,
-      isNewPost: true,
     );
   }
 }

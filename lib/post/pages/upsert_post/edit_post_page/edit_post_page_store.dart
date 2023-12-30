@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:dartx/dartx.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
 import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
@@ -41,22 +39,33 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      postImagePaths = ObservableList.of(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
+      updatePostImagePaths(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
       controller.text = res.caption;
     }
     listener.close();
   }
 
+  @action
+  void updatePostImagePaths(Iterable<String> imagePaths) {
+    postImagePaths = ObservableList.of(imagePaths);
+  }
+
   @override
   @action
   Future<bool> post() async {
-    
-    
-    
-    // final editPostApiProvider = EditPostApiProvider(
-    //     postId: postId, caption: controller.text, chatEnabled: shopMyLook, photos: photosToPost.whereNotNull().toList());
-    // final res = await Mew.pc.read(editPostApiProvider.future);
-    // return res;
-    return false;
+    // Only take edited images
+    final photosToPost = postImagePaths
+        .mapIndexed((index, imagePath) => imagePath.startsWith("http")
+            ? null
+            : PostPhoto(index: index, photoFileBytes: File(imagePath).readAsBytesSync()))
+        .whereNotNull();
+
+    final editPostApiProvider = EditPostApiProvider(
+        postId: postId,
+        caption: controller.text,
+        chatEnabled: shopMyLook,
+        photos: photosToPost.whereNotNull().toList());
+    final res = await Mew.pc.read(editPostApiProvider.future);
+    return res;
   }
 }

@@ -13,11 +13,11 @@ class PostDetailsRoute extends GoRouteData {
 class ImageSummaryEditPageRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
   final bool showCameraOptionsOnEnter;
-  final bool isNewPost;
-  ImageSummaryEditPageRoute({required this.showCameraOptionsOnEnter, required this.isNewPost});
+  final int? editPostId;
+  ImageSummaryEditPageRoute({required this.showCameraOptionsOnEnter, this.editPostId});
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return ImagesSummaryEditPage(showCameraOptionsOnEnter: showCameraOptionsOnEnter, isNewPost: isNewPost,);
+    return ImagesSummaryEditPage(showCameraOptionsOnEnter: showCameraOptionsOnEnter, editPostId: editPostId,);
   }
 }
 

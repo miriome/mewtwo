@@ -106,11 +106,22 @@ mixin _$ImageSummaryEditPageStore on _ImageSummaryEditPageStore, Store {
   }
 
   @override
-  void setSelectedImages(Iterable<String> paths) {
+  void addSelectedImages(Iterable<String> paths, bool isEditPost) {
+    final _$actionInfo = _$_ImageSummaryEditPageStoreActionController
+        .startAction(name: '_ImageSummaryEditPageStore.addSelectedImages');
+    try {
+      return super.addSelectedImages(paths, isEditPost);
+    } finally {
+      _$_ImageSummaryEditPageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectedImages(Iterable<String> paths, bool isEditPost) {
     final _$actionInfo = _$_ImageSummaryEditPageStoreActionController
         .startAction(name: '_ImageSummaryEditPageStore.setSelectedImages');
     try {
-      return super.setSelectedImages(paths);
+      return super.setSelectedImages(paths, isEditPost);
     } finally {
       _$_ImageSummaryEditPageStoreActionController.endAction(_$actionInfo);
     }

@@ -29,14 +29,10 @@ ImageSummaryEditPageStore imageSummaryEditPageStore(ImageSummaryEditPageStoreRef
   return store;
 }
 
-
 class ImageSummaryEditPageStore extends _ImageSummaryEditPageStore with _$ImageSummaryEditPageStore {}
 
 abstract class _ImageSummaryEditPageStore with Store {
-
-  void dispose() {
-    
-  }
+  void dispose() {}
 
   @observable
   double imagePagePosition = 0;
@@ -45,7 +41,6 @@ abstract class _ImageSummaryEditPageStore with Store {
   void updatePagePosition(double page) {
     imagePagePosition = page;
   }
-
 
   @observable
   ObservableList<_PostImage> _postImages = ObservableList.of([]);
@@ -59,8 +54,15 @@ abstract class _ImageSummaryEditPageStore with Store {
       _postImages.mapIndexed((index, image) => image.isEdited ? null : index + 1).whereNotNull().toList();
 
   @action
-  void setSelectedImages(Iterable<String> paths) {
-    _postImages = ObservableList.of(paths.map((path) => _PostImage(path: path, isEdited: false)));
+  void addSelectedImages(Iterable<String> paths, bool isEditPost) {
+    // All photos from edit post have already been edited
+    _postImages.addAll(paths.map((path) => _PostImage(path: path, isEdited: isEditPost)));
+  }
+
+  @action
+  void setSelectedImages(Iterable<String> paths, bool isEditPost) {
+    // All photos from edit post have already been edited
+    _postImages = ObservableList.of(paths.map((path) => _PostImage(path: path, isEdited: isEditPost)));
   }
 
   @action
