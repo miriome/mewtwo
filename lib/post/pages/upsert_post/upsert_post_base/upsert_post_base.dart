@@ -21,6 +21,7 @@ import 'package:mewtwo/routes/routes.dart';
 
 class UpsertPostBase extends StatefulWidget {
   final UpsertPostBaseStore store;
+
   /// If this is not null, this is edit post
   final int? editPostId;
   const UpsertPostBase({Key? key, required this.store, this.editPostId}) : super(key: key);
@@ -124,63 +125,62 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
   }
 
   Widget buildPostImageSection() {
-    return Consumer(
-      builder: (context, ref, child) {
-        return Observer(
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ...widget.store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
-                if (widget.store.postImagePaths.length != 10)
-                GestureDetector(
-                  onTap: () {
-                    // We use watch so that the state remains alive for the next page to attach in.
-                      final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
-                      imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
-                    ImageSummaryEditPageRoute(showCameraOptionsOnEnter: true, editPostId: widget.editPostId).push(context);
-                  },
-                  child: Container(
-                    height: 120,
-                    width: PostImage.aspectRatio * 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: const Color(0xFF7D7878))),
-                    child: const Icon(Icons.add),
-                  ),
-                )
-              ],
-            );
-          }
-        );
-      }
-    );
-  }
-
-  Widget buildPostImageItem({required int index}) {
-    return Consumer(
-      builder: (context,ref, child) {
-        return Stack(
+    return Consumer(builder: (context, ref, child) {
+      return Observer(builder: (context) {
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
           children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 120,
-              ),
-              child: GestureDetector(
+            ...widget.store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
+            if (widget.store.postImagePaths.length != 10)
+              GestureDetector(
                 onTap: () {
                   // We use watch so that the state remains alive for the next page to attach in.
                   final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
                   imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
-                  ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false, editPostId: widget.editPostId).push(context);
+                  ImageSummaryEditPageRoute(
+                          showCameraOptionsOnEnter: true, editPostId: widget.editPostId, initialPhotoIndex: 0)
+                      .push(context);
                 },
-                child: Observer(builder: (context) {
-                  return ClipRRect(
-                      borderRadius: BorderRadius.circular(5), child: PostImage(imageUrl: widget.store.postImagePaths[index]));
-                }),
-              ),
+                child: Container(
+                  height: 120,
+                  width: PostImage.aspectRatio * 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5), border: Border.all(color: const Color(0xFF7D7878))),
+                  child: const Icon(Icons.add),
+                ),
+              )
+          ],
+        );
+      });
+    });
+  }
+
+  Widget buildPostImageItem({required int index}) {
+    return Consumer(builder: (context, ref, child) {
+      return Stack(
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 120,
             ),
-            if (widget.editPostId == null)
+            child: GestureDetector(
+              onTap: () {
+                // We use watch so that the state remains alive for the next page to attach in.
+                final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
+                imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
+                ImageSummaryEditPageRoute(
+                        showCameraOptionsOnEnter: false, editPostId: widget.editPostId, initialPhotoIndex: index)
+                    .push(context);
+              },
+              child: Observer(builder: (context) {
+                return ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: PostImage(imageUrl: widget.store.postImagePaths[index]));
+              }),
+            ),
+          ),
+          if (widget.editPostId == null)
             PositionedDirectional(
                 top: 4,
                 end: 4,
@@ -189,10 +189,9 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                       widget.store.removeImageAt(index: index);
                     },
                     child: SvgPicture.asset("assets/icons/ic_remove.svg")))
-          ],
-        );
-      }
-    );
+        ],
+      );
+    });
   }
 
   Widget shopMyLook() {

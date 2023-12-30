@@ -14,17 +14,23 @@ class ImageSummaryEditPageRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
   final bool showCameraOptionsOnEnter;
   final int? editPostId;
-  ImageSummaryEditPageRoute({required this.showCameraOptionsOnEnter, this.editPostId});
+  final int? initialPhotoIndex;
+  ImageSummaryEditPageRoute({required this.showCameraOptionsOnEnter, this.editPostId, this.initialPhotoIndex}) {
+    int i = 1;
+  }
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return ImagesSummaryEditPage(showCameraOptionsOnEnter: showCameraOptionsOnEnter, editPostId: editPostId,);
+    return ImagesSummaryEditPage(
+      showCameraOptionsOnEnter: showCameraOptionsOnEnter,
+      editPostId: editPostId,
+      initialPhotoIndex: initialPhotoIndex ?? 0,
+    );
   }
 }
 
 class CreatePostRoute extends GoRouteData {
   static final GlobalKey<NavigatorState> $parentNavigatorKey = rootNavigatorKey; // TODO: Make this better.
-  
-  
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const CreatePostPage();

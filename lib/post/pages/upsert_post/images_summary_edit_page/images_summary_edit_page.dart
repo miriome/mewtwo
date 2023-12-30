@@ -24,8 +24,11 @@ import 'package:path/path.dart' as p;
 class ImagesSummaryEditPage extends ConsumerStatefulWidget {
   final bool showCameraOptionsOnEnter;
   final int? editPostId;
+  final int initialPhotoIndex;
 
-  const ImagesSummaryEditPage({Key? key, required this.showCameraOptionsOnEnter, this.editPostId}) : super(key: key);
+  const ImagesSummaryEditPage(
+      {Key? key, required this.showCameraOptionsOnEnter, this.editPostId, required this.initialPhotoIndex})
+      : super(key: key);
 
   @override
   ConsumerState<ImagesSummaryEditPage> createState() => _ImagesSummaryEditPageState();
@@ -33,11 +36,12 @@ class ImagesSummaryEditPage extends ConsumerStatefulWidget {
 
 class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
   final ImagePicker picker = ImagePicker();
-  final imagePageController = PageController();
+  final PageController imagePageController = PageController();
   final GlobalKey postImageGlobalKey = GlobalKey();
 
   @override
   void initState() {
+    
     imagePageController.addListener(() {
       final store = ref.read(imageSummaryEditPageStoreProvider);
       store.updatePagePosition(imagePageController.page ?? 0);
@@ -48,6 +52,11 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
         selectPhoto(context: context, store: store);
       });
     }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        imagePageController.jumpToPage(widget.initialPhotoIndex);
+      });
+    
+
     super.initState();
   }
 
@@ -142,10 +151,11 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                         if (widget.editPostId == null) {
                           CreatePostRoute().push(context);
                         } else {
-                          ref.read(editPostPageStoreProvider( postId: widget.editPostId!)).setPostImages(store.displayImagePaths);
+                          ref
+                              .read(editPostPageStoreProvider(postId: widget.editPostId!))
+                              .setPostImages(store.displayImagePaths);
                           Navigator.of(context).pop();
                         }
-                        
                       }
                     },
                     child: const Text(
@@ -167,8 +177,9 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
       final ByteData imageData = await NetworkAssetBundle(Uri.parse(imagePath)).load("");
       final Uint8List bytes = imageData.buffer.asUint8List();
       final tempDir = await getTemporaryDirectory();
-      final tempFile =File(p.join(tempDir.path, "${md5.convert(utf8.encode(imagePath)).toString()}.${p.extension(imagePath)}"))
-          ..writeAsBytesSync(bytes);
+      final tempFile =
+          File(p.join(tempDir.path, "${md5.convert(utf8.encode(imagePath)).toString()}.${p.extension(imagePath)}"))
+            ..writeAsBytesSync(bytes);
       imageFilePathToCrop = tempFile.path;
     } else {
       imageFilePathToCrop = imagePath;

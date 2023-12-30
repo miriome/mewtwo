@@ -459,6 +459,8 @@ extension $ImageSummaryEditPageRouteExtension on ImageSummaryEditPageRoute {
             state.uri.queryParameters['show-camera-options-on-enter']!),
         editPostId: _$convertMapValue(
             'edit-post-id', state.uri.queryParameters, int.parse),
+        initialPhotoIndex: _$convertMapValue(
+            'initial-photo-index', state.uri.queryParameters, int.parse),
       );
 
   String get location => GoRouteData.$location(
@@ -466,6 +468,8 @@ extension $ImageSummaryEditPageRouteExtension on ImageSummaryEditPageRoute {
         queryParams: {
           'show-camera-options-on-enter': showCameraOptionsOnEnter.toString(),
           if (editPostId != null) 'edit-post-id': editPostId!.toString(),
+          if (initialPhotoIndex != null)
+            'initial-photo-index': initialPhotoIndex!.toString(),
         },
       );
 
