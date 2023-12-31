@@ -45,6 +45,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
     return Observer(builder: (context) {
       return SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
           ),
