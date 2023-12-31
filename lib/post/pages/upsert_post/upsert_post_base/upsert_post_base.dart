@@ -83,7 +83,8 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                   ),
                 ),
               ),
-              Expanded(
+              TapRegion(
+                onTapOutside: (_) => FocusScope.of(context).unfocus(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: DetectableTextField(
