@@ -159,11 +159,12 @@ class _OtherUserProfilePageStoreProviderElement
 }
 
 String _$currentUserProfilePageStoreHash() =>
-    r'30226b5baa104c1085bba07005a22fd046caed5a';
+    r'08e8261deede046d7bdda9bc894088a50c6185b6';
 
 /// See also [currentUserProfilePageStore].
 @ProviderFor(currentUserProfilePageStore)
-final currentUserProfilePageStoreProvider = Provider<ProfilePageStore>.internal(
+final currentUserProfilePageStoreProvider =
+    AutoDisposeProvider<ProfilePageStore>.internal(
   currentUserProfilePageStore,
   name: r'currentUserProfilePageStoreProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -173,7 +174,8 @@ final currentUserProfilePageStoreProvider = Provider<ProfilePageStore>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef CurrentUserProfilePageStoreRef = ProviderRef<ProfilePageStore>;
+typedef CurrentUserProfilePageStoreRef
+    = AutoDisposeProviderRef<ProfilePageStore>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
 
@@ -203,6 +205,13 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
   int get followers =>
       (_$followersComputed ??= Computed<int>(() => super.followers,
               name: '_ProfilePageStore.followers'))
+          .value;
+  Computed<bool>? _$isAdminProfileComputed;
+
+  @override
+  bool get isAdminProfile =>
+      (_$isAdminProfileComputed ??= Computed<bool>(() => super.isAdminProfile,
+              name: '_ProfilePageStore.isAdminProfile'))
           .value;
   Computed<bool>? _$isOwnProfileComputed;
 
@@ -312,6 +321,7 @@ mixin _$ProfilePageStore on _ProfilePageStore, Store {
 likes: ${likes},
 posts: ${posts},
 followers: ${followers},
+isAdminProfile: ${isAdminProfile},
 isOwnProfile: ${isOwnProfile}
     ''';
   }

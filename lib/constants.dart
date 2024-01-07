@@ -19,4 +19,7 @@ class Constants {
     "Emo",
     "Vintage"
   ];
+
+  static const List<int> kadminIds = [6, 52];
+
 }

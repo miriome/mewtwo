@@ -250,6 +250,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
         const Spacer(),
+        if (!store.isAdminPost)
         GestureDetector(
           onTap: () => store.isMeasurementsVisible = !store.isMeasurementsVisible,
           child: SvgPicture.asset(

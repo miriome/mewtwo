@@ -5,6 +5,7 @@ import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/api/api.dart';
 import 'package:mewtwo/post/pages/post_details_page/comments/comments_section/comments_section_store.dart';
+import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,6 +45,9 @@ abstract class _PostDetailsPageStore with Store {
 
   @observable
   bool isShopableDescriptionVisible = false;
+
+  @computed
+  bool get isAdminPost => _post?.added_by != null ? Utility.isAdmin((_post?.added_by)!) : false;
 
 
   @observable

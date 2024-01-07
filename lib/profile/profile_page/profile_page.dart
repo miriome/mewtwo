@@ -30,7 +30,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   static const int _pageTabIndex = 4;
 
   ProfilePageStore get store {
-    return widget.userId != null ? ref.watch(OtherUserProfilePageStoreProvider(userId: widget.userId!)) : ref.watch(currentUserProfilePageStoreProvider);
+    return widget.userId != null
+        ? ref.watch(OtherUserProfilePageStoreProvider(userId: widget.userId!))
+        : ref.watch(currentUserProfilePageStoreProvider);
   }
 
   @override
@@ -55,8 +57,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 16),
-                measurements,
-                const SizedBox(height: 14),
+                if (!store.isAdminProfile) ...[
+                  measurements,
+                  const SizedBox(height: 14),
+                ],
                 relationStatistics,
                 const SizedBox(height: 16),
                 store.posts.isNotEmpty
@@ -66,7 +70,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           store.load();
                         },
                         child: AlignedGridView.count(
-                          controller: store.isOwnProfile ? Mew.tabPrimaryScrollControllers[_pageTabIndex] : PrimaryScrollController.of(context),
+                          controller: store.isOwnProfile
+                              ? Mew.tabPrimaryScrollControllers[_pageTabIndex]
+                              : PrimaryScrollController.of(context),
                           crossAxisCount: 2,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
@@ -80,7 +86,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () async {
-                              await ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false, initialPhotoIndex: 0).push(context);
+                              await ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false, initialPhotoIndex: 0)
+                                  .push(context);
                               store.load();
                             },
                             child: const Text.rich(
@@ -109,12 +116,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: const Color(0xFF6EC6CA),
-                  foregroundImage:
-                      store.user?.photo_url == Networking.imageDomain || store.user?.photo_url == null
-                          ? null
-                          : CachedNetworkImageProvider(
-                              store.user?.photo_url ?? "",
-                            ),
+                  foregroundImage: store.user?.photo_url == Networking.imageDomain || store.user?.photo_url == null
+                      ? null
+                      : CachedNetworkImageProvider(
+                          store.user?.photo_url ?? "",
+                        ),
                 ),
                 const SizedBox(
                   width: 16,
@@ -124,7 +130,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    
                     Text(
                       store.user?.name ?? "",
                       style: GoogleFonts.roboto(
@@ -148,7 +153,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 if (store.user != null) {
                   if (store.isOwnProfile) {
                     ProfileOptions.showOwnProfileOptions(context, store: store);
-                    
                   } else {
                     ProfileOptions.showOtherProfileOptions(context, store: store);
                   }
@@ -166,15 +170,16 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Widget get measurements {
-
-
     final user = store.user;
     if (!store.isOwnProfile && user != null) {
       if (user.measurementPrivacy == MeasurementPrivacy.following && !user.my_follow) {
-        return const Text("This user has only allowed followers to view their measurements.", textAlign: TextAlign.center,);
+        return const Text(
+          "This user has only allowed followers to view their measurements.",
+          textAlign: TextAlign.center,
+        );
       }
     }
-    
+
     // Change this to dynamic lmao
     const heightUnits = "cm";
     const otherUnits = "in";
@@ -182,7 +187,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Height: ${(store.user?.height == null || int.tryParse(store.user!.height!) == null) ?  "-" : int.tryParse(store.user!.height!)} $heightUnits",
+          "Height: ${(store.user?.height == null || int.tryParse(store.user!.height!) == null) ? "-" : int.tryParse(store.user!.height!)} $heightUnits",
           style: GoogleFonts.roboto(color: const Color(0xFF7D7878), fontSize: 14),
         ),
         Text(
@@ -258,8 +263,4 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       ],
     );
   }
-
-  
-
-
 }

@@ -5,6 +5,7 @@ import 'package:mewtwo/home/api/api.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/mew.dart';
+import 'package:mewtwo/utils.dart';
 import 'package:mobx/mobx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,7 @@ ProfilePageStore otherUserProfilePageStore(OtherUserProfilePageStoreRef ref, {re
   return store;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 ProfilePageStore currentUserProfilePageStore(CurrentUserProfilePageStoreRef ref) {
   final store = ProfilePageStore(null);
   store.init().then((value) => store.load());
@@ -57,6 +58,9 @@ abstract class _ProfilePageStore with Store {
 
   @computed
   int get followers => _user?.followers ?? 0;
+
+  @computed
+  bool get isAdminProfile => _userId != null ? Utility.isAdmin(_userId!) : false;
 
   @computed
   bool get isOwnProfile => _userId == _selfUserId && _selfUserId != null;

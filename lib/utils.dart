@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:mewtwo/constants.dart';
 import 'package:mewtwo/home/model/post_model.dart';
 import 'package:mewtwo/home/model/user_model.dart';
 import 'package:mewtwo/networking/networking.dart';
@@ -146,6 +147,11 @@ class Log {
 }
 
 class Utility {
+
+  static bool isAdmin(int id) {
+    return Constants.kadminIds.contains(id);
+  }
+
   static String parseImageUrl(String url) {
     if (url.startsWith("http")) {
       // return url;

@@ -16,6 +16,13 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
       (_$isMyPostComputed ??= Computed<bool>(() => super.isMyPost,
               name: '_PostDetailsPageStore.isMyPost'))
           .value;
+  Computed<bool>? _$isAdminPostComputed;
+
+  @override
+  bool get isAdminPost =>
+      (_$isAdminPostComputed ??= Computed<bool>(() => super.isAdminPost,
+              name: '_PostDetailsPageStore.isAdminPost'))
+          .value;
 
   late final _$_selfUserIdAtom =
       Atom(name: '_PostDetailsPageStore._selfUserId', context: context);
@@ -151,7 +158,8 @@ mixin _$PostDetailsPageStore on _PostDetailsPageStore, Store {
 isMeasurementsVisible: ${isMeasurementsVisible},
 isShopableDescriptionVisible: ${isShopableDescriptionVisible},
 interactiveViewState: ${interactiveViewState},
-isMyPost: ${isMyPost}
+isMyPost: ${isMyPost},
+isAdminPost: ${isAdminPost}
     ''';
   }
 }
