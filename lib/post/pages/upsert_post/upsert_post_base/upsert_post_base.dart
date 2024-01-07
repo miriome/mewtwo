@@ -52,53 +52,62 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: buildPostImageSection(),
-              ),
-              const SizedBox(height: 18),
-              CompositedTransformTarget(
-                link: link,
-                child: OverlayPortal(
-                  controller: portalController,
-                  overlayChildBuilder: (context) => PositionedDirectional(
-                    height: 200,
-                    start: 0,
-                    end: 0,
-                    child: CompositedTransformFollower(
-                      link: link,
-                      targetAnchor: Alignment.bottomLeft,
-                      followerAnchor: Alignment.bottomLeft,
-                      child: UserMentionSearch(
-                          onUserResultsTap: (user) {
-                            widget.store.onMentionUserSearchTap(user);
-                            portalController.hide();
-                          },
-                          store: widget.store.userMentionStore),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: shopMyLook(),
-                  ),
-                ),
-              ),
-              TapRegion(
-                onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: DetectableTextField(
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    maxLines: 5,
-                    style: const TextStyle(fontSize: 16),
-                    controller: widget.store.controller,
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                        hintText:
-                            "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                        hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: buildPostImageSection(),
+                      ),
+                      const SizedBox(height: 18),
+                      CompositedTransformTarget(
+                        link: link,
+                        child: OverlayPortal(
+                          controller: portalController,
+                          overlayChildBuilder: (context) => PositionedDirectional(
+                            height: 200,
+                            start: 0,
+                            end: 0,
+                            child: CompositedTransformFollower(
+                              link: link,
+                              targetAnchor: Alignment.bottomLeft,
+                              followerAnchor: Alignment.bottomLeft,
+                              child: UserMentionSearch(
+                                  onUserResultsTap: (user) {
+                                    widget.store.onMentionUserSearchTap(user);
+                                    portalController.hide();
+                                  },
+                                  store: widget.store.userMentionStore),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: shopMyLook(),
+                          ),
+                        ),
+                      ),
+                      TapRegion(
+                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: DetectableTextField(
+                            onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                            maxLines: null,
+                            style: const TextStyle(fontSize: 16),
+                            controller: widget.store.controller,
+                            decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                                hintText:
+                                    "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                                hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -111,7 +120,9 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                       final res = await widget.store.post();
                       EasyLoading.dismiss();
                       if (res && context.mounted) {
-                        Fluttertoast.showToast(msg: widget.editPostId != null ? "Post edited" : "Post uploaded", gravity: ToastGravity.CENTER);
+                        Fluttertoast.showToast(
+                            msg: widget.editPostId != null ? "Post edited" : "Post uploaded",
+                            gravity: ToastGravity.CENTER);
                         ProfilePageRoute().go(context);
                       }
                     },
