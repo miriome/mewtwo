@@ -199,6 +199,9 @@ class Utility {
     if (val is int) {
       return val;
     }
+    if (val == null) {
+      return defaultVal;
+    }
     return int.tryParse(val) ?? defaultVal;
   }
 }

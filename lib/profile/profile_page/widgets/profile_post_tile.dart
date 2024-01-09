@@ -63,7 +63,7 @@ class ProfilePostTile extends StatelessWidget {
                                         child: SizedBox(
                                       width: 4,
                                     )),
-                                    const TextSpan(text: "0", style: TextStyle(
+                                    TextSpan(text: post.views.toString(), style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w700
