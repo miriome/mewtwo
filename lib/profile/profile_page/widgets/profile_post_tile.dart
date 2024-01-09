@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/base/widgets/shoppable_icon.dart';
@@ -36,18 +37,40 @@ class ProfilePostTile extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        PostImage(imageUrl: Utility.parseImageUrl(post.image)
-                        ),
+                        PostImage(imageUrl: Utility.parseImageUrl(post.image)),
                         if (post.chat_enabled)
-                      const PositionedDirectional(
-                          bottom: 6,
-                          start: 6,
-                          child: ShoppableIcon(
-                            size: 16,
-                          )),
+                          const PositionedDirectional(
+                              bottom: 6,
+                              start: 6,
+                              child: ShoppableIcon(
+                                size: 16,
+                              )),
+                        if (store.isOwnProfile)
+                          PositionedDirectional(
+                              bottom: 4,
+                              end: 4,
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: const Color(0xFF787880).withOpacity(0.5)),
+                                  child: Text.rich(TextSpan(children: [
+                                    WidgetSpan(
+                                        child: SvgPicture.asset(
+                                      "assets/icons/ic_eye.svg",
+                                      height: 12,
+                                      width: 12,
+                                    )),
+                                    const WidgetSpan(
+                                        child: SizedBox(
+                                      width: 4,
+                                    )),
+                                    const TextSpan(text: "0", style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700
+                                    ))
+                                  ]))))
                       ],
                     ),
-                    
                     cardFooter,
                   ],
                 ),

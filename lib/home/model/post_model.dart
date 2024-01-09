@@ -22,6 +22,7 @@ class PostModel extends _PostModel with _$PostModel {
     required super.likes,
     required super.my_like,
     required super.images,
+    required super.views,
     super.hashtag,
     super.posted_by,
     super.comments,
@@ -65,6 +66,12 @@ abstract class _PostModel with Store {
     toJson: Utility.int2Str
   )
   int likes;
+
+  @JsonKey(
+    fromJson: Utility.parseInt,
+    toJson: Utility.int2Str
+  )
+  int views;
   //try. if not stick to int
   @JsonKey(
     fromJson: Utility.parseBool,
@@ -92,6 +99,7 @@ abstract class _PostModel with Store {
     required this.added_by,
     required this.likes,
     required this.my_like,
+    required this.views,
     this.hashtag,
     this.posted_by,
     required this.comments,
