@@ -21,6 +21,7 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
               ?.map((e) => _PostImageModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      views: Utility.parseInt(json['views']),
       hashtag: json['hashtag'] as String?,
       posted_by: json['posted_by'] == null
           ? null
@@ -44,6 +45,7 @@ Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
       'chat_enabled': Utility.bool2int(instance.chat_enabled),
       'added_by': Utility.int2Str(instance.added_by),
       'likes': Utility.int2Str(instance.likes),
+      'views': Utility.int2Str(instance.views),
       'my_like': Utility.bool2int(instance.my_like),
       'hashtag': instance.hashtag,
       'posted_by': instance.posted_by?.toJson(),
