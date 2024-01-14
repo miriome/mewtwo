@@ -142,7 +142,7 @@ class UpsertProfileBase extends ConsumerWidget {
               }
             },
             child: const Text(
-              'Select from camera',
+              'Take photo',
               style: TextStyle(color: Color(0xFF7D7878)),
             ),
           ),

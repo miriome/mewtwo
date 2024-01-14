@@ -94,16 +94,20 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: DetectableTextField(
                             onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                            minLines: 5,
                             maxLines: null,
                             style: const TextStyle(fontSize: 16),
                             controller: widget.store.controller,
                             decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                                contentPadding: EdgeInsets.all(8),
                                 hintText:
                                     "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
                                 hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none),
+                                hintMaxLines: 5,
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1, color: Color(0xFF7D7878))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1, color: Color(0xFF7D7878)))),
                           ),
                         ),
                       ),
@@ -111,7 +115,6 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                   ),
                 ),
               ),
-              const Spacer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 child: FilledButton(

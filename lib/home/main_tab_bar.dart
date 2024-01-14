@@ -84,11 +84,19 @@ class _MainTabBarState extends State<MainTabBar> {
                 unselectedIconTheme: const IconThemeData(color: Color(0xFF8474A1), size: 35),
                 onTap: (index) {
                   if (index == widget.child.currentIndex) {
-                    Mew.tabPrimaryScrollControllers[widget.child.currentIndex].animateTo(
-                      0.0,
-                      duration: const Duration(milliseconds: 1000),
-                      curve: Curves.easeOutCirc,
-                    );
+                    final currentRoute = widget.child.shellRouteContext.routerState.fullPath;
+                    final homePath = widget.child.shellRouteContext.route.routes[index];
+                    if (homePath is GoRoute) {
+                      if (currentRoute == homePath.path) {
+                        Mew.tabPrimaryScrollControllers[widget.child.currentIndex].animateTo(
+                          0.0,
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.easeOutCirc,
+                        );
+                      }
+                    }
+                    widget.child.goBranch(index, initialLocation: true);
+                    return;
                   }
                   if (index == 2) {
                     ImageSummaryEditPageRoute(showCameraOptionsOnEnter: false).push(context);

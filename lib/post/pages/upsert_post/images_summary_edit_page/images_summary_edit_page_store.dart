@@ -66,6 +66,11 @@ abstract class _ImageSummaryEditPageStore with Store {
   }
 
   @action
+  void clearAllImages() {
+    _postImages.clear();
+  }
+
+  @action
   void removeImageAt({required int index}) {
     _postImages.removeAt(index);
     // After removing from last index, the current page position will be same as the length.

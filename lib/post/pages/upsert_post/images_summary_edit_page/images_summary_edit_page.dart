@@ -41,7 +41,6 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
 
   @override
   void initState() {
-    
     imagePageController.addListener(() {
       final store = ref.read(imageSummaryEditPageStoreProvider);
       store.updatePagePosition(imagePageController.page ?? 0);
@@ -53,9 +52,10 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
       });
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (imagePageController.hasClients) {
         imagePageController.jumpToPage(widget.initialPhotoIndex);
-      });
-    
+      }
+    });
 
     super.initState();
   }
@@ -69,105 +69,117 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
   @override
   Widget build(BuildContext context) {
     final store = ref.watch(imageSummaryEditPageStoreProvider);
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
-        ),
-        body: Observer(builder: (context) {
-          if (store.displayImagePaths.isEmpty) {
-            return AspectRatio(
-                aspectRatio: PostImage.aspectRatio,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () async {
-                    selectPhoto(context: context, store: store);
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [Icon(Icons.add_a_photo), Text("Tap here to upload a new photo for your post")],
-                    ),
-                  ),
-                ));
+    return Observer(builder: (context) {
+      return PopScope(
+        canPop: store.displayImagePaths.isEmpty,
+        onPopInvoked: (canPop) {
+          if (!canPop) {
+            store.clearAllImages();
           }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.editPostId == null ? "New Post" : "Edit Post"),
+            ),
+            body: Center(
+              child: Observer(builder: (context) {
+                if (store.displayImagePaths.isEmpty) {
+                  return AspectRatio(
+                      aspectRatio: PostImage.aspectRatio,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          selectPhoto(context: context, store: store);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: const Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Icon(Icons.add_a_photo), Text("Tap here to upload a new photo for your post")],
+                          ),
+                        ),
+                      ));
+                }
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AspectRatio(
-                aspectRatio: PostImage.aspectRatio,
-                child: PageView(
-                    key: postImageGlobalKey,
-                    controller: imagePageController,
-                    children: store.displayImagePaths
-                        .mapIndexed((index, image) => Stack(
-                              children: [
-                                PostImage(imageUrl: image),
-                                PositionedDirectional(
-                                    bottom: 8,
-                                    end: 8,
-                                    child: GestureDetector(
-                                        onTap: () async {
-                                          final croppedImagePath = await cropImage(image);
-                                          if (croppedImagePath != null) {
-                                            store.updateImagePathAt(index: index, path: croppedImagePath);
-                                          }
-                                        },
-                                        child: SvgPicture.asset(
-                                          "assets/icons/ic_crop.svg",
-                                          height: 40,
-                                          width: 40,
-                                        )))
-                              ],
-                            ))
-                        .toList()),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              if (store.displayImagePaths.length > 1) buildPhotoList(),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: FilledButton(
-                    onPressed: () async {
-                      EasyLoading.show();
-                      try {
-                        await store.cropAllImages(postImageGlobalKey);
-                      } catch (e) {
-                        // TODO Log error
-                      }
-                      EasyLoading.dismiss();
-                      final uneditedImagesIndexes = store.uneditedImageNumbers;
-                      if (uneditedImagesIndexes.isNotEmpty) {
-                        Fluttertoast.showToast(
-                            msg:
-                                "Images ${uneditedImagesIndexes.join(',')} are unable to be cropped, please remove them before proceeding");
-                        return;
-                      }
-                      if (context.mounted) {
-                        if (widget.editPostId == null) {
-                          CreatePostRoute().push(context);
-                        } else {
-                          ref
-                              .read(editPostPageStoreProvider(postId: widget.editPostId!))
-                              .setPostImages(store.displayImagePaths);
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    },
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
-              )
-            ],
-          );
-        }),
-      ),
-    );
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: PostImage.aspectRatio,
+                      child: PageView(
+                          key: postImageGlobalKey,
+                          controller: imagePageController,
+                          children: store.displayImagePaths
+                              .mapIndexed((index, image) => Stack(
+                                    children: [
+                                      PostImage(imageUrl: image),
+                                      PositionedDirectional(
+                                          bottom: 8,
+                                          end: 8,
+                                          child: GestureDetector(
+                                              onTap: () async {
+                                                final croppedImagePath = await cropImage(image);
+                                                if (croppedImagePath != null) {
+                                                  store.updateImagePathAt(index: index, path: croppedImagePath);
+                                                }
+                                              },
+                                              child: SvgPicture.asset(
+                                                "assets/icons/ic_crop.svg",
+                                                height: 40,
+                                                width: 40,
+                                              )))
+                                    ],
+                                  ))
+                              .toList()),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    if (store.displayImagePaths.length > 1) buildPhotoList(),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: FilledButton(
+                          onPressed: () async {
+                            EasyLoading.show();
+                            try {
+                              await store.cropAllImages(postImageGlobalKey);
+                            } catch (e) {
+                              // TODO Log error
+                            }
+                            EasyLoading.dismiss();
+                            final uneditedImagesIndexes = store.uneditedImageNumbers;
+                            if (uneditedImagesIndexes.isNotEmpty) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Images ${uneditedImagesIndexes.join(',')} are unable to be cropped, please remove them before proceeding");
+                              return;
+                            }
+                            if (context.mounted) {
+                              if (widget.editPostId == null) {
+                                CreatePostRoute().push(context);
+                              } else {
+                                ref
+                                    .read(editPostPageStoreProvider(postId: widget.editPostId!))
+                                    .setPostImages(store.displayImagePaths);
+                                Navigator.of(context).pop();
+                              }
+                            }
+                          },
+                          child: const Text(
+                            "Next",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                    )
+                  ],
+                );
+              }),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   /// Returns the path to the cropped image.

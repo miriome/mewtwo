@@ -9,8 +9,6 @@ class InvalidPasswordCriteriaDialog extends StatelessWidget {
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.white,
             child: InvalidPasswordCriteriaDialog(),
-          
-
           );
         });
   }
@@ -21,75 +19,122 @@ class InvalidPasswordCriteriaDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 22,),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 22,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Password Criteria:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 22,),
+              const SizedBox(
+                height: 22,
+              ),
               Padding(
-                padding: EdgeInsetsDirectional.symmetric(horizontal: 24),
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 28, color: Color(0xFFDDE6A5),),
-                    SizedBox(width: 12,),
-                    Text("Minimum 8 characters", style: TextStyle(fontSize: 16),)
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 28, color: Color(0xFFDDE6A5),),
-                    SizedBox(width: 12,),
-                    Text("At least 1 number", style: TextStyle(fontSize: 16),)
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check, size: 28, color: Color(0xFFDDE6A5),),
-                    SizedBox(width: 12,),
-                    Text("At least 1 special character", style: TextStyle(fontSize: 16),)
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.check, size: 28, color: Color(0xFFDDE6A5),),
-                    SizedBox(width: 12,),
-                    Flexible(
-                      child: Text("Incudes both upper & lower case characters",
-                      maxLines: 2,
-                       style: TextStyle(fontSize: 16),),
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 8,
+                          width: 8,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        const Text(
+                          "Minimum 8 characters",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 8,
+                          width: 8,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        const Text(
+                          "At least 1 number",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 8,
+                          width: 8,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        const Text(
+                          "At least 1 special character",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Container(
+                            height: 8,
+                            width: 8,
+                            decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        const Flexible(
+                          child: Text(
+                            "Incudes both upper & lower case characters",
+                            maxLines: 2,
+                            style: TextStyle(fontSize: 16,),
+                          ),
+                        )
+                      ],
                     )
-                  ],
-                )
                   ],
                 ),
               )
-              
             ],
           ),
         ),
         PositionedDirectional(
-          top: 0,
-          end: 4,
-          child: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(Icons.close, size: 24,),
-        ))
+            top: 0,
+            end: 4,
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.close,
+                size: 24,
+              ),
+            ))
       ],
     );
   }

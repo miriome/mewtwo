@@ -128,6 +128,17 @@ mixin _$ImageSummaryEditPageStore on _ImageSummaryEditPageStore, Store {
   }
 
   @override
+  void clearAllImages() {
+    final _$actionInfo = _$_ImageSummaryEditPageStoreActionController
+        .startAction(name: '_ImageSummaryEditPageStore.clearAllImages');
+    try {
+      return super.clearAllImages();
+    } finally {
+      _$_ImageSummaryEditPageStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void removeImageAt({required int index}) {
     final _$actionInfo = _$_ImageSummaryEditPageStoreActionController
         .startAction(name: '_ImageSummaryEditPageStore.removeImageAt');
