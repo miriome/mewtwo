@@ -16,6 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/widgets/post_image.dart';
 import 'package:mewtwo/post/pages/upsert_post/edit_post_page/edit_post_page_store.dart';
 import 'package:mewtwo/post/pages/upsert_post/images_summary_edit_page/images_summary_edit_page_store.dart';
+import 'package:mewtwo/post/pages/upsert_post/upsert_post_base/upsert_post_base_store.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:path_provider/path_provider.dart';
@@ -158,6 +159,7 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                             }
                             if (context.mounted) {
                               if (widget.editPostId == null) {
+                                ref.invalidate(upsertPostBaseStoreProvider);
                                 CreatePostRoute().push(context);
                               } else {
                                 ref

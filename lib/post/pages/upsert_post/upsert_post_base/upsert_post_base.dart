@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dartx/dartx.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -61,7 +60,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: buildPostImageSection(),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 36),
                       CompositedTransformTarget(
                         link: link,
                         child: OverlayPortal(
@@ -88,6 +87,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 24),
                       TapRegion(
                         onTapOutside: (_) => FocusScope.of(context).unfocus(),
                         child: Padding(
@@ -104,10 +104,9 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                                     "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
                                 hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
                                 hintMaxLines: 5,
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 1, color: Color(0xFF7D7878))),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 1, color: Color(0xFF7D7878)))),
+                                border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878))),
+                                enabledBorder:
+                                    OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878)))),
                           ),
                         ),
                       ),
@@ -144,30 +143,35 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
   Widget buildPostImageSection() {
     return Consumer(builder: (context, ref, child) {
       return Observer(builder: (context) {
-        return Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            ...widget.store.postImagePaths.mapIndexed((index, path) => buildPostImageItem(index: index)).toList(),
-            if (widget.store.postImagePaths.length != 10)
-              GestureDetector(
-                onTap: () {
-                  // We use watch so that the state remains alive for the next page to attach in.
-                  final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
-                  imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
-                  ImageSummaryEditPageRoute(
-                          showCameraOptionsOnEnter: true, editPostId: widget.editPostId, initialPhotoIndex: 0)
-                      .push(context);
-                },
-                child: Container(
-                  height: 120,
-                  width: PostImage.aspectRatio * 120,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5), border: Border.all(color: const Color(0xFF7D7878))),
-                  child: const Icon(Icons.add),
-                ),
-              )
-          ],
+        return SizedBox(
+          height: 120,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (_, __) => const SizedBox(width: 8,),
+            itemBuilder: (context, index) {
+              if (index < 10 && index == widget.store.postImagePaths.length) {
+                return GestureDetector(
+                  onTap: () {
+                    // We use watch so that the state remains alive for the next page to attach in.
+                    final imageSummartEditStore = ref.watch(imageSummaryEditPageStoreProvider);
+                    imageSummartEditStore.setSelectedImages(widget.store.postImagePaths, true);
+                    ImageSummaryEditPageRoute(
+                            showCameraOptionsOnEnter: true, editPostId: widget.editPostId, initialPhotoIndex: 0)
+                        .push(context);
+                  },
+                  child: Container(
+                    height: 120,
+                    width: PostImage.aspectRatio * 120,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5), border: Border.all(color: const Color(0xFF7D7878))),
+                    child: const Icon(Icons.add),
+                  ),
+                );
+              }
+              return buildPostImageItem(index: index);
+            },
+            itemCount: widget.store.postImagePaths.length + 1,
+          ),
         );
       });
     });

@@ -122,6 +122,17 @@ mixin _$UpsertPostBaseStore on _UpsertPostBaseStore, Store {
   }
 
   @override
+  void setPostImages(Iterable<String> imagePaths) {
+    final _$actionInfo = _$_UpsertPostBaseStoreActionController.startAction(
+        name: '_UpsertPostBaseStore.setPostImages');
+    try {
+      return super.setPostImages(imagePaths);
+    } finally {
+      _$_UpsertPostBaseStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 postImagePaths: ${postImagePaths},

@@ -73,6 +73,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           controller: store.isOwnProfile
                               ? Mew.tabPrimaryScrollControllers[_pageTabIndex]
                               : PrimaryScrollController.of(context),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           crossAxisCount: 2,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,

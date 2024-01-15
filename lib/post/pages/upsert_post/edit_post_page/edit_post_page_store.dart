@@ -39,16 +39,12 @@ abstract class AbsEditPostPageStore extends UpsertPostBaseStore with Store {
     });
     final res = await Mew.pc.read(getPostsProvider.future);
     if (res != null) {
-      updatePostImagePaths(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
+      setPostImages(res.images.isEmpty ? [res.image] : res.images.map((e) => e.image));
       controller.text = res.caption;
     }
     listener.close();
   }
 
-  @action
-  void updatePostImagePaths(Iterable<String> imagePaths) {
-    postImagePaths = ObservableList.of(imagePaths);
-  }
 
   @override
   @action

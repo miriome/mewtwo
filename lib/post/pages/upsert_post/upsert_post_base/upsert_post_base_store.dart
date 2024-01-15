@@ -89,6 +89,7 @@ abstract class _UpsertPostBaseStore with Store {
     postImagePaths.removeAt(index);
   }
 
+  @action
   void setPostImages(Iterable<String> imagePaths) {
     postImagePaths = ObservableList.of(imagePaths);
   }
