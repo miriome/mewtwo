@@ -106,39 +106,44 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    AspectRatio(
-                      aspectRatio: PostImage.aspectRatio,
-                      child: PageView(
-                          key: postImageGlobalKey,
-                          controller: imagePageController,
-                          children: store.displayImagePaths
-                              .mapIndexed((index, image) => Stack(
-                                    children: [
-                                      PostImage(imageUrl: image),
-                                      PositionedDirectional(
-                                          bottom: 8,
-                                          end: 8,
-                                          child: GestureDetector(
-                                              onTap: () async {
-                                                final croppedImagePath = await cropImage(image);
-                                                if (croppedImagePath != null) {
-                                                  store.updateImagePathAt(index: index, path: croppedImagePath);
-                                                }
-                                              },
-                                              child: SvgPicture.asset(
-                                                "assets/icons/ic_crop.svg",
-                                                height: 40,
-                                                width: 40,
-                                              )))
-                                    ],
-                                  ))
-                              .toList()),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(children: [
+                          AspectRatio(
+                            aspectRatio: PostImage.aspectRatio,
+                            child: PageView(
+                                key: postImageGlobalKey,
+                                controller: imagePageController,
+                                children: store.displayImagePaths
+                                    .mapIndexed((index, image) => Stack(
+                                          children: [
+                                            PostImage(imageUrl: image),
+                                            PositionedDirectional(
+                                                bottom: 8,
+                                                end: 8,
+                                                child: GestureDetector(
+                                                    onTap: () async {
+                                                      final croppedImagePath = await cropImage(image);
+                                                      if (croppedImagePath != null) {
+                                                        store.updateImagePathAt(index: index, path: croppedImagePath);
+                                                      }
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      "assets/icons/ic_crop.svg",
+                                                      height: 40,
+                                                      width: 40,
+                                                    )))
+                                          ],
+                                        ))
+                                    .toList()),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          if (store.displayImagePaths.length > 1) buildPhotoList(),
+                        ]),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    if (store.displayImagePaths.length > 1) buildPhotoList(),
-                    const Spacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: FilledButton(

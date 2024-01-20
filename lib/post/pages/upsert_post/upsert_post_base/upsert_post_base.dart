@@ -88,26 +88,23 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      TapRegion(
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: DetectableTextField(
-                            onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                            minLines: 5,
-                            maxLines: null,
-                            style: const TextStyle(fontSize: 16),
-                            controller: widget.store.controller,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(8),
-                                hintText:
-                                    "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
-                                hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
-                                hintMaxLines: 5,
-                                border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878))),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878)))),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: DetectableTextField(
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          minLines: 5,
+                          maxLines: null,
+                          style: const TextStyle(fontSize: 16),
+                          controller: widget.store.controller,
+                          decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.all(8),
+                              hintText:
+                                  "Write your caption here...\n🔥Tip: Include the size, price and hyperlinks of your clothes for better content creation on miromie!",
+                              hintStyle: TextStyle(fontSize: 14, color: Color(0xFF7D7878)),
+                              hintMaxLines: 5,
+                              border: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878))),
+                              enabledBorder:
+                                  OutlineInputBorder(borderSide: BorderSide(width: 1, color: Color(0xFF7D7878)))),
                         ),
                       ),
                     ],
