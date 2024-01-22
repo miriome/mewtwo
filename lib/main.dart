@@ -73,16 +73,14 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData(
           useMaterial3: true,
-          iconButtonTheme: IconButtonThemeData(
-            style: ButtonStyle(
-              iconColor: MaterialStateProperty.resolveWith((states) {
+          iconButtonTheme: IconButtonThemeData(style: ButtonStyle(
+            iconColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.disabled)) {
                 return const Color(0xFF787D7D);
               }
               return const Color(0xFF6EC6CA);
             }),
-            )
-          ),
+          )),
           switchTheme: SwitchThemeData(
             trackColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.disabled)) {
@@ -150,7 +148,19 @@ class _MyAppState extends State<MyApp> {
           // counter didn't reset back to zero; the application is not restarted.
           primarySwatch: MaterialColorGenerator.from(const Color(0xFF6EC6CA)),
           textTheme: GoogleFonts.robotoTextTheme()),
-      builder: EasyLoading.init(),
+      builder: (context, widget) {
+        final easyLoading = EasyLoading.init();
+        EasyLoading.instance
+          ..backgroundColor = Colors.white
+          ..indicatorWidget = const CircularProgressIndicator()
+          ..contentPadding = const EdgeInsets.all(24)
+          ..boxShadow = <BoxShadow>[] // removes black background
+          ..loadingStyle = EasyLoadingStyle.light
+          ..textColor = Colors.black
+          ..indicatorColor = Colors.blue // color of animated loader
+          ..loadingStyle = EasyLoadingStyle.custom;
+        return easyLoading(context, widget);
+      },
       routerConfig: router,
     );
   }
