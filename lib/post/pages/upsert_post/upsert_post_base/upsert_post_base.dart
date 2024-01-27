@@ -37,8 +37,13 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
   @override
   void initState() {
     widget.store.addListenerForPortalController(portalController);
-    textScrollController.dispose();
+    
     super.initState();
+  }
+  @override
+  void dispose() {
+    textScrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +59,7 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
+              child: SafeArea(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,29 +123,29 @@ class _UpsertPostBaseState extends State<UpsertPostBase> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                child: FilledButton(
-                    onPressed: () async {
-                      EasyLoading.show(maskType: EasyLoadingMaskType.clear);
-                      final res = await widget.store.post();
-                      EasyLoading.dismiss();
-                      if (res && context.mounted) {
-                        Fluttertoast.showToast(
-                            msg: widget.editPostId != null ? "Post edited" : "Post uploaded",
-                            gravity: ToastGravity.CENTER);
-                        ProfilePageRoute().go(context);
-                      }
-                    },
-                    child: const Text(
-                      "Post",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    )),
-              )
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              child: FilledButton(
+                  onPressed: () async {
+                    EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+                    final res = await widget.store.post();
+                    EasyLoading.dismiss();
+                    if (res && context.mounted) {
+                      Fluttertoast.showToast(
+                          msg: widget.editPostId != null ? "Post edited" : "Post uploaded",
+                          gravity: ToastGravity.CENTER);
+                      ProfilePageRoute().go(context);
+                    }
+                  },
+                  child: const Text(
+                    "Post",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  )),
+            )
+          ],
         ),
-      );
+      ));
     });
   }
 
