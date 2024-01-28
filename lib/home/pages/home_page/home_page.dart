@@ -8,6 +8,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mewtwo/home/pages/home_page/widgets/home_post_tile.dart';
 import 'package:mewtwo/mew.dart';
+import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -86,13 +87,18 @@ class _HomePageState extends State<HomePage> {
       ),
       leadingWidth: 150,
       actions: [
-        GestureDetector(
-          onTap: () => MainPlatform.goToScreen(Screens.likedPosts),
-          child: const Icon(
-            Icons.favorite,
-            color: Color(0xFFFA897B),
-            size: 28,
-          ),
+        Builder(
+          builder: (context) {
+            return GestureDetector(
+              // onTap: () => MainPlatform.goToScreen(Screens.likedPosts),
+              onTap: () => LikedPostsPageRoute().push(context),
+              child: const Icon(
+                Icons.favorite,
+                color: Color(0xFFFA897B),
+                size: 28,
+              ),
+            );
+          }
         ),
         const SizedBox(width: 16),
         GestureDetector(

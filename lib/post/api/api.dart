@@ -12,6 +12,27 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'api.g.dart';
 
 @riverpod
+Future<List<PostModel>> getLikedPostsApi(
+  GetLikedPostsApiRef ref,
+) async {
+  final body = {"page_index": 0, 'count': 50};
+  try {
+    final res = await (await Networking.instance).post(path: "post/liked", body: body);
+    final response = res.data;
+    // TODO: Error handling
+    if (response['status']) {
+      if (response['data'] is List) {
+        return (response['data'] as List).map((e) => PostModel.fromJson(e)).toList();
+      } else {}
+    }
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+
+  return [];
+}
+
+@riverpod
 Future<PostModel?> getPostDetailsApi(GetPostDetailsApiRef ref, {required int postId}) async {
   try {
     final res = await (await Networking.instance)
@@ -126,8 +147,10 @@ Future<bool> editPostApi(EditPostApiRef ref,
   });
 
   photos.forEachIndexed((photo, index) {
-    data.files.add(MapEntry('${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
-          filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg'))));
+    data.files.add(MapEntry(
+        '${photo.index}',
+        MultipartFile.fromBytes(photo.photoFileBytes,
+            filename: "image_${photo.index}.jpg", contentType: MediaType('image', 'jpg'))));
   });
   try {
     final res = await (await Networking.instance).postForm(path: "post/editPost/$postId", data: data);
@@ -149,14 +172,13 @@ Future<bool> editPostApi(EditPostApiRef ref,
 @riverpod
 Future<bool> addPostApi(AddPostApiRef ref,
     {required String caption, required bool chatEnabled, required List<PostPhoto> photos}) async {
-  final data = FormData.fromMap({
-    "caption": caption,
-    'chat_enabled': chatEnabled ? 1 : 0,
-    'photos_last_index': photos.lastIndex
-  });
-   photos.forEachIndexed((photo, index) {
-    data.files.add(MapEntry('${photo.index}', MultipartFile.fromBytes(photo.photoFileBytes,
-          filename: "photo_$index.jpg", contentType: MediaType('image', 'jpeg'))));
+  final data = FormData.fromMap(
+      {"caption": caption, 'chat_enabled': chatEnabled ? 1 : 0, 'photos_last_index': photos.lastIndex});
+  photos.forEachIndexed((photo, index) {
+    data.files.add(MapEntry(
+        '${photo.index}',
+        MultipartFile.fromBytes(photo.photoFileBytes,
+            filename: "photo_$index.jpg", contentType: MediaType('image', 'jpeg'))));
   });
   try {
     final res = await (await Networking.instance).postForm(path: "post/addPost", data: data);

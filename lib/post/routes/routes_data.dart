@@ -47,3 +47,11 @@ class EditPostRoute extends GoRouteData {
     return EditPostPage(postId: postId);
   }
 }
+
+class LikedPostsPageRoute extends GoRouteData {
+  
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LikedPostsPage();
+  }
+}

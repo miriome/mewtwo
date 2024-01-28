@@ -183,6 +183,10 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                       ImageSummaryEditPageRoute.$parentNavigatorKey,
                   factory: $ImageSummaryEditPageRouteExtension._fromState,
                 ),
+                GoRouteData.$route(
+                  path: 'liked-posts',
+                  factory: $LikedPostsPageRouteExtension._fromState,
+                ),
               ],
             ),
           ],
@@ -471,6 +475,24 @@ extension $ImageSummaryEditPageRouteExtension on ImageSummaryEditPageRoute {
           if (initialPhotoIndex != null)
             'initial-photo-index': initialPhotoIndex!.toString(),
         },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $LikedPostsPageRouteExtension on LikedPostsPageRoute {
+  static LikedPostsPageRoute _fromState(GoRouterState state) =>
+      LikedPostsPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/liked-posts',
       );
 
   void go(BuildContext context) => context.go(location);

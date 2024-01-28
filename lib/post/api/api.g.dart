@@ -6,6 +6,22 @@ part of 'api.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$getLikedPostsApiHash() => r'485898c23a4354c9e26c9ab9e34cc4b8ac9bdb84';
+
+/// See also [getLikedPostsApi].
+@ProviderFor(getLikedPostsApi)
+final getLikedPostsApiProvider =
+    AutoDisposeFutureProvider<List<PostModel>>.internal(
+  getLikedPostsApi,
+  name: r'getLikedPostsApiProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getLikedPostsApiHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetLikedPostsApiRef = AutoDisposeFutureProviderRef<List<PostModel>>;
 String _$getPostDetailsApiHash() => r'582cfe39ac44dd477f66519bab8e32740fae57f4';
 
 /// Copied from Dart SDK
