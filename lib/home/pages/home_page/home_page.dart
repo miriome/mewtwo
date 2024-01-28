@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/miromie_title.dart';
+import 'package:mewtwo/home/pages/home_page/api/api.dart';
 import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,14 +23,20 @@ class _HomePageState extends State<HomePage> {
   static const int _pageTabIndex = 0;
   final store = HomePageStore();
   @override
-  void initState() {
-    MainPlatform.addMethodCallhandler((call) async {
-      if (call.method == "viewWillAppear") {
-        store.loadPosts();
+  void initState() {    
+    FirebaseMessaging.instance.requestPermission().then((value) async {
+      if (value.authorizationStatus == AuthorizationStatus.authorized) {
+        final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        if (apnsToken != null) {
+          Mew.pc.read(RegisterPushTokenApiProvider(value: apnsToken));
+        }
       }
     });
+
+
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(

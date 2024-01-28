@@ -50,7 +50,6 @@ abstract class _HomePageStore with Store {
     _posts[postIndex].likes += toggle ? 1 : -1;
 
     await Mew.pc.read(likePostProvider.future);
-
     
   }
 }
