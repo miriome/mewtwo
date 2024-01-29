@@ -121,9 +121,8 @@ abstract class _ImageSummaryEditPageStore with Store {
       ..copyCrop(
           x: imageRect.left.toInt(),
           y: imageRect.top.toInt(),
-          width: imageRect.width.toInt(),
-          height: imageRect.height.toInt())
-      ..copyResize(width: PostImage.maxWidth.toInt() * 2);
+          width: imageRect.width.toInt() * 10,
+          height: imageRect.height.toInt() * 10);
 
     await cmd.executeThread();
     if (cmd.outputImage == null) {
