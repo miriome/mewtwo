@@ -278,7 +278,7 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
             actions: <CupertinoActionSheetAction>[
               CupertinoActionSheetAction(
                 onPressed: () async {
-                  final images = await picker.pickMultiImage(maxWidth: PostImage.maxWidth);
+                  final images = await picker.pickMultiImage();
                   if (modalContext.mounted) {
                     if (images.length > 10) {
                       Fluttertoast.showToast(
@@ -294,7 +294,7 @@ class _ImagesSummaryEditPageState extends ConsumerState<ImagesSummaryEditPage> {
               ),
               CupertinoActionSheetAction(
                 onPressed: () async {
-                  final image = await picker.pickImage(source: ImageSource.camera, maxWidth: PostImage.maxWidth);
+                  final image = await picker.pickImage(source: ImageSource.camera);
 
                   if (modalContext.mounted) {
                     Navigator.pop(modalContext, image != null ? [image] : <XFile>[]);
