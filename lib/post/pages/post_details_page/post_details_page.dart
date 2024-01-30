@@ -172,7 +172,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> with TickerProviderSt
                             ),
                           if (post.posted_by != null && store.isMeasurementsVisible)
                             PositionedDirectional(
-                                start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!))
+                                start: 0, end: 0, bottom: 12, child: PostMeasurements(user: post.posted_by!, isMyPost: store.isMyPost,))
                         ],
                       ),
                     ),

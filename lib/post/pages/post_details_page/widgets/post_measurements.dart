@@ -3,7 +3,8 @@ import 'package:mewtwo/home/model/user_model.dart';
 
 class PostMeasurements extends StatelessWidget {
   final UserModel user;
-  const PostMeasurements({Key? key, required this.user}) : super(key: key);
+  final bool isMyPost;
+  const PostMeasurements({Key? key, required this.user, required this.isMyPost}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class PostMeasurements extends StatelessWidget {
   }
 
   List<Widget> get measurements {
-    if (user.measurementPrivacy == MeasurementPrivacy.following && !user.my_follow) {
+    if (user.measurementPrivacy == MeasurementPrivacy.following && !user.my_follow && !isMyPost) {
       return const [
         SizedBox(
           width: 268,

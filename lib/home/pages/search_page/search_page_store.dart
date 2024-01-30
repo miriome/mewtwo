@@ -99,6 +99,11 @@ abstract class _SearchPageStore with Store {
 
     _currentSearchOp = cancelableFut.then((res) {
       if (res != null) {
+        // FIX: Do not put UI logic here
+        if (Mew.tabPrimaryScrollControllers[1].hasClients) {
+          Mew.tabPrimaryScrollControllers[1].animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+        }
+        
         _postResults = ObservableList.of(res.postData ?? []);
         _userResults = ObservableList.of(res.userData ?? []);
       }
