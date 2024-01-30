@@ -90,7 +90,6 @@ class _HomePageState extends State<HomePage> {
         Builder(
           builder: (context) {
             return GestureDetector(
-              // onTap: () => MainPlatform.goToScreen(Screens.likedPosts),
               onTap: () => LikedPostsPageRoute().push(context),
               child: const Icon(
                 Icons.favorite,

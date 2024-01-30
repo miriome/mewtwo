@@ -20,6 +20,11 @@ class LikedPostsPage extends StatelessWidget {
         final data = ref.watch(getLikedPostsApiProvider);
         return data.when(
             data: (data) {
+              if (data.isEmpty) {
+                return const Center(child: Text("You haven't liked any posts", style: TextStyle(
+                  fontSize: 16
+                ),),);
+              }
               return AlignedGridView.count(
                 itemBuilder: (context, index) {
                   return GestureDetector(

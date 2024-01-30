@@ -18,7 +18,7 @@ class PostImage extends StatelessWidget {
           aspectRatio: aspectRatio,
           child: 
           imageUrl.startsWith("http") ? CachedNetworkImage(
-              memCacheWidth: constraints.maxWidth.isInfinite ? maxWidth.toInt() * 5 : constraints.maxWidth.ceil() * 5,
+              memCacheWidth: 1200,
               imageUrl: imageUrl,
               placeholder: (context, url) {
                 return const Center(
