@@ -40,14 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: ValueKey(HomePageRoute().location),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction == 1) {
-          store.loadPosts();
-        }
-      },
-      child: Observer(builder: (context) {
+    return Observer(builder: (context) {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: appBar,
@@ -72,8 +65,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ));
-      }),
-    );
+      });
   }
 
   PreferredSizeWidget get appBar {
