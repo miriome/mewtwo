@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/miromie_title.dart';
@@ -11,7 +10,6 @@ import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/post/routes/routes.dart';
 import 'package:mewtwo/routes/routes.dart';
 import 'package:mewtwo/utils.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

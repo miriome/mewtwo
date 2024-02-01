@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mewtwo/base/image/cached_network_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -69,8 +69,10 @@ class HomePostTile extends StatelessWidget {
                     backgroundColor: const Color(0xFF6EC6CA),
                     foregroundImage: post.posted_by?.photo_url == "https://miromie.com/uploads/"
                         ? null
-                        : CachedNetworkImageProvider(
+                        : BBCachedNetworkImageProvider(
                             post.posted_by?.photo_url ?? "",
+                            targetHeight: 50,
+                            targetWidth: 50
                           ),
                   ),
                   const SizedBox(
