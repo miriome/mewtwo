@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 class Constants {
   static const String kKeyId = "k_id";
   static const String kKeyPronouns = "k_pronouns";
@@ -21,5 +24,13 @@ class Constants {
   ];
 
   static const List<int> kadminIds = [6, 52];
+
+  static late Directory tempDir;
+  static late Directory appDocDir;
+
+  static Future<void> init() async {
+    tempDir = await getTemporaryDirectory();
+    appDocDir = await getApplicationDocumentsDirectory();
+  }
 
 }
