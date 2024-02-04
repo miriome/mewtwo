@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mewtwo/chats/routes/routes.dart';
 import 'package:mewtwo/home/pages/search_page/search_page_store.dart';
 import 'package:mewtwo/mew.dart';
 import 'package:mewtwo/profile/routes/routes.dart';
@@ -37,7 +38,7 @@ class UnauthorizedRoute extends GoRouteData {
     routes: [
       TypedGoRoute<HomePageRoute>(
         path: '/',
-        routes: [...SafetyRoutes.typedRoutes, ...ProfileRoutes.typedRoutes, ...PostRoutes.typedRoutes]
+        routes: [...SafetyRoutes.typedRoutes, ...ProfileRoutes.typedRoutes, ...PostRoutes.typedRoutes, ...ChatRoutes.typedRoutes]
       )
     ],
   ),

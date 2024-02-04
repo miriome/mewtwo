@@ -187,6 +187,10 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                   path: 'liked-posts',
                   factory: $LikedPostsPageRouteExtension._fromState,
                 ),
+                GoRouteData.$route(
+                  path: 'chat-list',
+                  factory: $ChatListPageRouteExtension._fromState,
+                ),
               ],
             ),
           ],
@@ -493,6 +497,24 @@ extension $LikedPostsPageRouteExtension on LikedPostsPageRoute {
 
   String get location => GoRouteData.$location(
         '/liked-posts',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ChatListPageRouteExtension on ChatListPageRoute {
+  static ChatListPageRoute _fromState(GoRouterState state) =>
+      ChatListPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/chat-list',
       );
 
   void go(BuildContext context) => context.go(location);

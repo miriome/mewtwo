@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mewtwo/base/widgets/miromie_title.dart';
+import 'package:mewtwo/chats/routes/routes.dart';
 import 'package:mewtwo/home/pages/home_page/api/api.dart';
 import 'package:mewtwo/home/pages/home_page/home_page_store.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -91,7 +92,8 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(width: 16),
         GestureDetector(
-          onTap: () => MainPlatform.goToScreen(Screens.chats),
+          // onTap: () => MainPlatform.goToScreen(Screens.chats),
+          onTap: () => ChatListPageRoute().go(context),
           child: const Icon(
             Icons.chat_bubble,
             color: Color(0xFFFFDD94),
