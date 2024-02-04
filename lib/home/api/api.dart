@@ -78,7 +78,7 @@ Future<SearchApiModel?> searchApi(SearchApiRef ref, {required int pageIndex, req
 }
 
 @riverpod
-Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {required int userId}) async {
+Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {required int userId}) async { // TODO: move to base
   try {
     final res = await (await Networking.instance).get(path: "users/profile/$userId");
     Map response = res.data;
@@ -90,9 +90,8 @@ Future<UserModel?> getUserInfoApi(GetUserInfoApiRef ref, {required int userId}) 
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
     Log.instance.e(e.toString(), stackTrace: s);
-  } catch (e, s) {
-    Log.instance.e(e.toString(), stackTrace: s);
-  }
+    
+  } 
   return null;
 }
 

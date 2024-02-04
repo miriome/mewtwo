@@ -191,6 +191,10 @@ RouteBase get $mainTabShellRoute => StatefulShellRouteData.$route(
                   path: 'chat-list',
                   factory: $ChatListPageRouteExtension._fromState,
                 ),
+                GoRouteData.$route(
+                  path: 'chat/:targetId',
+                  factory: $ChatPageRouteExtension._fromState,
+                ),
               ],
             ),
           ],
@@ -515,6 +519,25 @@ extension $ChatListPageRouteExtension on ChatListPageRoute {
 
   String get location => GoRouteData.$location(
         '/chat-list',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $ChatPageRouteExtension on ChatPageRoute {
+  static ChatPageRoute _fromState(GoRouterState state) => ChatPageRoute(
+        targetId: int.parse(state.pathParameters['targetId']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/chat/${Uri.encodeComponent(targetId.toString())}',
       );
 
   void go(BuildContext context) => context.go(location);

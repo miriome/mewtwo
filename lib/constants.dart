@@ -28,6 +28,7 @@ class Constants {
   static late Directory tempDir;
   static late Directory appDocDir;
 
+
   static Future<void> init() async {
     tempDir = await getTemporaryDirectory();
     appDocDir = await getApplicationDocumentsDirectory();

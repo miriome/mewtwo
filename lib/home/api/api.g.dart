@@ -446,7 +446,7 @@ class _SearchApiProviderElement
   String get keyword => (origin as SearchApiProvider).keyword;
 }
 
-String _$getUserInfoApiHash() => r'54d45174ae24c3c64565417f251bedb003e488d0';
+String _$getUserInfoApiHash() => r'37a34a94bdc415634f36df37a896ee39b01af8e6';
 
 /// See also [getUserInfoApi].
 @ProviderFor(getUserInfoApi)
