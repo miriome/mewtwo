@@ -307,5 +307,166 @@ class _ConversationUsersProviderElement
   @override
   int get receiverId => (origin as ConversationUsersProvider).receiverId;
 }
+
+String _$sendMessageHash() => r'b8f904f66c35a800988c8ca2f43591de0cdd4467';
+
+/// See also [sendMessage].
+@ProviderFor(sendMessage)
+const sendMessageProvider = SendMessageFamily();
+
+/// See also [sendMessage].
+class SendMessageFamily extends Family<AsyncValue<void>> {
+  /// See also [sendMessage].
+  const SendMessageFamily();
+
+  /// See also [sendMessage].
+  SendMessageProvider call({
+    required int senderId,
+    required int receiverId,
+    required String message,
+  }) {
+    return SendMessageProvider(
+      senderId: senderId,
+      receiverId: receiverId,
+      message: message,
+    );
+  }
+
+  @override
+  SendMessageProvider getProviderOverride(
+    covariant SendMessageProvider provider,
+  ) {
+    return call(
+      senderId: provider.senderId,
+      receiverId: provider.receiverId,
+      message: provider.message,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendMessageProvider';
+}
+
+/// See also [sendMessage].
+class SendMessageProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [sendMessage].
+  SendMessageProvider({
+    required int senderId,
+    required int receiverId,
+    required String message,
+  }) : this._internal(
+          (ref) => sendMessage(
+            ref as SendMessageRef,
+            senderId: senderId,
+            receiverId: receiverId,
+            message: message,
+          ),
+          from: sendMessageProvider,
+          name: r'sendMessageProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendMessageHash,
+          dependencies: SendMessageFamily._dependencies,
+          allTransitiveDependencies:
+              SendMessageFamily._allTransitiveDependencies,
+          senderId: senderId,
+          receiverId: receiverId,
+          message: message,
+        );
+
+  SendMessageProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.senderId,
+    required this.receiverId,
+    required this.message,
+  }) : super.internal();
+
+  final int senderId;
+  final int receiverId;
+  final String message;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(SendMessageRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendMessageProvider._internal(
+        (ref) => create(ref as SendMessageRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        senderId: senderId,
+        receiverId: receiverId,
+        message: message,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _SendMessageProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendMessageProvider &&
+        other.senderId == senderId &&
+        other.receiverId == receiverId &&
+        other.message == message;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, senderId.hashCode);
+    hash = _SystemHash.combine(hash, receiverId.hashCode);
+    hash = _SystemHash.combine(hash, message.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendMessageRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `senderId` of this provider.
+  int get senderId;
+
+  /// The parameter `receiverId` of this provider.
+  int get receiverId;
+
+  /// The parameter `message` of this provider.
+  String get message;
+}
+
+class _SendMessageProviderElement extends AutoDisposeFutureProviderElement<void>
+    with SendMessageRef {
+  _SendMessageProviderElement(super.provider);
+
+  @override
+  int get senderId => (origin as SendMessageProvider).senderId;
+  @override
+  int get receiverId => (origin as SendMessageProvider).receiverId;
+  @override
+  String get message => (origin as SendMessageProvider).message;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

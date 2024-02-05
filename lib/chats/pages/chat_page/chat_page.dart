@@ -1,4 +1,5 @@
 import 'package:dartx/dartx.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,8 +41,13 @@ class ChatPage extends StatelessWidget {
                       inputTextStyle: const TextStyle(color: Colors.black),
                       inputTextColor: Colors.black),
                   messages: value,
+                  onAttachmentPressed: () {
+                    _handleAttachmentPressed(context);
+                  },
                   disableImageGallery: true,
-                  onSendPressed: (text) {},
+                  onSendPressed: (text) async {
+                    await ref.read(sendMessageProvider(message: text.text, receiverId: targetId, senderId: currentUser.user?.id ?? 0).future);
+                  },
                   onAvatarTap: (user) {
                     OtherProfilePageRoute(userId: Utility.parseInt(user.id)).push(context);
                   },
@@ -55,24 +61,36 @@ class ChatPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
           }
 
-          // return switch (messages) {
-          //   // Display all the messages in a scrollable list view.
-          //   AsyncData(:final value)
-          //   ListView.builder(
-          //       // Show messages from bottom to top
-          //       reverse: true,
-          //       itemCount: value.length,
-          //       itemBuilder: (context, index) {
-          //         final message = value[index];
-          //         return Text(message.message);
-          //       },
-          //     ),
-          //   AsyncError(:final error) => Text(error.toString()),
-          //   _ => const CircularProgressIndicator(),
-          // };
         },
       ),
     );
+  }
+  void _handleAttachmentPressed(BuildContext context) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext modalContext) {
+          final List<CupertinoActionSheetAction> actions = [];
+          actions.add(CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(modalContext);
+              
+            },
+            child: const Text(
+              'Send image',
+              style: TextStyle(color: Color(0xFF7D7878)),
+            ),
+          ));
+          return CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(modalContext);
+              },
+              child: const Text('Cancel'),
+            ),
+            actions: actions,
+          );
+        },
+      );
   }
 
   PreferredSizeWidget buildAppBar() {

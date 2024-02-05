@@ -13,7 +13,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'api.g.dart';
 
 @riverpod
-Future<List<ContactModel>> getContactsApi(GetContactsApiRef ref,) async {
+Future<List<ContactModel>> getContactsApi(
+  GetContactsApiRef ref,
+) async {
   try {
     final res = await (await Networking.instance).get(path: "users/contacts");
     Map response = res.data;
@@ -24,7 +26,6 @@ Future<List<ContactModel>> getContactsApi(GetContactsApiRef ref,) async {
     if (response['data'] is List) {
       return (response['data'] as List).map((e) => ContactModel.fromJson(e)).toList();
     }
-    
   } on DioException catch (e, s) {
     Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
     Log.instance.e(e.toString(), stackTrace: s);
@@ -32,6 +33,27 @@ Future<List<ContactModel>> getContactsApi(GetContactsApiRef ref,) async {
     Log.instance.e(e.toString(), stackTrace: s);
   }
   return [];
+}
+
+@riverpod
+Future<bool> sendMessageApi(SendMessageApiRef ref,
+    {required int receiverId, required String message, required String messageType}) async {
+  final body = {"target_id": receiverId, "message": message, "message_type": "text"};
+  try {
+    final res = await (await Networking.instance).post(path: "users/sendMessage", body: body);
+    Map response = res.data;
+    if (response['status'] == false) {
+      Fluttertoast.showToast(msg: response['message'] ?? "", gravity: ToastGravity.CENTER);
+      return false;
+    }
+    return true;
+  } on DioException catch (e, s) {
+    Fluttertoast.showToast(msg: e.message ?? "", gravity: ToastGravity.CENTER);
+    Log.instance.e(e.toString(), stackTrace: s);
+  } catch (e, s) {
+    Log.instance.e(e.toString(), stackTrace: s);
+  }
+  return false;
 }
 
 

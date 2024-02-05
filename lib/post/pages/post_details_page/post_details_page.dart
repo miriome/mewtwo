@@ -1,6 +1,5 @@
 import 'package:dartx/dartx.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' hide UrlLinkifier, UrlElement;

@@ -1,4 +1,5 @@
 import 'package:dartx/dartx.dart';
+import 'package:mewtwo/chats/apis/api.dart';
 import 'package:mewtwo/chats/models/message_model.dart';
 import 'package:mewtwo/chats/utils/utils.dart';
 import 'package:mewtwo/constants.dart';
@@ -70,4 +71,23 @@ Future<({UserModel sender, UserModel reciever})> conversationUsers(ConversationU
     throw Exception("Unable to get user info");
   }
   return (sender: sender, reciever: reciever);
+}
+
+@riverpod
+Future<void> sendMessage(SendMessageRef ref, {required int senderId, required int receiverId, required String message}) async{
+  final firebaseParams = {
+    "sender_id"     : senderId,
+            "receiver_id"   : receiverId,
+            "message"       : message,
+            "content_type"  : "text",
+            "time"          : DateTime.now().toUtc().millisecondsSinceEpoch / 1000
+  };
+
+  final roomId = ChatUtils.getChatRoomId(firstId: senderId, secondId: receiverId);
+
+  await FirebaseFirestore.instance.collection("chats").doc(roomId).collection("chat").add(firebaseParams).then((_) {
+    return ref.read(sendMessageApiProvider(message: message, messageType: "text", receiverId: receiverId).future);
+  });
+
+  
 }
