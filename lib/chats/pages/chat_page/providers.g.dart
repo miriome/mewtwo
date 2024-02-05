@@ -308,24 +308,24 @@ class _ConversationUsersProviderElement
   int get receiverId => (origin as ConversationUsersProvider).receiverId;
 }
 
-String _$sendMessageHash() => r'b8f904f66c35a800988c8ca2f43591de0cdd4467';
+String _$sendTextMessageHash() => r'5187c21b0e9c8ef806e2dfaa54549d6719bbe3da';
 
-/// See also [sendMessage].
-@ProviderFor(sendMessage)
-const sendMessageProvider = SendMessageFamily();
+/// See also [sendTextMessage].
+@ProviderFor(sendTextMessage)
+const sendTextMessageProvider = SendTextMessageFamily();
 
-/// See also [sendMessage].
-class SendMessageFamily extends Family<AsyncValue<void>> {
-  /// See also [sendMessage].
-  const SendMessageFamily();
+/// See also [sendTextMessage].
+class SendTextMessageFamily extends Family<AsyncValue<void>> {
+  /// See also [sendTextMessage].
+  const SendTextMessageFamily();
 
-  /// See also [sendMessage].
-  SendMessageProvider call({
+  /// See also [sendTextMessage].
+  SendTextMessageProvider call({
     required int senderId,
     required int receiverId,
     required String message,
   }) {
-    return SendMessageProvider(
+    return SendTextMessageProvider(
       senderId: senderId,
       receiverId: receiverId,
       message: message,
@@ -333,8 +333,8 @@ class SendMessageFamily extends Family<AsyncValue<void>> {
   }
 
   @override
-  SendMessageProvider getProviderOverride(
-    covariant SendMessageProvider provider,
+  SendTextMessageProvider getProviderOverride(
+    covariant SendTextMessageProvider provider,
   ) {
     return call(
       senderId: provider.senderId,
@@ -355,38 +355,38 @@ class SendMessageFamily extends Family<AsyncValue<void>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'sendMessageProvider';
+  String? get name => r'sendTextMessageProvider';
 }
 
-/// See also [sendMessage].
-class SendMessageProvider extends AutoDisposeFutureProvider<void> {
-  /// See also [sendMessage].
-  SendMessageProvider({
+/// See also [sendTextMessage].
+class SendTextMessageProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [sendTextMessage].
+  SendTextMessageProvider({
     required int senderId,
     required int receiverId,
     required String message,
   }) : this._internal(
-          (ref) => sendMessage(
-            ref as SendMessageRef,
+          (ref) => sendTextMessage(
+            ref as SendTextMessageRef,
             senderId: senderId,
             receiverId: receiverId,
             message: message,
           ),
-          from: sendMessageProvider,
-          name: r'sendMessageProvider',
+          from: sendTextMessageProvider,
+          name: r'sendTextMessageProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$sendMessageHash,
-          dependencies: SendMessageFamily._dependencies,
+                  : _$sendTextMessageHash,
+          dependencies: SendTextMessageFamily._dependencies,
           allTransitiveDependencies:
-              SendMessageFamily._allTransitiveDependencies,
+              SendTextMessageFamily._allTransitiveDependencies,
           senderId: senderId,
           receiverId: receiverId,
           message: message,
         );
 
-  SendMessageProvider._internal(
+  SendTextMessageProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -404,12 +404,12 @@ class SendMessageProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(SendMessageRef provider) create,
+    FutureOr<void> Function(SendTextMessageRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: SendMessageProvider._internal(
-        (ref) => create(ref as SendMessageRef),
+      override: SendTextMessageProvider._internal(
+        (ref) => create(ref as SendTextMessageRef),
         from: from,
         name: null,
         dependencies: null,
@@ -424,12 +424,12 @@ class SendMessageProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   AutoDisposeFutureProviderElement<void> createElement() {
-    return _SendMessageProviderElement(this);
+    return _SendTextMessageProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SendMessageProvider &&
+    return other is SendTextMessageProvider &&
         other.senderId == senderId &&
         other.receiverId == receiverId &&
         other.message == message;
@@ -446,7 +446,7 @@ class SendMessageProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin SendMessageRef on AutoDisposeFutureProviderRef<void> {
+mixin SendTextMessageRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `senderId` of this provider.
   int get senderId;
 
@@ -457,16 +457,177 @@ mixin SendMessageRef on AutoDisposeFutureProviderRef<void> {
   String get message;
 }
 
-class _SendMessageProviderElement extends AutoDisposeFutureProviderElement<void>
-    with SendMessageRef {
-  _SendMessageProviderElement(super.provider);
+class _SendTextMessageProviderElement
+    extends AutoDisposeFutureProviderElement<void> with SendTextMessageRef {
+  _SendTextMessageProviderElement(super.provider);
 
   @override
-  int get senderId => (origin as SendMessageProvider).senderId;
+  int get senderId => (origin as SendTextMessageProvider).senderId;
   @override
-  int get receiverId => (origin as SendMessageProvider).receiverId;
+  int get receiverId => (origin as SendTextMessageProvider).receiverId;
   @override
-  String get message => (origin as SendMessageProvider).message;
+  String get message => (origin as SendTextMessageProvider).message;
+}
+
+String _$sendImageMessageHash() => r'cc4fc931bd31238739c1bc3b09843e0f6062b65f';
+
+/// See also [sendImageMessage].
+@ProviderFor(sendImageMessage)
+const sendImageMessageProvider = SendImageMessageFamily();
+
+/// See also [sendImageMessage].
+class SendImageMessageFamily extends Family<AsyncValue<bool>> {
+  /// See also [sendImageMessage].
+  const SendImageMessageFamily();
+
+  /// See also [sendImageMessage].
+  SendImageMessageProvider call({
+    required int senderId,
+    required int receiverId,
+    required XFile imageFile,
+  }) {
+    return SendImageMessageProvider(
+      senderId: senderId,
+      receiverId: receiverId,
+      imageFile: imageFile,
+    );
+  }
+
+  @override
+  SendImageMessageProvider getProviderOverride(
+    covariant SendImageMessageProvider provider,
+  ) {
+    return call(
+      senderId: provider.senderId,
+      receiverId: provider.receiverId,
+      imageFile: provider.imageFile,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'sendImageMessageProvider';
+}
+
+/// See also [sendImageMessage].
+class SendImageMessageProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [sendImageMessage].
+  SendImageMessageProvider({
+    required int senderId,
+    required int receiverId,
+    required XFile imageFile,
+  }) : this._internal(
+          (ref) => sendImageMessage(
+            ref as SendImageMessageRef,
+            senderId: senderId,
+            receiverId: receiverId,
+            imageFile: imageFile,
+          ),
+          from: sendImageMessageProvider,
+          name: r'sendImageMessageProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$sendImageMessageHash,
+          dependencies: SendImageMessageFamily._dependencies,
+          allTransitiveDependencies:
+              SendImageMessageFamily._allTransitiveDependencies,
+          senderId: senderId,
+          receiverId: receiverId,
+          imageFile: imageFile,
+        );
+
+  SendImageMessageProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.senderId,
+    required this.receiverId,
+    required this.imageFile,
+  }) : super.internal();
+
+  final int senderId;
+  final int receiverId;
+  final XFile imageFile;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(SendImageMessageRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SendImageMessageProvider._internal(
+        (ref) => create(ref as SendImageMessageRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        senderId: senderId,
+        receiverId: receiverId,
+        imageFile: imageFile,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _SendImageMessageProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SendImageMessageProvider &&
+        other.senderId == senderId &&
+        other.receiverId == receiverId &&
+        other.imageFile == imageFile;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, senderId.hashCode);
+    hash = _SystemHash.combine(hash, receiverId.hashCode);
+    hash = _SystemHash.combine(hash, imageFile.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SendImageMessageRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `senderId` of this provider.
+  int get senderId;
+
+  /// The parameter `receiverId` of this provider.
+  int get receiverId;
+
+  /// The parameter `imageFile` of this provider.
+  XFile get imageFile;
+}
+
+class _SendImageMessageProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with SendImageMessageRef {
+  _SendImageMessageProviderElement(super.provider);
+
+  @override
+  int get senderId => (origin as SendImageMessageProvider).senderId;
+  @override
+  int get receiverId => (origin as SendImageMessageProvider).receiverId;
+  @override
+  XFile get imageFile => (origin as SendImageMessageProvider).imageFile;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

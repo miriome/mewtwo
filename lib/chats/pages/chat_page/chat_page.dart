@@ -1,8 +1,11 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/base/image/cached_network_image_provider.dart';
 import 'package:mewtwo/base/stores/current_user_store.dart';
 import 'package:mewtwo/chats/pages/chat_page/providers.dart';
@@ -15,7 +18,8 @@ import 'package:mewtwo/utils.dart';
 
 class ChatPage extends StatelessWidget {
   final int targetId;
-  const ChatPage({Key? key, required this.targetId}) : super(key: key);
+  final ImagePicker picker = ImagePicker();
+  ChatPage({Key? key, required this.targetId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +45,18 @@ class ChatPage extends StatelessWidget {
                       inputTextStyle: const TextStyle(color: Colors.black),
                       inputTextColor: Colors.black),
                   messages: value,
-                  onAttachmentPressed: () {
-                    _handleAttachmentPressed(context);
+                  onAttachmentPressed: () async {
+                    final image = await _handleAttachmentPressed(context);
+                    if (image != null) {
+                      EasyLoading.show();
+                      await ref.read(sendImageMessageProvider(imageFile: image, receiverId: targetId, senderId: currentUser.user?.id ?? 0).future);
+                      EasyLoading.dismiss();
+                      
+                    }
                   },
                   disableImageGallery: true,
                   onSendPressed: (text) async {
-                    await ref.read(sendMessageProvider(message: text.text, receiverId: targetId, senderId: currentUser.user?.id ?? 0).future);
+                    await ref.read(sendTextMessageProvider(message: text.text, receiverId: targetId, senderId: currentUser.user?.id ?? 0).future);
                   },
                   onAvatarTap: (user) {
                     OtherProfilePageRoute(userId: Utility.parseInt(user.id)).push(context);
@@ -65,18 +75,34 @@ class ChatPage extends StatelessWidget {
       ),
     );
   }
-  void _handleAttachmentPressed(BuildContext context) {
-    showCupertinoModalPopup<void>(
+  Future<XFile?> _handleAttachmentPressed(BuildContext context) {
+    return showCupertinoModalPopup<XFile?>(
         context: context,
         builder: (BuildContext modalContext) {
           final List<CupertinoActionSheetAction> actions = [];
           actions.add(CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(modalContext);
+            onPressed: () async{
+              final image = await picker.pickImage(source: ImageSource.gallery);
+              if (modalContext.mounted) {
+                Navigator.pop(modalContext, image);
+              }            
+              
               
             },
             child: const Text(
-              'Send image',
+              'Send image from gallery',
+              style: TextStyle(color: Color(0xFF7D7878)),
+            ),
+          ));
+          actions.add(CupertinoActionSheetAction(
+            onPressed: () async{
+              final image = await picker.pickImage(source: ImageSource.camera);
+              if (modalContext.mounted) {
+                Navigator.pop(modalContext, image);
+              }   
+            },
+            child: const Text(
+              'Send image from camera',
               style: TextStyle(color: Color(0xFF7D7878)),
             ),
           ));

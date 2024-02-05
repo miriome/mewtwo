@@ -22,7 +22,7 @@ final getContactsApiProvider =
 );
 
 typedef GetContactsApiRef = AutoDisposeFutureProviderRef<List<ContactModel>>;
-String _$sendMessageApiHash() => r'881a6f9a4ca30111b38dab0d3c68c1e3efff1937';
+String _$sendMessageApiHash() => r'2a2d84194ffa0854585407deb248e2d7ca520ef6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -202,6 +202,134 @@ class _SendMessageApiProviderElement
   String get message => (origin as SendMessageApiProvider).message;
   @override
   String get messageType => (origin as SendMessageApiProvider).messageType;
+}
+
+String _$uploadImageApiHash() => r'95cb1049ee2875326b9d958d6784b987a3774446';
+
+/// See also [uploadImageApi].
+@ProviderFor(uploadImageApi)
+const uploadImageApiProvider = UploadImageApiFamily();
+
+/// See also [uploadImageApi].
+class UploadImageApiFamily extends Family<AsyncValue<String?>> {
+  /// See also [uploadImageApi].
+  const UploadImageApiFamily();
+
+  /// See also [uploadImageApi].
+  UploadImageApiProvider call({
+    required XFile image,
+  }) {
+    return UploadImageApiProvider(
+      image: image,
+    );
+  }
+
+  @override
+  UploadImageApiProvider getProviderOverride(
+    covariant UploadImageApiProvider provider,
+  ) {
+    return call(
+      image: provider.image,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'uploadImageApiProvider';
+}
+
+/// See also [uploadImageApi].
+class UploadImageApiProvider extends AutoDisposeFutureProvider<String?> {
+  /// See also [uploadImageApi].
+  UploadImageApiProvider({
+    required XFile image,
+  }) : this._internal(
+          (ref) => uploadImageApi(
+            ref as UploadImageApiRef,
+            image: image,
+          ),
+          from: uploadImageApiProvider,
+          name: r'uploadImageApiProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$uploadImageApiHash,
+          dependencies: UploadImageApiFamily._dependencies,
+          allTransitiveDependencies:
+              UploadImageApiFamily._allTransitiveDependencies,
+          image: image,
+        );
+
+  UploadImageApiProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.image,
+  }) : super.internal();
+
+  final XFile image;
+
+  @override
+  Override overrideWith(
+    FutureOr<String?> Function(UploadImageApiRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UploadImageApiProvider._internal(
+        (ref) => create(ref as UploadImageApiRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        image: image,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String?> createElement() {
+    return _UploadImageApiProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UploadImageApiProvider && other.image == image;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, image.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UploadImageApiRef on AutoDisposeFutureProviderRef<String?> {
+  /// The parameter `image` of this provider.
+  XFile get image;
+}
+
+class _UploadImageApiProviderElement
+    extends AutoDisposeFutureProviderElement<String?> with UploadImageApiRef {
+  _UploadImageApiProviderElement(super.provider);
+
+  @override
+  XFile get image => (origin as UploadImageApiProvider).image;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,4 +1,5 @@
 import 'package:dartx/dartx.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mewtwo/chats/apis/api.dart';
 import 'package:mewtwo/chats/models/message_model.dart';
 import 'package:mewtwo/chats/utils/utils.dart';
@@ -74,7 +75,7 @@ Future<({UserModel sender, UserModel reciever})> conversationUsers(ConversationU
 }
 
 @riverpod
-Future<void> sendMessage(SendMessageRef ref, {required int senderId, required int receiverId, required String message}) async{
+Future<void> sendTextMessage(SendTextMessageRef ref, {required int senderId, required int receiverId, required String message}) async{
   final firebaseParams = {
     "sender_id"     : senderId,
             "receiver_id"   : receiverId,
@@ -88,6 +89,27 @@ Future<void> sendMessage(SendMessageRef ref, {required int senderId, required in
   await FirebaseFirestore.instance.collection("chats").doc(roomId).collection("chat").add(firebaseParams).then((_) {
     return ref.read(sendMessageApiProvider(message: message, messageType: "text", receiverId: receiverId).future);
   });
+}
 
-  
+@riverpod
+Future<bool> sendImageMessage(SendImageMessageRef ref, {required int senderId, required int receiverId, required XFile imageFile}) async {
+  final imageUrl = await ref.read(uploadImageApiProvider(image: imageFile).future);
+  if (imageUrl == null) {
+    throw Exception("Failed to upload image");
+  }
+
+  final firebaseParams = {
+    "sender_id"     : senderId,
+            "receiver_id"   : receiverId,
+            "message"       : imageUrl,
+            "content_type"  : "image",
+            "time"          : DateTime.now().toUtc().millisecondsSinceEpoch / 1000
+  };
+
+  final roomId = ChatUtils.getChatRoomId(firstId: senderId, secondId: receiverId);
+
+  await FirebaseFirestore.instance.collection("chats").doc(roomId).collection("chat").add(firebaseParams).then((_) {
+    return ref.read(sendMessageApiProvider(message: "[photo]", messageType: "image", receiverId: receiverId).future);
+  });
+  return true;
 }
